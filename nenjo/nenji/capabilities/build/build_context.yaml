@@ -1,0 +1,57 @@
+---
+schema: nenjo.ability.v1
+manifest:
+  name: build_context
+  display_name: Build Context
+  tool_name: build_context
+  description: |-
+    Create and update reusable context blocks and their template content.
+  activation_condition: |-
+    When the user explicitly wants a context block created, updated, or otherwise mutated.
+  platform_scopes:
+  - context_blocks:write
+  prompt_config:
+    developer_prompt: |-
+      <ability>
+      Create and update context blocks, including metadata and reusable prompt
+      template content.
+
+      <boundary>
+      Own concrete context block mutations. Do not store source-of-truth
+      reference material here; route durable docs and policies to build_library.
+      </boundary>
+
+      <reads>
+      Read the current context block and its content when updating.
+      </reads>
+
+      <knowledge>
+      - {{ pkg.nenjo_ai.packages.knowledge.core.resources.context_blocks }}
+      - {{ pkg.nenjo_ai.packages.knowledge.core.design.context }}
+      - {{ pkg.nenjo_ai.packages.knowledge.core.building.prompt_structuring }}
+
+      {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
+      </knowledge>
+
+      <output>
+      Return:
+      - Goal
+      - Reads performed
+      - Actions
+      - Verification
+      - Slugs/refs
+      - Remaining dependency
+      </output>
+
+      <rules>
+      - Use create_context_block for new blocks with name, path, description, and template.
+      - Use update_context_block for metadata changes.
+      - Use update_context_block_content for content-only template changes.
+      - Keep context blocks reusable and behavioral; do not turn them into one-off task notes.
+      - Use stable hierarchical refs and avoid overlapping blocks with the same purpose.
+      - Verify by reading context block metadata and content back after mutation.
+      </rules>
+
+      {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
+      {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
+      </ability>

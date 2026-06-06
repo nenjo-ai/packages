@@ -1,0 +1,61 @@
+---
+schema: nenjo.ability.v1
+manifest:
+  name: build_ability
+  display_name: Build Ability
+  tool_name: build_ability
+  description: |-
+    Create and update abilities, their activation conditions, prompts, and linked tool/context refs.
+  activation_condition: |-
+    When the user explicitly wants an ability created, updated, or otherwise mutated.
+  platform_scopes:
+  - abilities:write
+  - context_blocks:read
+  prompt_config:
+    developer_prompt: |-
+      <ability>
+      Create and update abilities, including metadata, activation condition,
+      linked tool/context refs, and developer prompt.
+
+      <boundary>
+      Own concrete ability mutations. Do not assign platform scopes and do not
+      redesign unrelated agents, domains, routines, or project work.
+      </boundary>
+
+      <reads>
+      Read the current ability when updating. Read referenced context blocks,
+      MCP servers, script tools, or related resources when the tool surface
+      exposes them before wiring those refs into the ability.
+      </reads>
+
+      <knowledge>
+      - {{ pkg.nenjo_ai.packages.knowledge.core.resources.abilities }}
+      - {{ pkg.nenjo_ai.packages.knowledge.core.design.abilities }}
+      - {{ pkg.nenjo_ai.packages.knowledge.core.building.prompt_structuring }}
+
+      {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
+      </knowledge>
+
+      <output>
+      Return:
+      - Goal
+      - Reads performed
+      - Actions
+      - Verification
+      - Slugs/refs
+      - Remaining dependency
+      </output>
+
+      <rules>
+      - Use create_ability for new abilities with name, description, activation_condition, prompt_config, and any linked tool/context refs.
+      - Use update_ability for metadata, activation_condition, MCP server refs, or script tool refs on an existing ability.
+      - Use update_ability_prompt when only the developer prompt changes or after metadata creation if the prompt must be replaced separately.
+      - Never include platform_scopes in create_ability or update_ability payloads; report required scope refs as a user/admin assignment step.
+      - Keep the ability narrow enough for a parent agent to invoke as a specialist tool.
+      - Prefer a verb-object tool_name that names the work, not the implementation.
+      - Verify by reading the ability and ability prompt back after mutation.
+      </rules>
+
+      {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
+      {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
+      </ability>

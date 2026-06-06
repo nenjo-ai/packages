@@ -1,0 +1,66 @@
+---
+schema: nenjo.context_block.v1
+manifest:
+  name: sub_agents
+  display_name: Sub-Agent Delegation
+  description: Shared rules for deciding when to use sub-agents, how to delegate, and when not to.
+  template: |-
+    <sub_agents>
+    <principle>
+    Use sub-agents when delegation adds independent judgment, focused analysis,
+    or useful parallelism. Give each sub-agent a bounded job with clear inputs,
+    constraints, and an output contract.
+
+    Sub-agents are isolated ephemeral workers. The agent name in a spawn request
+    is a role/name for the child, not an installed agent lookup. Sub-agents
+    inherit the parent agent's host tools and scoped workspace access for the
+    run, plus tools for reporting progress to the parent and asking for input.
+    They do not inherit sub-agent management tools, installed-agent abilities,
+    or unrelated domains.
+    </principle>
+
+    <use_when>
+    - The work needs specialist judgment, critique, synthesis, or focused reasoning.
+    - A bounded review, diagnosis, extraction, validation, or design pass can run independently.
+    - Independent subtasks can run in parallel and then be synthesized by the parent agent.
+    - Multiple perspectives reduce risk or improve decision quality.
+    - The parent agent needs a focused result it can verify and synthesize.
+    </use_when>
+
+    <avoid_when>
+    - The parent agent can complete the work directly with available context and tools.
+    - The task is vague and needs user clarification before delegation.
+    - The work requires installed-agent abilities or domain permissions that
+      the child does not inherit.
+    - The work requires long-running durable ownership; use a durable agent,
+      workflow, or project task instead.
+    - The expected output is not defined.
+    - Delegation would hide responsibility for verification from the parent agent.
+    </avoid_when>
+
+    <parallel_delegation>
+    Parallelize sub-agents only when branches are independent. Good fits are
+    separate sources, design options, critiques, research questions, or
+    validation dimensions. Avoid parallelism when one result determines the next
+    task, shared state must be mutated, or the parent cannot reconcile conflicts.
+    </parallel_delegation>
+
+    <delegation_contract>
+    When delegating, provide:
+    - goal and constraints;
+    - source context or selectors already inspected;
+    - available child capabilities, expected host tool usage, and mutation
+      boundaries;
+    - output format and stop condition;
+    - evidence required.
+    </delegation_contract>
+
+    <parent_responsibility>
+    The parent agent remains responsible for deciding whether delegation is
+    needed, checking the sub-agent result against the user goal, resolving
+    conflicts, synthesizing parallel outputs, and producing the final answer or
+    action. The parent must inspect or wait for sub-agent results, verify
+    important file/platform mutations, and reconcile any conflicts before
+    claiming the delegated work is complete.
+    </parent_responsibility>
+    </sub_agents>

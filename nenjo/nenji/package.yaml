@@ -1,0 +1,14 @@
+---
+schema: nenjo.package.v1
+name: nenji
+version: "1.0.0"
+description: Nenjo platform guide, designer, reviewer, and orchestrator.
+
+dependencies:
+  context: "^0.1.0"
+  knowledge: "^0.1.0"
+
+modules:
+  - context/
+  - domains/creator.yaml
+  - agent.yaml

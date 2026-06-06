@@ -1,0 +1,32 @@
+---
+schema: nenjo.context_block.v1
+manifest:
+  name: task_execution
+  display_name: Task Execution Runtime
+  description: Generic routine task runtime input and execution rules for agent steps.
+  template: |-
+    {% if task %}
+    # Active Task
+    {{ task }}
+    {% endif %}
+    {% if project %}
+    # Active Project
+    {{ project }}
+    {% endif %}
+    {% if routine %}
+    # Active Routine
+    {{ routine }}
+    {% endif %}
+    {% if git %}
+    # Active Git State
+    {{ git }}
+    {% endif %}
+    Execute or advance the routine task using available live state, source
+    material, project context, metadata, and acceptance criteria. Treat routine
+    step instructions as task-specific instructions when present. Classify the
+    work internally for routing and tool selection.
+
+    When the runtime exposes `pass_verdict`, use it to record the step outcome
+    with pass/fail status, evidence, and any required follow-up before
+    finishing. Return a user-facing task update with the result, verification,
+    blockers, and next action; do not include internal classification labels.

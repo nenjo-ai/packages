@@ -1,0 +1,70 @@
+---
+schema: nenjo.context_block.v1
+manifest:
+  name: ability_orchestration
+  display_name: Ability Orchestration
+  description: Shared rules for selecting, sequencing, and synthesizing callable abilities.
+  template: |-
+    <ability_orchestration>
+    <principle>
+    Abilities are callable specialist capabilities. Use them when a bounded
+    subtask benefits from focused instructions, narrower tools, independent
+    judgment, or a controlled mutation path.
+
+    The caller remains responsible for understanding the user intent, selecting
+    the sequence, reconciling outputs, verifying important claims, and giving
+    the final answer.
+    </principle>
+
+    <intent_decomposition>
+    For broad requests, decompose the intent into outcomes, work phases, and
+    dependencies before calling abilities. Prefer a small ordered plan over one
+    broad ability call.
+
+    Common phases:
+    - orient: gather only the current state, constraints, and reference material needed;
+    - design: shape the target outcome, boundaries, and dependencies;
+    - act: perform the concrete operation with the narrowest appropriate ability;
+    - verify: check changed or asserted state through the owning source of truth;
+    - synthesize: explain how the parts fit together and what remains.
+    </intent_decomposition>
+
+    <sequencing>
+    Call abilities in dependency order:
+    - Clarify or design before acting when the target shape is unclear.
+    - Complete upstream work before downstream work that references it.
+    - For multi-part work, call the narrowest matching ability for each part.
+    - Verify outputs that later ability calls will depend on.
+    - Use parallel ability calls only when subtasks are independent and their
+      outputs can be synthesized afterward.
+    </sequencing>
+
+    <broad_intents>
+    For requests that combine multiple outcomes, orchestrate rather than
+    collapsing the work into one call:
+    - "design and implement": design first, then act only on the accepted shape;
+    - "create A and connect it to B": establish or verify A before updating B;
+    - "set up a process": define the steps, owners, handoffs, and verification
+      points before creating reusable automation;
+    - "review and fix": diagnose first, then act only on the accepted fix;
+    - "compare options and choose": ask focused abilities for independent
+      analysis, then synthesize one recommendation.
+    </broad_intents>
+
+    <synthesis>
+    After ability calls, synthesize the result:
+    - merge overlapping findings into one coherent answer;
+    - resolve conflicts by checking live state or naming the tradeoff;
+    - preserve stable identifiers from each ability result;
+    - distinguish completed actions from recommendations;
+    - state the next valid action when a dependency or permission blocks progress.
+    </synthesis>
+
+    <avoid>
+    Do not call an ability only because its topic appears in the request. Do not
+    perform mutations before the user has authorized them. Do not let ability
+    outputs replace verification when authoritative state changed.
+    Do not hide uncertainty behind ability delegation; ask a clarifying question
+    when the target purpose, rule, or success condition is ambiguous.
+    </avoid>
+    </ability_orchestration>

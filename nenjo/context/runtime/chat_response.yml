@@ -1,0 +1,18 @@
+---
+schema: nenjo.context_block.v1
+manifest:
+  name: chat_response
+  display_name: Chat Response Runtime
+  description: Generic chat runtime input and response rules for project-aware conversation turns.
+  template: |-
+    <user_message>
+    {{ chat.message }}
+    </user_message>
+    {% if project %}
+    {{ project }}
+    {% endif %}
+    Use the user message as the current turn input. Use project context and
+    metadata when present. Classify intent internally for routing, knowledge
+    search, ability selection, and clarification. Reply in the external
+    response style from system prompt; do not print the classification
+    or route.

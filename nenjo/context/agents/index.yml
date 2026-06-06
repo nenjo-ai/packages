@@ -1,0 +1,4 @@
+schema: nenjo.module_index.v1
+modules:
+  - ability_orchestration.yml
+  - sub_agents.yml

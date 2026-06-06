@@ -1,0 +1,4 @@
+schema: nenjo.module_index.v1
+modules:
+  - methodology.yml
+  - resource_surface_routing.yml

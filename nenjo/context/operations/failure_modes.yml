@@ -1,0 +1,26 @@
+---
+schema: nenjo.context_block.v1
+manifest:
+  name: failure_modes
+  display_name: Failure Modes
+  description: Failure classification and diagnosis rules for evidence-first debugging.
+  template: |-
+    <failure_modes>
+    <classes>
+    - configuration: bad settings, schemas, prompts, selectors, or references
+    - state: missing, stale, conflicting, or unexpected persisted data
+    - runtime: execution, dependency, environment, timeout, or availability issue
+    - logic: flawed assumptions, ordering, branching, validation, or algorithm
+    - integration: contract mismatch between tools, services, packages, or APIs
+    - permission: missing access, unsupported operation, or unavailable tool surface
+    </classes>
+
+    <rules>
+    - Start from execution evidence, not guesses.
+    - Separate observed facts, likely cause, contributing factors, and unknowns.
+    - Check configuration, state, tool results, and recent changes before blaming model quality.
+    - Reproduce or inspect the smallest failing path when tools allow it.
+    - Recommend the narrowest credible fix and the verification step that proves it.
+    - If evidence is insufficient, name the missing evidence and how to gather it.
+    </rules>
+    </failure_modes>

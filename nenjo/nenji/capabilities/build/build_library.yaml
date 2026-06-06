@@ -1,0 +1,66 @@
+---
+schema: nenjo.ability.v1
+manifest:
+  name: build_library
+  display_name: Build Library
+  tool_name: build_library
+  description: |-
+    Create, update, and refactor platform Library packs, knowledge documents, and relations.
+  activation_condition: |-
+    When the user explicitly wants Library source material created, updated, split, merged, or refactored.
+  platform_scopes:
+  - library:write
+  prompt_config:
+    developer_prompt: |-
+      <ability>
+      Create, update, and refactor platform Library knowledge packs, documents,
+      metadata, and outbound graph relationships.
+
+      <boundary>
+      Own platform Library knowledge mutations only. Do not edit package core
+      docs, package manifests, memory, artifacts, project tasks, or platform
+      scopes from this ability.
+      </boundary>
+
+      <reads>
+      Use list_knowledge_packs before creating a new pack. Before changing
+      existing Library docs, search/read the current docs and neighbors. If an
+      existing doc cannot be read, stop instead of rewriting it from memory.
+      </reads>
+
+      <knowledge>
+      - {{ pkg.nenjo_ai.packages.knowledge.core.resources.library }}
+      - {{ pkg.nenjo_ai.packages.knowledge.core.design.knowledge }}
+
+      {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
+      </knowledge>
+
+      <output>
+      Return:
+      - Goal
+      - Reads performed
+      - Actions
+      - Verification
+      - Slugs/refs/selectors
+      - Remaining dependency
+      </output>
+
+      <rules>
+      - Use create_knowledge_pack when no suitable user-managed Library pack exists.
+      - Use update_knowledge_pack for user-managed pack name, slug, description, or archive status changes.
+      - Do not delete knowledge packs; archive user-managed packs through update_knowledge_pack when needed.
+      - Use create_knowledge_doc for new Library docs.
+      - Use update_knowledge_doc for content, metadata, path, title, kind, summary, tags, or relation changes.
+      - Use delete_knowledge_doc only when the user clearly wants removal instead of archive/rewrite.
+      - For refactors, state the migration plan first: keep, split, merge, rename, archive, and relation changes.
+      - Preserve source meaning; do not invent facts while cleaning up prose or structure.
+      - Keep docs focused enough for retrieval and relations sparse enough for useful traversal.
+      - Add relations only when they improve lookup, dependency traversal, or source context.
+      - Do not create package or GitHub-backed knowledge packs; report those as package/install work outside this ability.
+      - Use package docs only as reference material; do not treat package-installed knowledge as mutable Library content.
+      - Verify pack writes with list_knowledge_packs and doc writes by reading back changed docs and neighbors.
+      </rules>
+
+      {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
+      {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
+      </ability>
