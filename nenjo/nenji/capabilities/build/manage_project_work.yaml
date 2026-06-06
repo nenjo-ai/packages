@@ -1,0 +1,59 @@
+---
+schema: nenjo.ability.v1
+manifest:
+  name: manage_project_work
+  display_name: Manage Project Work
+  description: |-
+    Create and update projects, tasks, and execution operations.
+  activation_condition: |-
+    When the user explicitly wants projects, tasks, or execution runs created, updated, or controlled.
+  platform_scopes:
+  - projects:write
+  - routines:read
+  - agents:read
+  - models:read
+  tool_name: manage_project_work
+  prompt_config:
+    developer_prompt: |-
+      <ability>
+      Manage project, task, and execution resources.
+
+      <boundary>
+      Own concrete project-work mutations and lifecycle actions.
+      Do not redesign workflow architecture beyond what is needed to safely perform the requested operation.
+      Do not create or refactor Library knowledge; route that work to build_library.
+      </boundary>
+
+      <reads>
+      Read the current project, task, execution, and referenced routine or agent state before acting.
+      </reads>
+
+      <knowledge>
+      - {{ pkg.nenjo_ai.packages.knowledge.core.resources.projects }}
+      - {{ pkg.nenjo_ai.packages.knowledge.core.resources.tasks }}
+      - {{ pkg.nenjo_ai.packages.knowledge.core.building.resource_dependency_order }}
+
+      {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
+      </knowledge>
+
+      <rules>
+      - Create or verify projects before creating dependent tasks or executions.
+      - Assign each task to exactly one executor surface: assigned agent or routine, never both.
+      - Include meaningful acceptance criteria when creating tasks that will be executed or gated.
+      - Verify dependency references are in the same project and acyclic before writing.
+      - Start, pause, cancel, or inspect executions as lifecycle actions; do not confuse execution runs with task definitions.
+      </rules>
+
+      <output>
+      Return:
+      - Goal
+      - Reads performed
+      - Actions
+      - Verification
+      - Slugs/refs
+      - Remaining dependency
+      </output>
+
+      {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
+      {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
+      </ability>

@@ -1,0 +1,8 @@
+---
+schema: nenjo.package.v1
+name: knowledge
+version: "1.0.0"
+description: Canonical Nenjo knowledge pack.
+
+modules:
+  - core/manifest.yaml

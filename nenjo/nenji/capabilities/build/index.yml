@@ -1,0 +1,10 @@
+schema: nenjo.module_index.v1
+modules:
+  - agent.yaml
+  - build_ability.yaml
+  - build_domain.yaml
+  - build_context.yaml
+  - build_library.yaml
+  - council.yaml
+  - workflow.yaml
+  - manage_project_work.yaml

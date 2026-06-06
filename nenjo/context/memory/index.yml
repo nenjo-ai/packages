@@ -1,0 +1,3 @@
+schema: nenjo.module_index.v1
+modules:
+  - remembrance.yml

@@ -1,0 +1,677 @@
+schema: nenjo.knowledge.v1
+manifest:
+  name: Nenjo Core
+  description: Canonical Nenjo core knowledge organized for design, resource building, retrieval, and general questions.
+  pack_id: nenjo.core
+  docs:
+  - selector: orientation.nenjo
+    source_path: docs/orientation/nenjo.md
+    title: Nenjo
+    summary: "High-level orientation to Nenjo, Nenji, core resources, Library knowledge, packages, and platform/SDK surfaces."
+    kind: orientation
+    tags: ["intent:overview", "domain:nenjo", "audience:agent"]
+    related:
+    - type: references
+      target: orientation.platform
+    - type: references
+      target: orientation.sdk
+    - type: references
+      target: classification.resource_surfaces
+    - type: references
+      target: resources.library
+    - type: references
+      target: reference.glossary
+
+  - selector: orientation.platform
+    source_path: docs/orientation/platform.md
+    title: Platform
+    summary: "Orientation to the user-facing platform surface: dashboard, chat, Library, projects, workers, settings, and permission UX."
+    kind: orientation
+    tags: ["intent:overview", "surface:platform", "audience:user"]
+    related:
+    - type: part_of
+      target: orientation.nenjo
+    - type: references
+      target: classification.resource_surfaces
+    - type: references
+      target: resources.library
+    - type: references
+      target: reference.platform_scopes
+
+  - selector: orientation.sdk
+    source_path: docs/orientation/sdk.md
+    title: SDK
+    summary: "Orientation to the developer-facing SDK surface: manifests, provider builder, runtime crates, tools, models, memory, and worker integration."
+    kind: orientation
+    tags: ["intent:overview", "surface:sdk", "audience:developer"]
+    related:
+    - type: part_of
+      target: orientation.nenjo
+    - type: references
+      target: classification.resource_surfaces
+    - type: references
+      target: resources.packages
+    - type: references
+      target: building.package_manifests
+
+  - selector: design.agents
+    source_path: docs/design/agent-design.md
+    title: Agent Design
+    summary: "How to design effective agents, choose role boundaries, assign capabilities, and avoid over-broad behavior."
+    kind: design
+    tags: ["intent:design", "resource:agents", "topic:behavior", "audience:builder"]
+    related:
+    - type: part_of
+      target: design.resource_design
+    - type: depends_on
+      target: resources.agents
+    - type: references
+      target: design.abilities
+    - type: references
+      target: design.prompts
+
+  - selector: design.resource_design
+    source_path: docs/design/resource-design.md
+    title: Resource Design
+    summary: "Central design guide for choosing Nenjo resource boundaries, producing minimum viable specs, and handing off accepted designs to build abilities."
+    kind: design
+    tags: ["intent:design", "intent:classify", "domain:nenjo", "topic:resource_boundaries", "audience:builder"]
+    related:
+    - type: references
+      target: design.agents
+    - type: references
+      target: design.abilities
+    - type: references
+      target: design.domains
+    - type: references
+      target: design.context
+    - type: references
+      target: design.workflows
+    - type: references
+      target: design.councils
+    - type: references
+      target: design.prompts
+    - type: references
+      target: design.knowledge
+
+  - selector: design.abilities
+    source_path: docs/design/ability-design.md
+    title: Ability Design
+    summary: "How to decide when a capability should be modeled as an agent-invoked reusable specialist tool."
+    kind: design
+    tags: ["intent:design", "resource:abilities", "topic:capabilities", "audience:builder"]
+    related:
+    - type: part_of
+      target: design.resource_design
+    - type: depends_on
+      target: resources.abilities
+    - type: references
+      target: design.domains
+
+  - selector: design.domains
+    source_path: docs/design/domain-design.md
+    title: Domain Design
+    summary: "How to design explicit user-activated modes that change behavior and available capability surfaces."
+    kind: design
+    tags: ["intent:design", "resource:domains", "topic:modes", "audience:builder"]
+    related:
+    - type: part_of
+      target: design.resource_design
+    - type: depends_on
+      target: resources.domains
+    - type: references
+      target: design.abilities
+
+  - selector: design.councils
+    source_path: docs/design/council-design.md
+    title: Council Design
+    summary: "How to design multi-agent collaboration, delegation, review, and synthesis patterns."
+    kind: design
+    tags: ["intent:design", "resource:councils", "topic:collaboration", "audience:builder"]
+    related:
+    - type: part_of
+      target: design.resource_design
+    - type: depends_on
+      target: resources.councils
+    - type: references
+      target: classification.workflow_patterns
+
+  - selector: design.prompts
+    source_path: docs/design/prompt-design.md
+    title: Prompt Design
+    summary: "How to decide what belongs in system prompts, developer prompts, templates, context blocks, memory, or knowledge."
+    kind: design
+    tags: ["intent:design", "topic:prompting", "resource:prompts", "audience:builder"]
+    related:
+    - type: part_of
+      target: design.resource_design
+    - type: references
+      target: building.prompt_structuring
+    - type: depends_on
+      target: building.template_vars
+    - type: depends_on
+      target: resources.knowledge_packs
+    - type: depends_on
+      target: resources.context_blocks
+
+  - selector: design.knowledge
+    source_path: docs/design/knowledge-design.md
+    title: Knowledge Design
+    summary: "How to organize knowledge docs, selectors, tags, summaries, and graph relationships for efficient agent retrieval."
+    kind: design
+    tags: ["intent:design", "domain:knowledge", "topic:retrieval", "audience:builder"]
+    related:
+    - type: part_of
+      target: design.resource_design
+    - type: depends_on
+      target: resources.knowledge_packs
+    - type: references
+      target: building.knowledge_manifests
+    - type: references
+      target: classification.search_patterns
+
+  - selector: design.context
+    source_path: docs/design/context-design.md
+    title: Context Design
+    summary: "How to design reusable prompt context and decide between context blocks, memory, knowledge, and runtime variables."
+    kind: design
+    tags: ["intent:design", "resource:context_blocks", "topic:context", "audience:builder"]
+    related:
+    - type: part_of
+      target: design.resource_design
+    - type: depends_on
+      target: resources.context_blocks
+    - type: references
+      target: building.template_vars
+    - type: references
+      target: design.prompts
+
+  - selector: design.workflows
+    source_path: docs/design/workflow-design.md
+    title: Workflow Design
+    summary: "How to design tasks, routines, councils, gates, executions, handoffs, dependencies, and review points."
+    kind: design
+    tags: ["intent:design", "domain:workflow", "resource:routines", "resource:tasks", "audience:builder"]
+    related:
+    - type: part_of
+      target: design.resource_design
+    - type: depends_on
+      target: resources.tasks
+    - type: depends_on
+      target: resources.routines
+    - type: depends_on
+      target: resources.executions
+    - type: references
+      target: classification.workflow_patterns
+
+  - selector: resources.agents
+    source_path: docs/resources/agents.md
+    title: Agents
+    summary: "Resource-level model for agents: behavior ownership, prompts, runtime modes, memory profile, and assigned capability surface."
+    kind: resource
+    tags: ["intent:explain", "intent:build", "resource:agents", "topic:behavior"]
+    related:
+    - type: references
+      target: design.agents
+    - type: references
+      target: resources.abilities
+    - type: references
+      target: resources.domains
+    - type: depends_on
+      target: resources.memory
+    - type: depends_on
+      target: resources.models
+    - type: related_to
+      target: resources.mcp_servers
+    - type: related_to
+      target: resources.script_tools
+    - type: references
+      target: reference.platform_scopes
+    - type: depends_on
+      target: building.prompt_structuring
+
+  - selector: resources.abilities
+    source_path: docs/resources/abilities.md
+    title: Abilities
+    summary: "Resource-level model for abilities as reusable specialist execution modes exposed to agents as callable tools."
+    kind: resource
+    tags: ["intent:explain", "intent:build", "resource:abilities", "topic:capabilities"]
+    related:
+    - type: references
+      target: design.abilities
+    - type: related_to
+      target: resources.agents
+    - type: related_to
+      target: resources.domains
+    - type: related_to
+      target: resources.mcp_servers
+    - type: related_to
+      target: resources.script_tools
+    - type: references
+      target: reference.platform_scopes
+
+  - selector: resources.domains
+    source_path: docs/resources/domains.md
+    title: Domains
+    summary: "Resource-level model for user-activated execution modes with prompt addons, abilities, tools, and audit semantics."
+    kind: resource
+    tags: ["intent:explain", "intent:build", "resource:domains", "topic:modes"]
+    related:
+    - type: references
+      target: design.domains
+    - type: related_to
+      target: resources.abilities
+    - type: related_to
+      target: resources.agents
+    - type: related_to
+      target: resources.mcp_servers
+    - type: related_to
+      target: resources.script_tools
+    - type: references
+      target: reference.platform_scopes
+
+  - selector: resources.councils
+    source_path: docs/resources/councils.md
+    title: Councils
+    summary: "Resource-level model for structured multi-agent collaboration groups with leaders, members, and delegation strategies."
+    kind: resource
+    tags: ["intent:explain", "intent:build", "resource:councils", "topic:collaboration"]
+    related:
+    - type: depends_on
+      target: resources.agents
+    - type: references
+      target: design.councils
+    - type: references
+      target: classification.workflow_patterns
+
+  - selector: resources.tasks
+    source_path: docs/resources/tasks.md
+    title: Tasks
+    summary: "Resource-level model for project work units with status, dependencies, assignment, priority, complexity, and readiness semantics."
+    kind: resource
+    tags: ["intent:explain", "intent:build", "resource:tasks", "domain:project_work"]
+    related:
+    - type: references
+      target: design.workflows
+    - type: related_to
+      target: resources.routines
+    - type: related_to
+      target: resources.agents
+    - type: references
+      target: classification.task_types
+
+  - selector: resources.routines
+    source_path: docs/resources/routines.md
+    title: Routines
+    summary: "Resource-level model for workflow graphs, agents, gates, councils, triggers, and terminal outcomes."
+    kind: resource
+    tags: ["intent:explain", "intent:build", "resource:routines", "domain:workflow"]
+    related:
+    - type: references
+      target: design.workflows
+    - type: depends_on
+      target: resources.agents
+    - type: related_to
+      target: resources.councils
+    - type: references
+      target: classification.workflow_patterns
+
+  - selector: resources.projects
+    source_path: docs/resources/projects.md
+    title: Projects
+    summary: "Resource-level model for work containers, settings, repository context, tasks, memory, and executions; Library owns source material."
+    kind: resource
+    tags: ["intent:explain", "intent:build", "resource:projects", "domain:project_work"]
+    related:
+    - type: governs
+      target: resources.tasks
+    - type: governs
+      target: resources.executions
+    - type: governs
+      target: resources.memory
+    - type: references
+      target: resources.library
+
+  - selector: resources.memory
+    source_path: docs/resources/memory.md
+    title: Memory
+    summary: "Resource-level model for scoped agent memory, including core, project, shared memory, and artifact separation."
+    kind: resource
+    tags: ["intent:explain", "intent:build", "resource:memory", "topic:context"]
+    related:
+    - type: references
+      target: resources.agents
+    - type: references
+      target: design.context
+    - type: references
+      target: building.template_vars
+    - type: references
+      target: resources.artifacts
+
+  - selector: resources.executions
+    source_path: docs/resources/executions.md
+    title: Executions
+    summary: "Resource-level model for stateful runtime runs across project tasks, chat, schedules, gates, heartbeats, and progress tracking."
+    kind: resource
+    tags: ["intent:explain", "intent:build", "resource:executions", "domain:workflow"]
+    related:
+    - type: part_of
+      target: resources.projects
+    - type: depends_on
+      target: resources.tasks
+    - type: references
+      target: design.workflows
+
+  - selector: resources.context_blocks
+    source_path: docs/resources/context-blocks.md
+    title: Context Blocks
+    summary: "Resource-level model for reusable prompt-context assets referenced by path-like template names."
+    kind: resource
+    tags: ["intent:explain", "intent:build", "resource:context_blocks", "topic:prompting"]
+    related:
+    - type: references
+      target: design.context
+    - type: depends_on
+      target: building.template_vars
+    - type: references
+      target: design.prompts
+
+  - selector: resources.knowledge_packs
+    source_path: docs/resources/knowledge-packs.md
+    title: Knowledge Packs
+    summary: "Resource-level model for metadata-first knowledge tools, Library knowledge, package knowledge, graph retrieval, and SDK registration."
+    kind: resource
+    tags: ["intent:explain", "intent:build", "domain:knowledge", "topic:retrieval"]
+    related:
+    - type: references
+      target: design.knowledge
+    - type: depends_on
+      target: building.knowledge_manifests
+    - type: references
+      target: classification.search_patterns
+    - type: related_to
+      target: resources.library
+    - type: related_to
+      target: resources.packages
+
+  - selector: resources.library
+    source_path: docs/resources/library.md
+    title: Library
+    summary: "Platform source-material surface exposed through knowledge pack search, graph traversal, and full-document reads."
+    kind: resource
+    tags: ["intent:explain", "intent:build", "resource:library", "domain:knowledge"]
+    related:
+    - type: depends_on
+      target: resources.knowledge_packs
+    - type: depends_on
+      target: building.knowledge_manifests
+    - type: references
+      target: classification.search_patterns
+
+  - selector: resources.packages
+    source_path: docs/resources/packages.md
+    title: Packages
+    summary: "Resource-level reference for installable packages, package-installed selectors, and package boundaries that agents should not mutate."
+    kind: resource
+    tags: ["intent:explain", "domain:packages", "topic:manifests", "audience:developer"]
+    related:
+    - type: depends_on
+      target: building.package_manifests
+    - type: references
+      target: resources.knowledge_packs
+    - type: references
+      target: orientation.sdk
+
+  - selector: resources.models
+    source_path: docs/resources/models.md
+    title: Models
+    summary: "Resource-level model for LLM configuration refs used by agents."
+    kind: resource
+    tags: ["intent:explain", "intent:build", "resource:models", "topic:llm"]
+    related:
+    - type: references
+      target: resources.agents
+    - type: references
+      target: reference.platform_scopes
+
+  - selector: resources.mcp_servers
+    source_path: docs/resources/mcp-servers.md
+    title: MCP Servers
+    summary: "Resource-level reference for external MCP tool integrations assigned by slug/ref."
+    kind: resource
+    tags: ["intent:explain", "intent:build", "resource:mcp_servers", "topic:tools"]
+    related:
+    - type: related_to
+      target: resources.agents
+    - type: related_to
+      target: resources.abilities
+    - type: related_to
+      target: resources.domains
+    - type: references
+      target: resources.packages
+
+  - selector: resources.script_tools
+    source_path: docs/resources/script-tools.md
+    title: Script Tools
+    summary: "Resource-level reference for native or package script-backed tools assigned by slug/ref."
+    kind: resource
+    tags: ["intent:explain", "intent:build", "resource:script_tools", "topic:tools"]
+    related:
+    - type: related_to
+      target: resources.agents
+    - type: related_to
+      target: resources.abilities
+    - type: related_to
+      target: resources.domains
+    - type: references
+      target: resources.packages
+
+  - selector: resources.artifacts
+    source_path: docs/resources/artifacts.md
+    title: Artifacts
+    summary: "Resource-level reference for saved generated outputs and workspace files indexed separately from memory and Library knowledge."
+    kind: resource
+    tags: ["intent:explain", "resource:artifacts", "topic:context"]
+    related:
+    - type: related_to
+      target: resources.memory
+    - type: references
+      target: building.template_vars
+
+  - selector: building.resource_dependency_order
+    source_path: docs/building/resource-dependency-order.md
+    title: Resource Dependency Order
+    summary: "Recommended creation order for Nenjo resources to avoid circular dependencies and invalid states."
+    kind: build
+    tags: ["intent:build", "domain:workflow", "topic:ordering", "risk:routing"]
+    related:
+    - type: depends_on
+      target: resources.context_blocks
+    - type: depends_on
+      target: resources.agents
+    - type: depends_on
+      target: resources.councils
+    - type: depends_on
+      target: resources.routines
+    - type: depends_on
+      target: resources.projects
+    - type: references
+      target: resources.library
+    - type: references
+      target: resources.packages
+    - type: references
+      target: reference.platform_scopes
+
+  - selector: building.prompt_structuring
+    source_path: docs/building/prompt-structuring.md
+    title: Prompt Structuring
+    summary: "Construction rules for composing prompts, context blocks, template variables, memory, Library/package knowledge, and retrieval evidence."
+    kind: build
+    tags: ["intent:build", "topic:prompting", "resource:prompts", "audience:builder"]
+    related:
+    - type: depends_on
+      target: building.template_vars
+    - type: depends_on
+      target: resources.context_blocks
+    - type: references
+      target: design.prompts
+    - type: depends_on
+      target: resources.knowledge_packs
+    - type: references
+      target: reference.platform_scopes
+
+  - selector: building.template_vars
+    source_path: docs/building/template-vars.md
+    title: Template Vars
+    summary: "Runtime prompt variables for connecting static prompt design with live execution state, context, memory, and knowledge indexes."
+    kind: build
+    tags: ["intent:build", "topic:prompting", "resource:template_vars", "audience:builder"]
+    related:
+    - type: references
+      target: resources.context_blocks
+    - type: part_of
+      target: building.prompt_structuring
+
+  - selector: building.package_manifests
+    source_path: docs/building/package-manifests.md
+    title: Package Manifests
+    summary: "How top-level package manifests define identity, version, modules, dependencies, and derived module metadata."
+    kind: build
+    tags: ["intent:build", "domain:packages", "topic:manifests", "audience:developer"]
+    related:
+    - type: references
+      target: building.knowledge_manifests
+    - type: references
+      target: orientation.sdk
+    - type: defines
+      target: resources.packages
+
+  - selector: building.knowledge_manifests
+    source_path: docs/building/knowledge-manifests.md
+    title: Knowledge Manifests
+    summary: "Canonical authored knowledge manifest shape, document metadata fields, selectors, tags, kinds, and graph relationships."
+    kind: build
+    tags: ["intent:build", "domain:knowledge", "topic:manifests", "audience:builder"]
+    related:
+    - type: depends_on
+      target: building.package_manifests
+    - type: references
+      target: reference.selector_conventions
+    - type: references
+      target: reference.knowledge_doc_kinds
+    - type: references
+      target: design.knowledge
+
+  - selector: classification.task_types
+    source_path: docs/classification/task-types.md
+    title: Task Type Classification
+    summary: "Classification guide for valid task types, priority, urgency, and complexity across Nenjo projects."
+    kind: classification
+    tags: ["intent:classify", "resource:tasks", "domain:project_work", "topic:priority"]
+    related:
+    - type: classifies
+      target: resources.tasks
+    - type: references
+      target: design.workflows
+
+  - selector: classification.resource_surfaces
+    source_path: docs/classification/resource-surfaces.md
+    title: Resource Surface Classification
+    summary: "Classification for platform UI/tools, SDK manifest/runtime, Library knowledge, package resources, permissions, and shared fields."
+    kind: classification
+    tags: ["intent:classify", "domain:nenjo", "topic:routing", "risk:routing"]
+    related:
+    - type: classifies
+      target: orientation.platform
+    - type: classifies
+      target: orientation.sdk
+    - type: classifies
+      target: resources.library
+    - type: classifies
+      target: resources.packages
+    - type: classifies
+      target: reference.platform_scopes
+
+  - selector: classification.workflow_patterns
+    source_path: docs/classification/workflow-patterns.md
+    title: Workflow Pattern Classification
+    summary: "Classification guide for workflow structures, including linear pipelines, gates, fan-out, reviews, councils, and escalation paths."
+    kind: classification
+    tags: ["intent:classify", "domain:workflow", "topic:orchestration"]
+    related:
+    - type: classifies
+      target: resources.routines
+    - type: references
+      target: resources.councils
+    - type: references
+      target: design.workflows
+
+  - selector: classification.search_patterns
+    source_path: docs/classification/search-patterns.md
+    title: Search Patterns
+    summary: "Retrieval patterns that tell Nenji which docs to search, read, and traverse for general, design, build, and reference questions."
+    kind: classification
+    tags: ["intent:classify", "domain:knowledge", "topic:retrieval", "audience:agent"]
+    related:
+    - type: references
+      target: design.resource_design
+    - type: references
+      target: design.knowledge
+    - type: references
+      target: building.resource_dependency_order
+    - type: references
+      target: resources.library
+    - type: references
+      target: resources.packages
+    - type: references
+      target: reference.platform_scopes
+    - type: references
+      target: reference.selector_conventions
+    - type: references
+      target: reference.glossary
+
+  - selector: reference.knowledge_doc_kinds
+    source_path: docs/reference/knowledge-doc-kinds.md
+    title: Knowledge Doc Kinds
+    summary: "Reference for using the user-defined doc kind field to categorize knowledge documents such as orientation, design, resource, build, classification, reference, policy, and entity."
+    kind: reference
+    tags: ["intent:lookup", "domain:knowledge", "topic:kinds", "audience:builder"]
+    related:
+    - type: defines
+      target: building.knowledge_manifests
+    - type: references
+      target: design.knowledge
+
+  - selector: reference.selector_conventions
+    source_path: docs/reference/selector-conventions.md
+    title: Selector Conventions
+    summary: "Reference for stable dotted Jinja-compatible selectors, naming rules, and the distinction between selectors and source paths."
+    kind: reference
+    tags: ["intent:lookup", "domain:knowledge", "topic:selectors", "audience:builder"]
+    related:
+    - type: defines
+      target: building.knowledge_manifests
+    - type: references
+      target: design.knowledge
+
+  - selector: reference.platform_scopes
+    source_path: docs/reference/platform-scopes.md
+    title: Platform Scopes
+    summary: "Reference for user/platform-controlled permission refs that determine platform tool availability."
+    kind: reference
+    tags: ["intent:lookup", "surface:platform", "topic:permissions", "risk:routing"]
+    related:
+    - type: references
+      target: orientation.platform
+    - type: references
+      target: classification.resource_surfaces
+
+  - selector: reference.glossary
+    source_path: docs/reference/glossary.md
+    title: Glossary
+    summary: "Compact definitions of core Nenjo terms for quick answers and disambiguation."
+    kind: reference
+    tags: ["intent:lookup", "domain:nenjo", "topic:vocabulary", "audience:agent"]
+    related:
+    - type: references
+      target: orientation.nenjo

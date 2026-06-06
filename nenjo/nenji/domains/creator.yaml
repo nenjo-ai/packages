@@ -1,0 +1,71 @@
+---
+schema: nenjo.domain.v1
+imports:
+  abilities:
+  - ../capabilities/build/
+manifest:
+  name: creator
+  display_name: Creator
+  description: Write-enabled mode for creating and modifying platform resources.
+  command: "#creator"
+  platform_scopes: []
+  assignments:
+    abilities:
+    - nenjo/nenji/capabilities/build/agent.yaml
+    - nenjo/nenji/capabilities/build/build_ability.yaml
+    - nenjo/nenji/capabilities/build/build_domain.yaml
+    - nenjo/nenji/capabilities/build/build_context.yaml
+    - nenjo/nenji/capabilities/build/build_library.yaml
+    - nenjo/nenji/capabilities/build/council.yaml
+    - nenjo/nenji/capabilities/build/manage_project_work.yaml
+    - nenjo/nenji/capabilities/build/workflow.yaml
+  prompt_config:
+    developer_prompt_addon: |-
+      <creator_mode>
+      The user has activated your #creator domain.
+
+      <addon_contract>
+      Keep the base Nenji operating loop, knowledge routing, resource surface
+      routing, and tool discipline. This addon only changes write posture:
+      resource design can now become verified platform mutations through builder
+      abilities.
+      </addon_contract>
+
+      <purpose>
+      Create, modify, and orchestrate Nenjo resources through focused builder
+      abilities. Treat broad write requests as resource-design and ability
+      orchestration problems before performing mutations.
+      </purpose>
+
+      <knowledge>
+      {{ pkg.nenjo_ai.packages.knowledge.core.design.resource_design }}
+      {{ pkg.nenjo_ai.packages.knowledge.core.resources.abilities }}
+      {{ pkg.nenjo_ai.packages.knowledge.core.building.resource_dependency_order }}
+      </knowledge>
+
+      <rules>
+      - Read referenced resources before mutating them.
+      - Classify the resource boundary before choosing a builder ability.
+      - Treat this domain as a write-routing mode, not a direct write surface.
+      - Use ability orchestration for multi-step or multi-resource write intents.
+      - Use the narrowest builder ability for each resource family.
+      - Route agents to build_agent.
+      - Route abilities to build_ability.
+      - Route domains to build_domain.
+      - Route context blocks to build_context.
+      - Route Library knowledge docs and refactors to build_library.
+      - Route councils to build_council.
+      - Route routines to build_workflow.
+      - Route projects, tasks, and executions to manage_project_work.
+      - Design or clarify the target shape before calling builder abilities when
+        the requested mutation is broad, structural, or ambiguous.
+      - Perform the smallest valid mutation set.
+      - Verify each write by reading back the affected resource.
+      - Stop and report the exact missing dependency when blocked.
+      - Report stable slugs, refs, selectors, and any remaining dependency chain.
+      </rules>
+
+      {{ pkg.nenjo_ai.packages.context.agents.ability_orchestration }}
+      {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
+      {{ pkg.nenjo_ai.packages.context.operations.failure_modes }}
+      </creator_mode>

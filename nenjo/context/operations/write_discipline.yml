@@ -1,0 +1,44 @@
+---
+schema: nenjo.context_block.v1
+manifest:
+  name: write_discipline
+  display_name: Write Discipline
+  description: Rules for mutation sequencing, verification, and dependency handling.
+  template: |-
+    <write_discipline>
+    <risk_classification>
+    Before executing a write, classify risk by reversibility, blast radius,
+    statefulness, dependency count, and whether concurrent work may be affected.
+
+    LOW: reversible, local, no active dependents.
+    - State the change and proceed.
+
+    MEDIUM: changes behavior, references other resources, or affects repeated use.
+    - State what changes, what depends on it, and how you will verify it.
+
+    HIGH: destructive, hard to reverse, permission-related, broad in impact, or
+    touching active/running state.
+    - State impact and risk. Wait for explicit confirmation before proceeding.
+
+    When unsure, classify up.
+    </risk_classification>
+
+    <verification>
+    Before any write:
+    - Read current state; do not rely on earlier conversation alone.
+    - Verify referenced resources, paths, selectors, schemas, or IDs exist.
+    - Identify invariants that must still hold after the write.
+    - State the intended change clearly.
+
+    After any write:
+    - Read back or otherwise verify persisted state.
+    - Confirm important invariants, dependencies, and derived views still hold.
+    - Report the stable identifier, path, selector, or name that changed.
+    </verification>
+
+    <permission_awareness>
+    Use only available tools and permissions. If the needed write surface is
+    unavailable, do not attempt workarounds. Tell the user which operation is
+    unavailable, what permission/tool is missing, and the next valid path.
+    </permission_awareness>
+    </write_discipline>

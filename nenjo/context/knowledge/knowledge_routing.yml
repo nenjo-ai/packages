@@ -1,0 +1,71 @@
+---
+schema: nenjo.context_block.v1
+manifest:
+  name: knowledge_routing
+  display_name: Knowledge Routing
+  description: Generic rules for metadata-first knowledge selection, intent routing, and graph traversal.
+  template: |-
+    <knowledge_routing>
+    <principle>
+    Seeded knowledge variables are compact metadata, not full source material.
+    Use selectors, titles, summaries, descriptions, kinds, tags, and related
+    edges to choose where to start. Read full documents only when source detail
+    affects the answer or action.
+    </principle>
+
+    <intent_routing>
+    Route intent through metadata before reading bodies:
+    - use summaries/descriptions to decide whether a doc answers the question;
+    - use tags to match resource family, domain, topic, audience, risk, and task intent;
+    - use kind as the user-defined document category, such as orientation,
+      design, resource, build, classification, reference, policy, or entity;
+    - prefer the most specific seeded selector that matches the request;
+    - if no seeded selector is specific enough, search metadata first.
+    </intent_routing>
+
+    <retrieval_flow>
+    1. Classify intent, affected domain, and needed confidence level.
+    2. Select one seeded document when summary/tags/kind are a strong match.
+    3. If the seed set is insufficient, search document metadata before reading bodies.
+    4. Read compact metadata for promising selectors before reading full content.
+    5. Traverse graph neighbors only when relations may improve the answer,
+       reveal prerequisites, or identify exact reference material.
+    6. Read only the final selected full documents.
+    7. Answer from documents actually read, verified live state, and clearly
+       named assumptions.
+    </retrieval_flow>
+
+    <relation_traversal>
+    Use relation types deliberately:
+    - depends_on: read or inspect when prerequisites, ordering, or required context may affect correctness;
+    - references: traverse for exact facts, examples, conventions, or source material;
+    - defines: traverse when a term, schema, resource, field, or contract must be precise;
+    - classifies: traverse when choosing categories, routing, task type, risk, or workflow pattern;
+    - part_of: traverse upward for broader context or downward when the current doc is too general;
+    - governs: traverse when rules, policy, permissions, compliance, or constraints may control the answer;
+    - extends: traverse when specialization, variants, or inherited behavior matter;
+    - related_to: traverse only when the current metadata suggests the related doc is likely relevant.
+    </relation_traversal>
+
+    <when_to_traverse>
+    Traverse when:
+    - the selected doc is broad and the answer needs a more specific companion doc;
+    - the user asks how concepts relate;
+    - the decision depends on prerequisites, rules, categories, or exact references;
+    - the metadata indicates a neighboring doc has a better kind/tag match.
+
+    Do not traverse when:
+    - the seeded summary already answers a low-stakes orientation question;
+    - the user asks for a narrow fact contained in one selected reference;
+    - graph edges are weakly related and would broaden the search unnecessarily;
+    - live resource state or user-provided data is the primary source of truth.
+    </when_to_traverse>
+
+    <selection_rules>
+    - Keep the active seed set small: one or two docs, three only when necessary.
+    - Prefer graph traversal over broad full-text reading.
+    - Prefer selectors over source paths in tool calls and reasoning.
+    - Do not treat summaries as final authority when exact behavior matters.
+    - Do not read a full doc just because its metadata was seeded.
+    </selection_rules>
+    </knowledge_routing>
