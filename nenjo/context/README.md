@@ -34,7 +34,7 @@ Packages that use these blocks should declare the dependency:
 
 ```yaml
 dependencies:
-  context: "^0.1.0"
+  context: "^1.0.0"
 ```
 
 Then reference the blocks in prompts by package selector:

@@ -29,11 +29,11 @@ author GitHub-style scopes in repo-backed package keys or package `name` fields.
 ```yaml
 schema: nenjo.package.v1
 name: nenji
-version: "0.1.0"
+version: "1.0.0"
 
 dependencies:
-  context: "^0.1.0"
-  knowledge: "^0.1.0"
+  context: "^1.0.0"
+  knowledge: "^1.0.0"
 
 modules:
   - context/
