@@ -31,10 +31,10 @@ a list of root module entrypoints:
 ```yaml
 schema: nenjo.package.v1
 name: nenji
-version: "0.1.0"
+version: "1.0.0"
 
 dependencies:
-  knowledge: "^0.1.0"
+  knowledge: "^1.0.0"
 
 modules:
   - nenji/agent.yaml

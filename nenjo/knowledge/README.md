@@ -35,7 +35,7 @@ Packages that use the core knowledge pack should declare it as a dependency:
 
 ```yaml
 dependencies:
-  knowledge: "^0.1.0"
+  knowledge: "^1.0.0"
 ```
 
 Then seed the pack or specific documents in prompts with package selectors:

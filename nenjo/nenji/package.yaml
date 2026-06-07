@@ -5,8 +5,8 @@ version: "1.0.0"
 description: Nenjo platform guide, designer, reviewer, and orchestrator.
 
 dependencies:
-  context: "^0.1.0"
-  knowledge: "^0.1.0"
+  context: "^1.0.0"
+  knowledge: "^1.0.0"
 
 modules:
   - context/

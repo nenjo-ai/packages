@@ -23,8 +23,8 @@ The package depends on:
 
 ```yaml
 dependencies:
-  context: "^0.1.0"
-  knowledge: "^0.1.0"
+  context: "^1.0.0"
+  knowledge: "^1.0.0"
 ```
 
 Those dependencies provide shared operating context and the Nenjo Core knowledge
