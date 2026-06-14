@@ -57,6 +57,7 @@ Include:
   retrieval instructions.
 - Making templates print internal labels such as `Intent:` or `Route:` as part
   of normal replies.
+- Treating system and developer prompt as separate. They are concatenated together when constructing the full agent prompt.
 
 ## Agent Guidance
 

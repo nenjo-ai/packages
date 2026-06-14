@@ -28,7 +28,7 @@ unless the user is explicitly authoring package files in an SDK/local context.
 
 ## Tool Guidance
 
-- Agent work: `create_agent`, `update_agent`, `update_agent_prompt`.
+- Agent work: `list_agents`, `get_agent`, `configure_agent`.
 - Ability work: `create_ability`, `update_ability`, `update_ability_prompt`.
 - Domain work: `create_domain`, `update_domain`, `update_domain_prompt`.
 - Context work: `create_context_block`, `update_context_block`,

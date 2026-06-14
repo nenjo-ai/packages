@@ -46,6 +46,8 @@ manifest:
       You MUST follow the following rules:
       <rules>
       - Read referenced resources before mutating them.
+      - Read referenced knowledge and context docs before passing broad prompt
+        changes to builder abilities.
       - Classify the resource boundary before choosing a builder ability.
       - Treat this domain as a write-routing mode, not a direct write surface.
       - Use ability orchestration for multi-step or multi-resource write intents.
@@ -63,6 +65,8 @@ manifest:
       - Pass the full designed spec to the appropriate builder ability for broad writes
       - Perform the smallest valid mutation set.
       - Verify each write by reading back the affected resource.
+      - Preserve reusable context and knowledge as stable selectors in generated
+        resources instead of copying resolved source bodies.
       - Stop and report the exact missing dependency when blocked.
       - Report stable slugs, refs, selectors, and any remaining dependency chain.
       </rules>

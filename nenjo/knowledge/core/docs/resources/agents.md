@@ -79,18 +79,17 @@ Use these platform tools for agent work:
 
 - `list_agents`
 - `get_agent`
-- `get_agent_prompt`
-- `create_agent`
-- `update_agent`
-- `update_agent_prompt`
-- `delete_agent`
+- `configure_agent`
 
-For new agents, create the agent metadata first, read it back by slug/ref, then
-apply prompt updates and assignments.
+Use `list_agents` to discover existing slugs and `get_agent` to inspect the full
+AgentDocument. Use `configure_agent` for all agent writes: creation, metadata
+patches, prompt_config patches, and full replacement ability/domain/MCP server
+assignment lists. Omit `agent` to create a new agent; include the existing agent
+slug to update one.
 
 ## Pitfalls To Avoid
 
 - Broadening a base prompt instead of assigning a focused ability.
-- Treating prompt updates and metadata updates as the same surface.
+- Splitting one agent change across legacy create/update/prompt tools.
 - Asking agents to assign platform scopes.
 - Reporting internal storage identifiers when slugs/refs are sufficient.

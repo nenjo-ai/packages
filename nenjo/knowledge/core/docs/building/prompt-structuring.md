@@ -23,6 +23,30 @@ state and full source reads.
 Do not put current mutable platform state or full source material into stable
 prompts. Read current state and selected source docs through tools.
 
+## Referenced Source Material
+
+Prompts should reference reusable source material by stable selector, not by
+copying resolved bodies.
+
+Use context-block selectors for reusable behavior:
+
+```jinja
+{{ context.methodology }}
+{{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
+```
+
+Use knowledge-pack selectors as discovery indexes, then require knowledge tools
+to read selected full documents during execution:
+
+```jinja
+{{ lib.<pack_slug> }}
+{{ pkg.nenjo_ai.packages.knowledge.core }}
+```
+
+Do not paste Library docs, package knowledge docs, or context block templates
+into stable prompts. Read them to choose the right selector and to write correct
+routing instructions.
+
 ## What Goes Where
 
 | Content | Best Home |
@@ -87,9 +111,11 @@ Builder prompts should:
 
 - state the resource family they own;
 - require live reads before writes;
+- require referenced knowledge and context docs to be read before composing prompt_config;
 - name the exact write tools they may use;
 - forbid platform-scope assignment by agents;
 - require readback verification;
+- verify generated prompt_config contains intended selectors rather than copied source bodies;
 - report slugs, refs, and selectors.
 
 Example:
@@ -103,8 +129,9 @@ Example:
 
 <rules>
 - Read current agent state before mutation.
-- Use create_agent or update_agent for metadata.
-- Use update_agent_prompt only after the agent exists.
+- Read referenced context block and knowledge docs before composing prompt_config.
+- Use configure_agent for metadata, prompt_config, and assignment changes.
+- Use selectors for reusable context and knowledge instead of copying source bodies.
 - Do not assign platform scopes.
 - Verify by reading back the agent by slug/ref.
 </rules>
@@ -126,6 +153,7 @@ for gate criteria.
 
 - Seeding too many docs instead of using retrieval tools.
 - Treating knowledge indexes as full source material.
+- Copying context block templates or knowledge doc bodies into stable prompts.
 - Treating memory as Library documentation.
 - Embedding platform-scope changes in prompts.
 - Using variables that are not rendered by the current runtime.

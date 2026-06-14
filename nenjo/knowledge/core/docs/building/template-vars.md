@@ -76,6 +76,10 @@ Package-installed knowledge uses the
 `pkg.<source_scope>.<source_repo>.<package_name>.<pack_name>` namespace. Library
 knowledge uses `lib.<pack_slug>`.
 
+When composing prompts, include the knowledge selector when the agent should
+discover and read that source during execution. Do not paste the resolved
+knowledge document body into prompt text.
+
 ## Routine
 
 - `{{ routine }}`
@@ -147,6 +151,9 @@ Context blocks render by their refs, for example:
 Installed agents, abilities, domains, MCP servers, script tools, and routines
 are resolved as runtime resources, not prompt variables.
 
+When composing prompts, include the context block selector. Do not paste the
+resolved context block template into another prompt.
+
 ## Global
 
 - `{{ global.timestamp }}`
@@ -157,5 +164,6 @@ Use this when the prompt needs the current timestamp.
 
 - Using variables that are not listed in this reference.
 - Treating knowledge pack indexes as full source material.
+- Copying resolved context or knowledge bodies instead of using selectors.
 - Treating memory as Library knowledge.
 - Embedding platform-scope assumptions in prompt templates.
