@@ -15,7 +15,7 @@ answering, designing, or building.
 | Package question | `resources.packages` | `building.package_manifests` and `orientation.sdk` |
 | Library/source-material question | `resources.library` | `resources.knowledge_packs` and knowledge tools |
 | Permission/tool unavailable | `reference.platform_scopes` | affected resource doc and live tool state |
-| Workflow planning | `design.workflows` | `resources.tasks`, `resources.routines`, `classification.workflow_patterns` |
+| Workflow planning | `design.workflows` | `classification.workflow_patterns`, `building.workflow_pattern_cookbook`, `resources.tasks`, `resources.routines` |
 | Knowledge authoring | `design.knowledge` | `building.knowledge_manifests`, `reference.selector_conventions` |
 
 ## Retrieval Order

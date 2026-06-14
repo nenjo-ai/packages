@@ -6,5 +6,5 @@ modules:
   - build_context.yaml
   - build_library.yaml
   - council.yaml
-  - workflow.yaml
+  - build_routine.yaml
   - manage_project_work.yaml

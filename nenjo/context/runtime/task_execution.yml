@@ -18,7 +18,9 @@ manifest:
     step instructions as task-specific instructions when present. Classify the
     work internally for routing and tool selection.
 
-    When the runtime exposes `pass_verdict`, use it to record the step outcome
-    with pass/fail status, evidence, and any required follow-up before
-    finishing. Return a user-facing task update with the result, verification,
-    blockers, and next action; do not include internal classification labels.
+    When the runtime exposes `route_next_steps`, use it exactly once as your
+    final action. Use verdict="fail" with reasoning and output when the step
+    cannot continue. Use verdict="pass" with reasoning, output, and one
+    next_steps item for each downstream route when the step should continue.
+    Return a user-facing task update through the tool output; do not include
+    internal classification labels.

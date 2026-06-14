@@ -55,7 +55,7 @@ behavior from each resolved module manifest schema, for example
 schema: nenjo.module_index.v1
 modules:
   - agent.yaml
-  - workflow.yaml
+  - build_routine.yaml
 ```
 
 Module files may also bundle multiple resources:
@@ -68,7 +68,7 @@ resources:
       name: build_agent
   - schema: nenjo.ability.v1
     manifest:
-      name: build_workflow
+      name: build_routine
 ```
 
 Bundled resources are referenced with `#resource_name` selectors. The official

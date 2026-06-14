@@ -203,6 +203,8 @@ manifest:
       target: resources.executions
     - type: references
       target: classification.workflow_patterns
+    - type: references
+      target: building.workflow_pattern_cookbook
 
   - selector: resources.agents
     source_path: docs/resources/agents.md
@@ -502,6 +504,24 @@ manifest:
     - type: references
       target: reference.platform_scopes
 
+  - selector: building.workflow_pattern_cookbook
+    source_path: docs/building/workflow-pattern-cookbook.md
+    title: Workflow Pattern Cookbook
+    summary: "Concrete Nenjo recipes for implementing workflow patterns as routines, agents, councils, abilities, domains, task sets, or combinations."
+    kind: build
+    tags: ["intent:build", "intent:design", "domain:workflow", "resource:routines", "topic:orchestration", "audience:builder"]
+    related:
+    - type: depends_on
+      target: classification.workflow_patterns
+    - type: depends_on
+      target: design.workflows
+    - type: references
+      target: resources.routines
+    - type: references
+      target: resources.councils
+    - type: references
+      target: resources.agents
+
   - selector: building.prompt_structuring
     source_path: docs/building/prompt-structuring.md
     title: Prompt Structuring
@@ -602,6 +622,8 @@ manifest:
     - type: classifies
       target: resources.routines
     - type: references
+      target: building.workflow_pattern_cookbook
+    - type: references
       target: resources.councils
     - type: references
       target: design.workflows
@@ -615,6 +637,12 @@ manifest:
     related:
     - type: references
       target: design.resource_design
+    - type: references
+      target: design.workflows
+    - type: references
+      target: classification.workflow_patterns
+    - type: references
+      target: building.workflow_pattern_cookbook
     - type: references
       target: design.knowledge
     - type: references

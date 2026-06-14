@@ -15,8 +15,8 @@ A routine is a directed graph consisting of:
 Platform routine graphs are mostly acyclic. The one allowed cycle shape is a
 bounded gate failure loop: a `gate` step may send an `on_fail` edge back to an
 earlier step. The runner uses `metadata.max_attempts` when present and defaults
-to 3 attempts when it is omitted. Use `on_exhausted` to route retry exhaustion
-to a terminal failure or escalation step when needed.
+to 3 attempts when it is omitted. If the retry budget is exhausted, the routine
+fails directly with a structured `retry_exhausted` result.
 
 ## Triggers
 
@@ -36,18 +36,24 @@ schedule; include schedule metadata when configuring cron behavior.
 | `gate`         | Evaluates prior evidence and branches; requires `agent`; use gate criteria in `config` | Quality control, validation |
 | `council`      | Runs one assigned council; requires `council`                               | Review, synthesis, voting |
 | `terminal`     | Successful end of the routine                                               | Success stop |
-| `terminal_fail`| Failed end of the routine                                                   | Failed stop after escalation or exhausted retries |
+| `terminal_fail`| Failed end of the routine                                                   | Explicit failed stop after an escalation path |
 
 ## Failure & Verdict Handling
 
 **Important runtime behavior:**
 
-- Every **agent step** and **gate step** is automatically exposed to a `pass_verdict` tool.
-- This tool allows the agent to explicitly return a structured pass/fail verdict along with a reason.
+- Every **agent step** is exposed to `route_next_steps`. This is the agent
+  step's terminal tool: it records `verdict`, `reasoning`, `output`, and, on
+  pass, the decomposed task for each downstream edge.
+- Every **gate step** is exposed to `pass_verdict`. This records a structured
+  gate pass/fail verdict and drives `on_pass` / `on_fail` routing.
 
 **Failure semantics differ by step type:**
 
-- **Agent Step Failure**: If an agent step fails (either by returning a failure verdict or by throwing an error), the **entire routine fails** immediately. There is no `on_fail` edge for agent steps.
+- **Agent Step Failure**: If an agent step fails (either by returning
+  `route_next_steps` with `verdict="fail"` or by throwing an error), the
+  **entire routine fails** immediately. There is no `on_fail` edge for agent
+  steps.
 - **Gate Step Failure**: If a gate step fails (returns a failure verdict), execution follows the explicitly defined `on_fail` edge. This allows graceful degradation, bounded rework, escalation, or routing to a failure path.
 
 This distinction ensures that critical work steps are treated as atomic (failure = routine failure), while gates can implement sophisticated error handling and branching.
@@ -64,12 +70,15 @@ Routines are typically built using well-known patterns:
 ## Graph Rules
 
 - Routine graphs must be acyclic except bounded gate failure loops.
-- Exactly one entry step should be present. Use `entry_steps` to name it.
+- One or more entry steps should be present. Use `entry_steps` to name them.
+  Multiple entry steps start as parallel branches.
 - Every routine step has a stable `slug`. Edge `source_step`, edge
   `target_step`, and `entry_steps` should reference those step slugs.
 - Every non-terminal step must have at least one outgoing edge.
 - Terminal steps must not have outgoing edges.
-- Every step must be reachable from the entry step.
+- Every step must be reachable from at least one entry step.
+- Multiple activated incoming edges into a step are an all-success join; the
+  target step runs only after all upstream branches required for that path pass.
 - Every routine must have at least one reachable terminal step: `terminal` or
   `terminal_fail`.
 - Edge `condition` values are `always`, `on_pass`, or `on_fail`.
@@ -80,8 +89,8 @@ Routines are typically built using well-known patterns:
   routine trigger to `cron`; the graph still uses ordinary routine nodes.
 - If an `on_fail` edge creates a retry cycle, the source step must be a `gate`
   and the retry remains bounded by `metadata.max_attempts` or the runner default.
-- Use `metadata.on_exhausted` to point to the step ref that should run when the
-  retry edge exhausts its attempts.
+- Do not add an `on_exhausted` branch. Retry exhaustion fails the routine
+  directly and records the exhausted edge in the result data.
 
 ## Bounded Rework Pattern
 
@@ -90,7 +99,7 @@ Express retries only as a bounded gate failure loop:
 1. `implement -> review_gate`
 2. `review_gate on_pass -> done`
 3. `review_gate on_fail -> implement`, optionally with `metadata.max_attempts`
-4. `metadata.on_exhausted -> failed` or an escalation step
+4. If the retry budget is exhausted, the routine fails directly
 
 The gate owns the retry decision. Agent steps do not use `on_fail` retry edges;
 agent step failure fails the routine immediately.

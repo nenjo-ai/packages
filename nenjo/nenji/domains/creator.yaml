@@ -18,7 +18,7 @@ manifest:
     - nenjo/nenji/capabilities/build/build_library.yaml
     - nenjo/nenji/capabilities/build/council.yaml
     - nenjo/nenji/capabilities/build/manage_project_work.yaml
-    - nenjo/nenji/capabilities/build/workflow.yaml
+    - nenjo/nenji/capabilities/build/build_routine.yaml
   prompt_config:
     developer_prompt_addon: |-
       <creator_mode>
@@ -58,7 +58,7 @@ manifest:
       - Route context block mutations to build_context.
       - Route library knowledge packs and docs mutations to build_library.
       - Route councils mutations to build_council.
-      - Route routines to mutations build_workflow.
+      - Route routine mutations to build_routine.
       - Route projects, tasks, and executions changes to manage_project_work.
       - Design or clarify the target shape before calling builder abilities when
         the requested mutation is broad, structural, or ambiguous.
