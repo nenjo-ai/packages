@@ -46,8 +46,8 @@ proper Library write surface:
 
 Package knowledge is installed from packages and should be treated as read-only
 source material by agents. Agents should not mutate package knowledge packs.
-Agents must not delete knowledge packs; use `update_knowledge_pack` to archive
-user-managed Library packs when needed.
+User-managed Library packs are removed through the platform delete API, which
+hard-deletes pack metadata, documents, edges, and object storage.
 
 ## Retrieval Flow
 

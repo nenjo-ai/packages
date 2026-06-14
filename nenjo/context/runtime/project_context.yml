@@ -1,0 +1,17 @@
+---
+schema: nenjo.context_block.v1
+manifest:
+  name: project_context
+  display_name: Project Context
+  description: Generic project runtime context 
+  template: |-
+    {% if project %}
+    # Current active project context.
+    {{ project }}
+    {% endif %}
+
+    {% if git %}
+    # Current actiev git context.
+    {{ git }}
+    {% endif %}
+

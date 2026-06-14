@@ -35,5 +35,9 @@ Use orientation docs for broad questions, resource docs for concrete behavior,
 design docs for tradeoffs, build docs for manifests and tool use, classification
 docs for routing, and reference docs for exact terms.
 
+For workflow design questions, start with `design.workflows`, then read
+`classification.workflow_patterns` for implementation tradeoffs and
+`building.workflow_pattern_cookbook` for concrete Nenjo graph recipes.
+
 Do not answer from the rendered knowledge-pack index alone. Search, traverse
 outbound neighbors, and read selected docs before making claims.

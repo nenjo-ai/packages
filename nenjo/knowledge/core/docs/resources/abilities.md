@@ -48,14 +48,14 @@ Use these platform tools for ability work:
 
 - `list_abilities`
 - `get_ability`
-- `get_ability_prompt`
-- `create_ability`
-- `update_ability`
-- `update_ability_prompt`
-- `delete_ability`
+- `configure_ability`
 
-Do not use ability create/update tools to assign platform scopes. Scope changes
-are a user/platform operation.
+Use `list_abilities` to discover existing names/slugs and `get_ability` to
+inspect the full AbilityDocument, including prompt_config and tool assignments.
+Use `configure_ability` for all ability writes: creation, metadata changes,
+prompt_config changes, and full replacement MCP/script tool assignments. Do not
+use `configure_ability` to assign platform scopes. Scope changes are a
+user/platform operation.
 
 ## Pitfalls To Avoid
 

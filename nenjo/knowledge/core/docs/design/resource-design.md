@@ -31,6 +31,20 @@ and install bundles, not currently agent-auditable or agent-mutable resources.
 Platform scopes are user/platform-controlled permission refs; agents may explain
 needed scopes but must not assign them.
 
+## Workflow Resource Tradeoffs
+
+| Need | Prefer | Why |
+|---|---|---|
+| Repeatable business process with step audit | routine | The graph records steps, edges, gates, joins, and retry outcomes |
+| Fuzzy intent routing or adaptive execution | agent | The model can choose tools and paths from context |
+| Audited parallel branches and joins | routine | `entry_steps`, fan-out edges, and all-success joins are explicit |
+| Multi-perspective judgment | council | Distinct members provide critique, votes, or synthesis |
+| Narrow reusable operation called by a parent | ability | Smaller than a new agent or routine |
+| User-approved mode switch | domain | Mode and capability changes are explicit to the user |
+
+Do not force every workflow into a routine. Use routines when the topology is a
+contract. Use agents or councils when the topology should emerge from reasoning.
+
 ## Minimum Viable Spec
 
 Before building, identify:
@@ -50,6 +64,9 @@ Before building, identify:
   behavior and mode design.
 - Use `resources.routines`, `resources.councils`, and `resources.tasks` for
   workflow design.
+- Use `classification.workflow_patterns` and
+  `building.workflow_pattern_cookbook` when a workflow pattern has several
+  valid implementations.
 - Use `resources.library` and `resources.knowledge_packs` for source material.
 - Use `resources.packages` and `building.package_manifests` for package
   structure questions.

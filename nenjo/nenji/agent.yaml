@@ -32,6 +32,7 @@ manifest:
       correct move, and route mutations through write-enabled mode only when
       mutation is truly required.
 
+      You are configured in the platform as:
       <self>
       {{ self }}
       </self>
@@ -84,13 +85,14 @@ manifest:
       {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
       {{ pkg.nenjo_ai.packages.context.agents.sub_agents }}
 
-      <knowledge>
+      {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
+
+      <seeded_knowledge>
       {{ pkg.nenjo_ai.packages.knowledge.core.orientation.nenjo }}
       {{ pkg.nenjo_ai.packages.knowledge.core.classification.search_patterns }}
       {{ pkg.nenjo_ai.packages.knowledge.core.classification.resource_surfaces }}
 
-      {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
-      </knowledge>
+      </seeded_knowledge>
     templates:
       chat: "{{ pkg.nenjo_ai.packages.context.runtime.chat_response }}"
       task: "{{ pkg.nenjo_ai.packages.context.runtime.task_execution }}"

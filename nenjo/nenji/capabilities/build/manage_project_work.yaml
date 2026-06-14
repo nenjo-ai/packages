@@ -15,7 +15,6 @@ manifest:
   tool_name: manage_project_work
   prompt_config:
     developer_prompt: |-
-      <ability>
       Manage project, task, and execution resources.
 
       <boundary>
@@ -28,14 +27,15 @@ manifest:
       Read the current project, task, execution, and referenced routine or agent state before acting.
       </reads>
 
-      <knowledge>
-      - {{ pkg.nenjo_ai.packages.knowledge.core.resources.projects }}
-      - {{ pkg.nenjo_ai.packages.knowledge.core.resources.tasks }}
-      - {{ pkg.nenjo_ai.packages.knowledge.core.building.resource_dependency_order }}
-
       {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
-      </knowledge>
 
+      <seeded_knowledge>
+        {{ pkg.nenjo_ai.packages.knowledge.core.resources.projects }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.resources.tasks }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.building.resource_dependency_order }}
+      </seeded_knowledge>
+
+      You MUST follow the following rules:
       <rules>
       - Create or verify projects before creating dependent tasks or executions.
       - Assign each task to exactly one executor surface: assigned agent or routine, never both.
@@ -44,16 +44,9 @@ manifest:
       - Start, pause, cancel, or inspect executions as lifecycle actions; do not confuse execution runs with task definitions.
       </rules>
 
-      <output>
-      Return:
-      - Goal
-      - Reads performed
-      - Actions
-      - Verification
-      - Slugs/refs
-      - Remaining dependency
-      </output>
-
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
+
       {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
-      </ability>
+    
+      {{ pkg.nenjo_ai.packages.context.output.ability_output }}
+

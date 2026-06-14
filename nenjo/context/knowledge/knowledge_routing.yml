@@ -5,7 +5,9 @@ manifest:
   display_name: Knowledge Routing
   description: Generic rules for metadata-first knowledge selection, intent routing, and graph traversal.
   template: |-
-    <knowledge_routing>
+    Use the following knowledge routing instructions to obtain proper knowledge for the task at hand. 
+
+    <knowledge_routing_intructions> 
     <principle>
     Seeded knowledge variables are compact metadata, not full source material.
     Use selectors, titles, summaries, descriptions, kinds, tags, and related
@@ -62,10 +64,14 @@ manifest:
     </when_to_traverse>
 
     <selection_rules>
-    - Keep the active seed set small: one or two docs, three only when necessary.
     - Prefer graph traversal over broad full-text reading.
     - Prefer selectors over source paths in tool calls and reasoning.
     - Do not treat summaries as final authority when exact behavior matters.
-    - Do not read a full doc just because its metadata was seeded.
     </selection_rules>
-    </knowledge_routing>
+
+    If the task requires specific knowledge in a domain/area, prefer a depth first search until leaf node documents are reached.
+    Read the leaf nodes documents and the relevant parent documents.
+
+    If the task requires broad overview knowledge, prefer a breadth first search and read the most relevant documents  
+    </knowledge_routing_intructions> 
+

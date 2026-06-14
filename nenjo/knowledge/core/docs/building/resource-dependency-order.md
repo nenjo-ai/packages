@@ -28,11 +28,11 @@ unless the user is explicitly authoring package files in an SDK/local context.
 
 ## Tool Guidance
 
-- Agent work: `create_agent`, `update_agent`, `update_agent_prompt`.
-- Ability work: `create_ability`, `update_ability`, `update_ability_prompt`.
-- Domain work: `create_domain`, `update_domain`, `update_domain_prompt`.
-- Context work: `create_context_block`, `update_context_block`,
-  `update_context_block_content`.
+- Agent work: `list_agents`, `get_agent`, `configure_agent`.
+- Ability work: `list_abilities`, `get_ability`, `configure_ability`.
+- Domain work: `list_domains`, `get_domain`, `configure_domain`.
+- Context work: `list_context_blocks`, `get_context_block`,
+  `configure_context_block`.
 - Routine work: `create_routine`, `update_routine`.
 - Council work: `create_council`, `update_council`, `update_council_member`.
 - Project work: `create_project`, `update_project`.
@@ -49,5 +49,5 @@ unless the user is explicitly authoring package files in an SDK/local context.
 - Verify every write by reading back the changed resource.
 - Use slugs/refs/selectors in reports.
 - Do not assign platform scopes from agent-authored resource writes.
-- Do not delete Library knowledge packs; archive user-managed packs instead.
+- Do not delete Library knowledge packs from agent tools; pack removal is a platform delete operation.
 - Stop and report the missing upstream ref or scope family when blocked.

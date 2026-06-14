@@ -1,32 +1,57 @@
 # Workflow Pattern Classification
 
 ## Purpose
-A classification system for the different types of workflow patterns used in Nenjo routines. This guide helps agents and humans choose the right structure for a given problem.
 
-## Core Workflow Patterns
+Classify common AI workflow patterns and map them to Nenjo implementation
+choices. Use this before building routines, councils, agents, or task plans.
 
-| Pattern            | Description                                                                 | Best Used When                                      | Key Characteristics |
-|--------------------|-----------------------------------------------------------------------------|-----------------------------------------------------|---------------------|
-| **Linear Pipeline** | Simple sequential execution of steps                                        | Work naturally flows in a fixed order               | No branching, predictable path |
-| **Gated Pipeline**  | Sequential steps with validation gates at key points                        | Quality, safety, or compliance must be checked      | Explicit pass/fail decisions |
-| **Fan Out**         | Parallel independent work followed by aggregation or review                 | Multiple independent analyses or generations needed | Parallel execution + join step |
-| **Review Pipeline** | Generation → Review → Approval/Rejection path                               | Output quality or compliance requires human/agent review | Explicit pass/fail routing |
-| **Decomposition**   | Leader breaks work into subtasks assigned to specialists                    | Complex work that benefits from division of labor   | Clear subtask boundaries |
-| **Council**         | Structured multi-agent collaboration with defined delegation strategy       | Multiple perspectives or synthesis are required     | Leader + members with roles |
-| **Adversarial**     | One agent proposes, another critiques, leader decides                       | High-stakes decisions requiring critical thinking   | Built-in challenge mechanism |
-| **Bounded Iterative** | Repeated generation + gate evaluation with a bounded retry loop            | Creative or optimization work with a retry budget   | Gate `on_fail` loop with optional `max_attempts` and final escalation |
+A workflow pattern can often be implemented in several ways. Choose by the
+needed balance of auditability, determinism, flexibility, scheduling, failure
+semantics, parallelism, and cost.
+
+## Implementation Tradeoffs
+
+| Axis | Routine | Agent / Ability / Council |
+|---|---|---|
+| Auditability | Strong step, edge, gate, and retry trail | Weaker unless the agent records evidence explicitly |
+| Determinism | Graph controls order, dependencies, and joins | Model decides flow dynamically |
+| Flexibility | Lower because topology is authored up front | Higher because intent and context can shape execution |
+| Scheduling | Coupled to task or cron dispatch | Can run in chat, task, ability, council, or domain contexts |
+| Failure semantics | Explicit terminal, terminal_fail, gate retry exhaustion | Prompt and tool dependent |
+| Parallelism | Explicit entry steps, fan-out edges, and joins | Possible through sub-agents or council members, less graph-visible |
+| Cost/control | Predictable shape | More variable but often simpler for exploratory work |
+
+Use routines when the workflow shape is part of the product contract. Use
+agents, abilities, or councils when the workflow shape is part of the reasoning.
+
+## Core Patterns
+
+| Pattern | Intent | Nenjo Implementations | Default Guidance |
+|---|---|---|---|
+| Prompt chaining | Run ordered transformations or analyses | Linear routine; one agent with structured phases | Use a routine when phases need audit, different owners, gates, or model choices |
+| Routing | Choose one path from task intent, context, or evidence | Router agent; council; routine branches; domain switch | Use an agent for fuzzy intent. Use a routine when route choice is an audited business process |
+| Parallelization | Run independent branches and combine results | Multiple `entry_steps`; agent fan-out plus join; council members; sub-agents | Use a routine for auditable branch state. Use a council for judgment. Use sub-agents for flexible speed |
+| Orchestrator-workers | Decompose work, assign specialists, synthesize | Planner step -> worker branches -> synthesis; council leader and members; single agent delegation | Use a routine when worker lanes are predictable. Use an agent or council when decomposition is dynamic |
+| Evaluator-optimizer | Generate, evaluate, revise within a bounded budget | Gate `on_fail` retry loop with `max_attempts`; reviewer ability; self-reflection agent loop | Use a routine when retry count, evidence, and outcomes must be recorded |
+| Autonomous agent | Let one agent pursue a goal with tools over time | Single agent with abilities/domains/tools; scheduled routine wrapper when needed | Use an agent by default. Wrap in a routine only for scheduling, audit checkpoints, or deterministic handoffs |
+| Human/tool approval | Pause or gate progress on external approval or evidence | Gate step; explicit terminal_fail/escalation path; agent asks user/tool | Use a routine when approval is a workflow checkpoint |
+| Adversarial review | Challenge an answer before acceptance | Council with critic/reviewer roles; routine generate -> critique -> gate | Use a council for contested judgment. Use a routine when the challenge path must be explicit |
 
 ## Decision Framework
 
-Use this classification guide when designing routines:
+1. Start with a single agent if the work is fuzzy, conversational, or
+   intent-driven.
+2. Add an ability when a narrow reusable specialist operation is enough.
+3. Use a routine when step order, audit trail, retry budget, or scheduled
+   dispatch matters.
+4. Use a council when independent perspectives, voting, critique, or synthesis
+   add real signal.
+5. Combine routine and council when the macro workflow is deterministic but one
+   step needs collaborative judgment.
+6. Keep routine ordinary flow acyclic. The only valid cycle is a bounded gate
+   `on_fail` retry loop. Retry exhaustion fails the routine directly.
 
-1. Start with **Linear Pipeline** if the work is simple and sequential.
-2. Add **Gates** if validation is required at key stages.
-3. Use **Fan Out** when parallel independent work improves speed or quality.
-4. Choose **Review Pipeline** when output quality matters.
-5. Use **Council** when multiple perspectives or synthesis are genuinely needed.
-6. Consider **Decomposition** or **Adversarial** for complex or high-stakes work.
-7. For platform routines, keep ordinary flow acyclic. Use cycles only for bounded gate `on_fail` retry loops; set `max_attempts` only when overriding the default retry budget.
+## Agent Guidance
 
-## Notes
-This classification guide is intentionally extensible. New patterns can be added as the platform evolves.
+After choosing a pattern, read `design.workflows` for resource boundaries and
+`building.workflow_pattern_cookbook` for concrete Nenjo graph recipes.

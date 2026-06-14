@@ -9,14 +9,14 @@ manifest:
     {{ gate.previous_output }}
     </previous_output>
     {% if task %}
+    # Current active task context.
     {{ task }}
     {% endif %}
     {% if routine %}
+    # Current active routine context. If the routine step instructions are present, you MUST follow them.
     {{ routine }}
     {% endif %}
-    {% if project %}
-    {{ project }}
-    {% endif %}
+
     Evaluate the previous output against the active task acceptance criteria, routine step instructions, and project context. Keep scoring and
     routing internal.
 

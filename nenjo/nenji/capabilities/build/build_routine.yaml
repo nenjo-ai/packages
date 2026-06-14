@@ -1,8 +1,8 @@
 ---
 schema: nenjo.ability.v1
 manifest:
-  name: build_workflow
-  display_name: Build Workflow
+  name: build_routine
+  display_name: Build Routine
   description: |-
     Create and update routines and routine graph composition.
   activation_condition: |-
@@ -12,11 +12,10 @@ manifest:
   - agents:read
   - projects:read
   - councils:read
-  tool_name: build_workflow
+  tool_name: build_routine
   prompt_config:
     developer_prompt: |-
-      <ability>
-      Create and update routine workflow graphs.
+      Create and update routine graphs.
 
       <boundary>
       Own concrete routine mutations. Do not create councils, domains, agents,
@@ -28,24 +27,16 @@ manifest:
       projects, and related routines before wiring them together.
       </reads>
 
-      <knowledge>
-      - {{ pkg.nenjo_ai.packages.knowledge.core.resources.routines }}
-      - {{ pkg.nenjo_ai.packages.knowledge.core.design.workflows }}
-      - {{ pkg.nenjo_ai.packages.knowledge.core.classification.workflow_patterns }}
-
       {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
-      </knowledge>
 
-      <output>
-      Return:
-      - Goal
-      - Reads performed
-      - Actions
-      - Verification
-      - Slugs/refs
-      - Remaining dependency
-      </output>
+      <seeded_knowledge>
+        {{ pkg.nenjo_ai.packages.knowledge.core.resources.routines }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.design.workflows }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.classification.workflow_patterns }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.building.workflow_pattern_cookbook }}
+      </seeded_knowledge>
 
+      You MUST follow the following rules:
       <rules>
       - Verify upstream resources before wiring downstream references.
       - For routines, list/read referenced agents and councils before using their slugs.
@@ -53,17 +44,22 @@ manifest:
       - In routine graph steps, use the `agent` field with an agent slug for every `agent` step and every `gate` step.
       - Use `council` only for `council` steps. For scheduled routines, set trigger="cron"; the graph still uses ordinary routine nodes.
       - Keep ordinary routine flow acyclic. The only valid cycle is a gate `on_fail` retry loop.
-      - Model bounded retries with a `gate` `on_fail` edge back to the work step; set `metadata.max_attempts` only when overriding the default retry budget.
-      - When retries can exhaust, include a reachable `terminal_fail` or escalation step and set `metadata.on_exhausted` to that step ref.
       - Use trigger="task" for project task dispatch and trigger="cron" only for scheduled routines.
       - Include all steps targeted by edges before writing the graph.
       - Each routine step must have a stable `slug`; edge `source_step`, edge `target_step`, and `entry_steps` must reference those step slugs.
-      - Use exactly one entry step and at least one reachable terminal step.
+      - Use one or more entry steps and at least one reachable terminal step.
+      - Treat multiple entry steps as parallel branches.
+      - Treat multiple activated incoming edges into a step as an all-success join.
+      - Treat multiple outgoing edges from an agent step as deterministic fan-out; decompose the task so each downstream edge has a clear purpose.
+      - Put branch purpose on edge metadata (`purpose`, `task`, or `description`) so `route_next_steps` can show the agent each downstream route.
+      - Use councils for deliberative routing or agent-driven branch choice; routines should make fan-out edges explicit and auditable.
       - Preserve explicit success and failure terminals when changing routine topology.
       - Validate gate pass/fail destinations before writing.
-      - Verify reachable terminals, branch destinations, and cross-resource references after mutation.
+      - Verify reachable terminals, branch destinations, joins, and cross-resource references after mutation.
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
+
       {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
-      </ability>
+
+      {{ pkg.nenjo_ai.packages.context.output.ability_output }}

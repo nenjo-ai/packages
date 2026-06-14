@@ -54,7 +54,7 @@ Creator mode enables the write abilities installed by this package:
 - `build_context`
 - `build_library`
 - `build_council`
-- `build_workflow`
+- `build_routine`
 - `manage_project_work`
 
 Nenji's write flow is intentionally conservative: it reads current state before

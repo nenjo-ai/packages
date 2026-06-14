@@ -14,7 +14,6 @@ manifest:
   - context_blocks:read
   prompt_config:
     developer_prompt: |-
-      <ability>
       Create and update domains, including command, metadata, assigned
       abilities, linked tool/context refs, and developer prompt addon.
 
@@ -29,35 +28,29 @@ manifest:
       context blocks before assigning them to the domain.
       </reads>
 
-      <knowledge>
-      - {{ pkg.nenjo_ai.packages.knowledge.core.resources.domains }}
-      - {{ pkg.nenjo_ai.packages.knowledge.core.design.domains }}
-      - {{ pkg.nenjo_ai.packages.knowledge.core.building.resource_dependency_order }}
-
       {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
-      </knowledge>
 
-      <output>
-      Return:
-      - Goal
-      - Reads performed
-      - Actions
-      - Verification
-      - Slugs/refs
-      - Remaining dependency
-      </output>
+      <seeded_knowledge>
+        {{ pkg.nenjo_ai.packages.knowledge.core.resources.domains }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.design.domains }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.building.resource_dependency_order }}
+      </seeded_knowledge>
 
+      You MUST follow the following rules.
       <rules>
       - Domains are explicit user-activated modes; use hash commands such as #creator.
       - Verify every assigned ability exists before writing the domain assignment list.
-      - Use create_domain for new domains with name, description, command, abilities, and prompt_config when available.
-      - Use update_domain for metadata, command, ability refs, MCP server refs, or script tool refs.
-      - Use update_domain_prompt for prompt addon changes on an existing domain.
-      - Never include platform_scopes in create_domain or update_domain payloads; report required scope refs as a user/admin assignment step.
-      - Pass the complete intended replacement ability list to update_domain; do not pass partial assignment lists.
-      - Verify by reading the domain and domain prompt back after mutation.
+      - Use configure_domain as the only domain write tool for creation, metadata changes, prompt_config changes, and ability/MCP/script tool assignments.
+      - For new domains, call configure_domain without `domain` and include metadata.name plus metadata.command.
+      - For existing domains, call configure_domain with the current domain slug.
+      - Never include platform_scopes in configure_domain payloads; report required scope refs as a user/admin assignment step.
+      - Pass the complete intended replacement ability list in assignments.abilities; omit assignment fields that should remain unchanged.
+      - Verify by reading the domain back with get_domain after mutation.
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
+
       {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
-      </ability>
+      
+      {{ pkg.nenjo_ai.packages.context.output.ability_output }}
+

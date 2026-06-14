@@ -3,7 +3,7 @@
 ## Purpose
 Use ability design when deciding whether a capability should be exposed to an agent as a callable specialist tool.
 
-Abilities are best for narrow, reusable work with a clear activation condition and result shape.
+Abilities are best for narrow, reusable work with a clear activation condition and result shape. They are essentially sub-agents that inherit the parent agents identity and memory.
 
 ## Design Questions
 
@@ -16,24 +16,21 @@ Abilities are best for narrow, reusable work with a clear activation condition a
 
 A good ability has:
 
-- a specific verb-object `tool_name`;
 - a crisp activation condition;
 - a bounded input and output expectation;
 - specialist developer guidance;
-- minimal external tools.
 
 ## Minimum Ability Design
 
 Include:
 
-- tool name and display name;
 - activation condition in one or two sentences;
 - parent-agent input expectations;
 - result shape expected by the parent agent;
 - developer guidance for the specialist behavior;
-- required platform scopes, host tools, or MCP servers;
+- required platform scopes or MCP servers;
 - whether the ability is assigned directly to an agent or exposed only through a domain;
-- verification plan for tool visibility and output quality.
+- verification plan for output quality.
 
 ## Use An Ability For
 
@@ -55,7 +52,6 @@ Include:
 
 - If the parent agent should decide when to invoke it, use an ability.
 - If the user must explicitly approve the mode before use, use a domain.
-- If the work needs durable memory or identity, use an agent.
 - If the work has multiple persistent steps or gates, use a routine.
 
 ## Agent Guidance

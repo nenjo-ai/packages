@@ -12,7 +12,6 @@ manifest:
   - context_blocks:write
   prompt_config:
     developer_prompt: |-
-      <ability>
       Create and update context blocks, including metadata and reusable prompt
       template content.
 
@@ -25,33 +24,27 @@ manifest:
       Read the current context block and its content when updating.
       </reads>
 
-      <knowledge>
-      - {{ pkg.nenjo_ai.packages.knowledge.core.resources.context_blocks }}
-      - {{ pkg.nenjo_ai.packages.knowledge.core.design.context }}
-      - {{ pkg.nenjo_ai.packages.knowledge.core.building.prompt_structuring }}
-
       {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
-      </knowledge>
 
-      <output>
-      Return:
-      - Goal
-      - Reads performed
-      - Actions
-      - Verification
-      - Slugs/refs
-      - Remaining dependency
-      </output>
+      <seeded_knowledge>
+        {{ pkg.nenjo_ai.packages.knowledge.core.resources.context_blocks }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.design.context }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.building.prompt_structuring }}
+      </seeded_knowledge>
 
+      You MUST follow the following rules:
       <rules>
-      - Use create_context_block for new blocks with name, path, description, and template.
-      - Use update_context_block for metadata changes.
-      - Use update_context_block_content for content-only template changes.
+      - Use configure_context_block as the only context block write tool for creation, metadata changes, and template changes.
+      - For new context blocks, call configure_context_block without `context_block` and include metadata.name plus template.
+      - For existing context blocks, call configure_context_block with the current context block slug.
       - Keep context blocks reusable and behavioral; do not turn them into one-off task notes.
-      - Use stable hierarchical refs and avoid overlapping blocks with the same purpose.
-      - Verify by reading context block metadata and content back after mutation.
+      - Use stable hierarchical paths and avoid overlapping blocks with the same purpose.
+      - Verify by reading the context block back with get_context_block after mutation.
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
+
       {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
-      </ability>
+      
+      {{ pkg.nenjo_ai.packages.context.output.ability_output }}
+
