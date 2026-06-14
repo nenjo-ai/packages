@@ -29,10 +29,10 @@ unless the user is explicitly authoring package files in an SDK/local context.
 ## Tool Guidance
 
 - Agent work: `list_agents`, `get_agent`, `configure_agent`.
-- Ability work: `create_ability`, `update_ability`, `update_ability_prompt`.
-- Domain work: `create_domain`, `update_domain`, `update_domain_prompt`.
-- Context work: `create_context_block`, `update_context_block`,
-  `update_context_block_content`.
+- Ability work: `list_abilities`, `get_ability`, `configure_ability`.
+- Domain work: `list_domains`, `get_domain`, `configure_domain`.
+- Context work: `list_context_blocks`, `get_context_block`,
+  `configure_context_block`.
 - Routine work: `create_routine`, `update_routine`.
 - Council work: `create_council`, `update_council`, `update_council_member`.
 - Project work: `create_project`, `update_project`.

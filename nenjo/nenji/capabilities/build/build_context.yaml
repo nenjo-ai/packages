@@ -34,12 +34,12 @@ manifest:
 
       You MUST follow the following rules:
       <rules>
-      - Use create_context_block for new blocks with name, path, description, and template.
-      - Use update_context_block for metadata changes.
-      - Use update_context_block_content for content-only template changes.
+      - Use configure_context_block as the only context block write tool for creation, metadata changes, and template changes.
+      - For new context blocks, call configure_context_block without `context_block` and include metadata.name plus template.
+      - For existing context blocks, call configure_context_block with the current context block slug.
       - Keep context blocks reusable and behavioral; do not turn them into one-off task notes.
       - Use stable hierarchical paths and avoid overlapping blocks with the same purpose.
-      - Verify by reading context block metadata and content back after mutation.
+      - Verify by reading the context block back with get_context_block after mutation.
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}

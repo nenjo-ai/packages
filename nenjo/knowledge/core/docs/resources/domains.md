@@ -50,14 +50,14 @@ surface:
 
 - `list_domains`
 - `get_domain`
-- `get_domain_prompt`
-- `create_domain`
-- `update_domain`
-- `update_domain_prompt`
-- `delete_domain`
+- `configure_domain`
 
-Do not use domain create/update tools to assign platform scopes. Platform scopes
-are user-controlled permission refs.
+Use `list_domains` to discover existing slugs and `get_domain` to inspect the
+full DomainDocument, including prompt_config and assignments. Use
+`configure_domain` for all domain writes: creation, metadata/command changes,
+prompt_config changes, and full replacement ability/MCP/script tool assignments.
+Do not use `configure_domain` to assign platform scopes. Platform scopes are
+user-controlled permission refs.
 
 ## Common Patterns
 

@@ -37,13 +37,13 @@ manifest:
 
       You MUST follow the following rules.
       <rules>
-      - Use create_ability for new abilities with name, description, activation_condition, prompt_config, and any linked tool/context refs.
-      - Use update_ability for metadata, activation_condition, MCP server refs, or script tool refs on an existing ability.
-      - Use update_ability_prompt when only the developer prompt changes or after metadata creation if the prompt must be replaced separately.
-      - Never include platform_scopes in create_ability or update_ability payloads; report required scope refs as a user/admin assignment step.
+      - Use configure_ability as the only ability write tool for creation, metadata changes, prompt_config changes, and MCP/script tool assignments.
+      - For new abilities, call configure_ability without `ability` and include metadata.name plus prompt_config.developer_prompt.
+      - For existing abilities, call configure_ability with the current ability slug.
+      - Never include platform_scopes in configure_ability payloads; report required scope refs as a user/admin assignment step.
       - Keep the ability narrow enough for a parent agent to invoke as a specialist tool.
       - Prefer a verb-object tool_name that names the work, not the implementation.
-      - Verify by reading the ability and ability prompt back after mutation.
+      - Verify by reading the ability back with get_ability after mutation.
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}

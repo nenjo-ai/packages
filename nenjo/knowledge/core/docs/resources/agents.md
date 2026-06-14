@@ -90,6 +90,6 @@ slug to update one.
 ## Pitfalls To Avoid
 
 - Broadening a base prompt instead of assigning a focused ability.
-- Splitting one agent change across legacy create/update/prompt tools.
+- Splitting one agent change across multiple calls instead of using configure_agent.
 - Asking agents to assign platform scopes.
 - Reporting internal storage identifiers when slugs/refs are sufficient.

@@ -23,8 +23,35 @@ A good agent has:
 - explicit prompt boundaries;
 - a narrow default capability set;
 - enough knowledge access to answer its domain questions;
-- memory guidance that matches its expected lifetime.
-- reuses available context blocks appropriately based on the descrtiption and contents
+- memory guidance that matches its expected lifetime;
+- reusable context blocks selected by role need, not by availability.
+
+## Knowledge And Context Selection
+
+Seeded knowledge belongs in an agent prompt only when that knowledge pertains to
+the agent's recurring role, decisions, or expected source material. Do not seed
+broad packs or docs just because they are available. If the agent only
+occasionally needs a source, give it retrieval guidance and the right knowledge
+tools instead of injecting the source index into every turn.
+
+Use context blocks when they directly support how the agent should operate.
+Knowledge docs describe selector names as literal references; they do not render
+context blocks themselves.
+
+| Agent Need | Useful Context Selector |
+|---|---|
+| Finds and reads Library/package docs | `pkg.nenjo_ai.packages.context.knowledge.knowledge_routing` |
+| Uses tools frequently or must sequence reads/writes | `pkg.nenjo_ai.packages.context.tools.tool_usage` |
+| Performs platform writes | `pkg.nenjo_ai.packages.context.operations.write_discipline` |
+| Diagnoses failures or recovery paths | `pkg.nenjo_ai.packages.context.operations.failure_modes` |
+| Delegates to sub-agents | `pkg.nenjo_ai.packages.context.agents.sub_agents` |
+| Orchestrates abilities | `pkg.nenjo_ai.packages.context.agents.ability_orchestration` |
+| Depends on durable memory behavior | `pkg.nenjo_ai.packages.context.memory.remembrance` |
+| Runs routine tasks, gates, heartbeats, or chat wrappers | the matching `pkg.nenjo_ai.packages.context.runtime.*` selector |
+
+Do not add context selectors that do not support the role. Read context block
+metadata and content to choose useful selectors, then include the selectors
+rather than copying resolved templates.
 
 ## Design Patterns
 
@@ -43,6 +70,8 @@ Include:
 - durable responsibility and non-goals;
 - system prompt purpose, principles, and behavioral boundaries;
 - developer guidance for tool use, retrieval, verification, and escalation;
+- role-relevant seeded knowledge selectors, if any;
+- role-relevant context block selectors, if any;
 - model slug or model requirements;
 - memory profile focus areas;
 - runtime templates only when chat, routine task, gate, or heartbeat behavior differs;
@@ -74,7 +103,8 @@ Complete the following checklist to ensure a good agent shape
 - well defined developer prompt?
 - well defined memory profile
 - well defined chat, task, gate, and heartbeat task templates
-- prompts and task templates resuse the context blocks
+- seeded knowledge is limited to sources that pertain to the agent's role
+- prompts and task templates reuse selected context blocks by selector
 
 ## Agent Guidance
 

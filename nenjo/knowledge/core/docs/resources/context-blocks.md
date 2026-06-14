@@ -68,11 +68,12 @@ Use these tools for context block work:
 
 - `list_context_blocks`
 - `get_context_block`
-- `get_context_block_content`
-- `create_context_block`
-- `update_context_block`
-- `update_context_block_content`
-- `delete_context_block`
+- `configure_context_block`
+
+Use `list_context_blocks` to discover existing slugs/selectors and
+`get_context_block` to inspect the full ContextBlockDocument, including
+template. Use `configure_context_block` for all context block writes: creation,
+metadata changes, and template changes.
 
 ## Best Practices
 
