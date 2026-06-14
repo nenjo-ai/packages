@@ -37,28 +37,30 @@ manifest:
       orchestration problems before performing mutations.
       </purpose>
 
-      <knowledge>
+      <additional_knowledge>
       {{ pkg.nenjo_ai.packages.knowledge.core.design.resource_design }}
       {{ pkg.nenjo_ai.packages.knowledge.core.resources.abilities }}
       {{ pkg.nenjo_ai.packages.knowledge.core.building.resource_dependency_order }}
-      </knowledge>
+      </additional_knowledge>
 
+      You MUST follow the following rules:
       <rules>
       - Read referenced resources before mutating them.
       - Classify the resource boundary before choosing a builder ability.
       - Treat this domain as a write-routing mode, not a direct write surface.
       - Use ability orchestration for multi-step or multi-resource write intents.
       - Use the narrowest builder ability for each resource family.
-      - Route agents to build_agent.
-      - Route abilities to build_ability.
-      - Route domains to build_domain.
-      - Route context blocks to build_context.
-      - Route Library knowledge docs and refactors to build_library.
-      - Route councils to build_council.
-      - Route routines to build_workflow.
-      - Route projects, tasks, and executions to manage_project_work.
+      - Route agent mutations to build_agent.
+      - Route abilitiy mutations to build_ability.
+      - Route domain mutations to build_domain.
+      - Route context block mutations to build_context.
+      - Route library knowledge packs and docs mutations to build_library.
+      - Route councils mutations to build_council.
+      - Route routines to mutations build_workflow.
+      - Route projects, tasks, and executions changes to manage_project_work.
       - Design or clarify the target shape before calling builder abilities when
         the requested mutation is broad, structural, or ambiguous.
+      - Pass the full designed spec to the appropriate builder ability for broad writes
       - Perform the smallest valid mutation set.
       - Verify each write by reading back the affected resource.
       - Stop and report the exact missing dependency when blocked.
@@ -66,6 +68,8 @@ manifest:
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.agents.ability_orchestration }}
+
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
+      
       {{ pkg.nenjo_ai.packages.context.operations.failure_modes }}
       </creator_mode>

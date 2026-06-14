@@ -9,17 +9,9 @@ manifest:
     # Active Task
     {{ task }}
     {% endif %}
-    {% if project %}
-    # Active Project
-    {{ project }}
-    {% endif %}
     {% if routine %}
-    # Active Routine
+    # Current active routine context. If the routine step instructions are present, you MUST follow them.
     {{ routine }}
-    {% endif %}
-    {% if git %}
-    # Active Git State
-    {{ git }}
     {% endif %}
     Execute or advance the routine task using available live state, source
     material, project context, metadata, and acceptance criteria. Treat routine

@@ -1,0 +1,17 @@
+---
+schema: nenjo.context_block.v1
+manifest:
+  name: ability_output
+  display_name: Ability Output
+  description: Generic output sytle rules for abilities
+  template: |-
+      You MUST respond in the following output when you are done.
+      <output>
+        Return:
+        - Goal
+        - Reads performed
+        - Actions
+        - Verification
+        - Slugs
+        - Remaining dependency
+      </output>

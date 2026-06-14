@@ -24,6 +24,7 @@ A good agent has:
 - a narrow default capability set;
 - enough knowledge access to answer its domain questions;
 - memory guidance that matches its expected lifetime.
+- reuses available context blocks appropriately based on the descrtiption and contents
 
 ## Design Patterns
 
@@ -44,10 +45,7 @@ Include:
 - developer guidance for tool use, retrieval, verification, and escalation;
 - model slug or model requirements;
 - memory profile focus areas;
-- default platform scopes and host tools;
-- assigned abilities, domains, context blocks, MCP servers, and knowledge seeds;
 - runtime templates only when chat, routine task, gate, or heartbeat behavior differs;
-- verification plan for prompt rendering, model assignment, and capability access.
 
 ## Boundary Rules
 
@@ -68,6 +66,15 @@ Include:
 - Using an agent when an ability or routine would be simpler.
 - Designing assignments vaguely instead of naming the complete intended ability,
   domain, model, MCP, context, and knowledge surface.
+- Optimization the agent prompts early on. Start simple and add complexity later when the work demands it.
+
+## Checklist
+Complete the following checklist to ensure a good agent shape  
+- well defined system prompt
+- well defined developer prompt?
+- well defined memory profile
+- well defined chat, task, gate, and heartbeat task templates
+- prompts and task templates resuse the context blocks
 
 ## Agent Guidance
 

@@ -17,10 +17,13 @@ manifest:
     {{ heartbeat.previous_output }}
     </previous_output>
 
+    {% if heartbeat.instructions %}
+    # You MUST read and follow the heartbeat instructions
     <heartbeat_instructions>
     {{ heartbeat.instructions }}
     </heartbeat_instructions>
-    
+    {% endif %}
+
     Perform a lightweight health or maintenance check using available live
     state, configured heartbeat context, and project context. Keep routing and
     prioritization internal. Return only meaningful findings, actions taken,

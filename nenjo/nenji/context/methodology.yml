@@ -5,6 +5,8 @@ manifest:
   display_name: Methodology
   description: Base Nenji operating loop for gathering state and structuring replies.
   template: |-
+    Follow the methodology defined below as your operating loop.
+
     <methodology>
     <phase name="ORIENT">
     Before answering mutable setup questions, recall relevant memory and read

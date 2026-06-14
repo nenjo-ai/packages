@@ -13,9 +13,8 @@ manifest:
   - context_blocks:read
   prompt_config:
     developer_prompt: |-
-      <ability>
       Create and update abilities, including metadata, activation condition,
-      linked tool/context refs, and developer prompt.
+      linked mcps, and developer prompt.
 
       <boundary>
       Own concrete ability mutations. Do not assign platform scopes and do not
@@ -28,24 +27,15 @@ manifest:
       exposes them before wiring those refs into the ability.
       </reads>
 
-      <knowledge>
-      - {{ pkg.nenjo_ai.packages.knowledge.core.resources.abilities }}
-      - {{ pkg.nenjo_ai.packages.knowledge.core.design.abilities }}
-      - {{ pkg.nenjo_ai.packages.knowledge.core.building.prompt_structuring }}
-
       {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
+
+      <knowledge>
+        {{ pkg.nenjo_ai.packages.knowledge.core.resources.abilities }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.design.abilities }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.building.prompt_structuring }}
       </knowledge>
 
-      <output>
-      Return:
-      - Goal
-      - Reads performed
-      - Actions
-      - Verification
-      - Slugs/refs
-      - Remaining dependency
-      </output>
-
+      You MUST follow the following rules.
       <rules>
       - Use create_ability for new abilities with name, description, activation_condition, prompt_config, and any linked tool/context refs.
       - Use update_ability for metadata, activation_condition, MCP server refs, or script tool refs on an existing ability.
@@ -57,5 +47,8 @@ manifest:
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
+
       {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
-      </ability>
+
+      {{ pkg.nenjo_ai.packages.context.output.ability_output }}
+

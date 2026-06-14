@@ -49,5 +49,5 @@ unless the user is explicitly authoring package files in an SDK/local context.
 - Verify every write by reading back the changed resource.
 - Use slugs/refs/selectors in reports.
 - Do not assign platform scopes from agent-authored resource writes.
-- Do not delete Library knowledge packs; archive user-managed packs instead.
+- Do not delete Library knowledge packs from agent tools; pack removal is a platform delete operation.
 - Stop and report the missing upstream ref or scope family when blocked.

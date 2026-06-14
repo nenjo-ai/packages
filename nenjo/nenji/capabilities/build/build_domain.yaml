@@ -14,7 +14,6 @@ manifest:
   - context_blocks:read
   prompt_config:
     developer_prompt: |-
-      <ability>
       Create and update domains, including command, metadata, assigned
       abilities, linked tool/context refs, and developer prompt addon.
 
@@ -29,24 +28,15 @@ manifest:
       context blocks before assigning them to the domain.
       </reads>
 
-      <knowledge>
-      - {{ pkg.nenjo_ai.packages.knowledge.core.resources.domains }}
-      - {{ pkg.nenjo_ai.packages.knowledge.core.design.domains }}
-      - {{ pkg.nenjo_ai.packages.knowledge.core.building.resource_dependency_order }}
-
       {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
-      </knowledge>
 
-      <output>
-      Return:
-      - Goal
-      - Reads performed
-      - Actions
-      - Verification
-      - Slugs/refs
-      - Remaining dependency
-      </output>
+      <seeded_nowledge>
+        {{ pkg.nenjo_ai.packages.knowledge.core.resources.domains }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.design.domains }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.building.resource_dependency_order }}
+      </seeded_knowledge>
 
+      You MUST follow the following ruiles.
       <rules>
       - Domains are explicit user-activated modes; use hash commands such as #creator.
       - Verify every assigned ability exists before writing the domain assignment list.
@@ -59,5 +49,8 @@ manifest:
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
+
       {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
-      </ability>
+      
+      {{ pkg.nenjo_ai.packages.context.output.ability_output }}
+

@@ -23,18 +23,6 @@ state and full source reads.
 Do not put current mutable platform state or full source material into stable
 prompts. Read current state and selected source docs through tools.
 
-## Seed Limits
-
-Nenji base, domain, and ability prompts should seed no more than three knowledge
-docs directly. Use those seeded docs as entry points, then use knowledge tools:
-
-- `list_knowledge_packs`
-- `search_knowledge`
-- `list_knowledge_neighbors`
-- `read_knowledge_doc`
-
-Rendered knowledge-pack variables are indexes, not complete docs.
-
 ## What Goes Where
 
 | Content | Best Home |
@@ -74,7 +62,6 @@ variables include:
 - `{{ memories }}`
 - `{{ artifacts }}`
 - `{{ git }}`
-- `{{ pkg.nenjo_ai.packages.knowledge.core }}`
 
 Use only variables documented in `building.template_vars`. Available tools and
 resources should come from the platform tool surface and live reads, not invented

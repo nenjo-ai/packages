@@ -8,9 +8,7 @@ manifest:
     <user_message>
     {{ chat.message }}
     </user_message>
-    {% if project %}
-    {{ project }}
-    {% endif %}
+
     Use the user message as the current turn input. Use project context and
     metadata when present. Classify intent internally for routing, knowledge
     search, ability selection, and clarification. Reply in the external

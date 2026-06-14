@@ -16,7 +16,6 @@ manifest:
   - context_blocks:read
   prompt_config:
     developer_prompt: |-
-      <ability>
       Create and update councils, including charter, leader/member structure,
       delegation strategy, and membership.
 
@@ -30,28 +29,21 @@ manifest:
       routines, and relevant context blocks before wiring the council together.
       </reads>
 
-      <knowledge>
-      - {{ pkg.nenjo_ai.packages.knowledge.core.resources.councils }}
-      - {{ pkg.nenjo_ai.packages.knowledge.core.design.councils }}
-      - {{ pkg.nenjo_ai.packages.knowledge.core.building.resource_dependency_order }}
-
       {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
-      </knowledge>
 
-      <output>
-      Return:
-      - Goal
-      - Reads performed
-      - Actions
-      - Verification
-      - Slugs/refs
-      - Remaining dependency
-      </output>
+      <seeded_knowledge>
+        {{ pkg.nenjo_ai.packages.knowledge.core.resources.councils }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.design.councils }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.building.resource_dependency_order }}
+      </seeded_knowledge>
 
       <rules>
       - Verify leader assignment, membership, delegation strategy, and referenced resources by reading the council back.
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
+      
       {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
-      </ability>
+
+      {{ pkg.nenjo_ai.packages.context.output.ability_output }}
+

@@ -12,7 +12,6 @@ manifest:
   - library:write
   prompt_config:
     developer_prompt: |-
-      <ability>
       Create, update, and refactor platform Library knowledge packs, documents,
       metadata, and outbound graph relationships.
 
@@ -28,31 +27,21 @@ manifest:
       existing doc cannot be read, stop instead of rewriting it from memory.
       </reads>
 
-      <knowledge>
-      - {{ pkg.nenjo_ai.packages.knowledge.core.resources.library }}
-      - {{ pkg.nenjo_ai.packages.knowledge.core.design.knowledge }}
-
       {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
-      </knowledge>
-
-      <output>
-      Return:
-      - Goal
-      - Reads performed
-      - Actions
-      - Verification
-      - Slugs/refs/selectors
-      - Remaining dependency
-      </output>
+      
+      <seeded_knowledge>
+        {{ pkg.nenjo_ai.packages.knowledge.core.resources.library }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.design.knowledge }}
+      </seeded_knowledge>
 
       <rules>
       - Use create_knowledge_pack when no suitable user-managed Library pack exists.
-      - Use update_knowledge_pack for user-managed pack name, slug, description, or archive status changes.
-      - Do not delete knowledge packs; archive user-managed packs through update_knowledge_pack when needed.
+      - Use update_knowledge_pack for user-managed pack name, slug, or description changes.
+      - Do not delete knowledge packs from agent tools; pack removal is a platform delete operation.
       - Use create_knowledge_doc for new Library docs.
       - Use update_knowledge_doc for content, metadata, path, title, kind, summary, tags, or relation changes.
-      - Use delete_knowledge_doc only when the user clearly wants removal instead of archive/rewrite.
-      - For refactors, state the migration plan first: keep, split, merge, rename, archive, and relation changes.
+      - Use delete_knowledge_doc when the user clearly wants a document removed.
+      - For refactors, state the migration plan first: keep, split, merge, rename, delete, and relation changes.
       - Preserve source meaning; do not invent facts while cleaning up prose or structure.
       - Keep docs focused enough for retrieval and relations sparse enough for useful traversal.
       - Add relations only when they improve lookup, dependency traversal, or source context.
@@ -62,5 +51,10 @@ manifest:
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
+
       {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
-      </ability>
+
+      {{ pkg.nenjo_ai.packages.context.output.ability_output }}
+
+
+      
