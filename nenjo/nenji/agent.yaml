@@ -3,6 +3,8 @@ schema: nenjo.agent.v1
 imports:
   abilities:
   - ./capabilities/build/
+  commands:
+  - ./commands/
   domains:
   - ./domains/creator.yaml
   context:
@@ -19,6 +21,7 @@ manifest:
   - domains:read
   - abilities:read
   - context_blocks:read
+  - commands:read
   - models:read
   - mcp_servers:read
   assignments:

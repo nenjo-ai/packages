@@ -1,9 +1,9 @@
 # Nenji
 
 Nenji is the official Nenjo platform guide package. It installs the `Nenji`
-agent, a user-activated `#creator` domain, build abilities, and Nenji-specific
-context blocks for understanding, designing, reviewing, and safely changing
-Nenjo resources.
+agent, a user-activated `#creator` domain, build abilities, slash commands, and
+Nenji-specific context blocks for understanding, designing, reviewing, and
+safely changing Nenjo resources.
 
 Use this package when you want an agent that can explain how Nenjo works,
 inspect live platform state, design resource changes, and route platform writes
@@ -14,8 +14,10 @@ through explicit write-enabled mode.
 - `agent.yaml`: the `Nenji` agent manifest.
 - `domains/creator.yaml`: the `#creator` domain for write-enabled platform
   changes.
-- `capabilities/build/`: write abilities for agents, abilities, domains,
-  context blocks, Library knowledge, councils, routines, and project work.
+- `capabilities/build/`: write abilities for agents, abilities, commands,
+  domains, context blocks, Library knowledge, councils, routines, and project
+  work.
+- `commands/`: slash command entrypoints such as `/design`.
 - `context/`: Nenji-specific context blocks for methodology and resource
   surface routing.
 
@@ -50,6 +52,7 @@ Creator mode enables the write abilities installed by this package:
 
 - `build_agent`
 - `build_ability`
+- `build_command`
 - `build_domain`
 - `build_context`
 - `build_library`
