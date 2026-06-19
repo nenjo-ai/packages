@@ -26,6 +26,9 @@ executing agent. Use scalar fields for concise identity references.
 - `{{ chat.message }}`
 
 Use this in chat templates when the user message should be passed through.
+Command content is rendered like a chat template for the command turn; after a
+slash command is invoked, `{{ chat.message }}` contains the user's request with
+the command trigger stripped.
 
 ## Task
 
@@ -148,8 +151,8 @@ Context blocks render by their refs, for example:
 ```
 
 `pkg.*` is only used for package-installed context blocks and package knowledge.
-Installed agents, abilities, domains, MCP servers, script tools, and routines
-are resolved as runtime resources, not prompt variables.
+Installed agents, abilities, domains, commands, MCP servers, script tools, and
+routines are resolved as runtime resources, not prompt variables.
 
 When composing prompts, include the context block selector. Do not paste the
 resolved context block template into another prompt.
