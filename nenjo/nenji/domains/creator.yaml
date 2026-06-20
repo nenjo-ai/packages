@@ -13,7 +13,6 @@ manifest:
     abilities:
     - nenjo/nenji/capabilities/build/agent.yaml
     - nenjo/nenji/capabilities/build/build_ability.yaml
-    - nenjo/nenji/capabilities/build/build_command.yaml
     - nenjo/nenji/capabilities/build/build_domain.yaml
     - nenjo/nenji/capabilities/build/build_context.yaml
     - nenjo/nenji/capabilities/build/build_library.yaml
@@ -55,7 +54,6 @@ manifest:
       - Use the narrowest builder ability for each resource family.
       - Route agent mutations to build_agent.
       - Route abilitiy mutations to build_ability.
-      - Route slash command mutations to build_command.
       - Route domain mutations to build_domain.
       - Route context block mutations to build_context.
       - Route library knowledge packs and docs mutations to build_library.

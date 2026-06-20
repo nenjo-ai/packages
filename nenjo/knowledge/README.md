@@ -15,10 +15,10 @@ Nenjo resources are modeled, designed, built, routed, or retrieved.
 - `core/docs/orientation/`: high-level guides for Nenjo, the platform, and the
   SDK.
 - `core/docs/design/`: design guidance for agents, abilities, domains,
-  councils, prompts, commands, workflows, context, and knowledge.
+  councils, prompts, workflows, context, and knowledge.
 - `core/docs/resources/`: resource-level references for agents, abilities,
-  domains, commands, councils, tasks, routines, projects, memory, executions,
-  context blocks, and knowledge packs.
+  domains, councils, tasks, routines, projects, memory, executions, context
+  blocks, and knowledge packs.
 - `core/docs/building/`: implementation guidance for manifests, prompt
   structure, template variables, and dependency order.
 - `core/docs/classification/` and `core/docs/reference/`: routing

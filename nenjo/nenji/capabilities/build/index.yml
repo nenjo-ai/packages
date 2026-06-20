@@ -2,7 +2,6 @@ schema: nenjo.module_index.v1
 modules:
   - agent.yaml
   - build_ability.yaml
-  - build_command.yaml
   - build_domain.yaml
   - build_context.yaml
   - build_library.yaml
