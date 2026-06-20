@@ -2,8 +2,8 @@
 
 ## Purpose
 
-Use this guide when composing agent, ability, domain, routine, gate, heartbeat,
-and context-block prompts.
+Use this guide when composing agent, ability, domain, command, routine, gate,
+heartbeat, and context-block prompts.
 
 Good prompts separate stable behavior from runtime context and source material.
 They seed only the docs needed for discovery, then require tools for current
@@ -17,6 +17,8 @@ state and full source reads.
    behavior.
 3. Runtime template — chat, task, gate, routine, heartbeat, memory,
    artifact, project, and Git variables.
+   Command content uses the same template rules as chat templates for the
+   invoked turn.
 4. Evidence gathered during the turn — tool results, selected Library/package
    knowledge, memory recall, and file reads.
 
@@ -54,6 +56,7 @@ routing instructions.
 | Stable identity and principles | system prompt |
 | Tool-use discipline and routing | developer prompt or context block |
 | External response style and hidden intent classification | developer prompt or context block |
+| Explicit one-turn slash workflow | command content |
 | Task or chat data | runtime template |
 | Reusable prompt behavior | context block |
 | Learned preferences and corrections | memory |
@@ -117,6 +120,10 @@ Builder prompts should:
 - require readback verification;
 - verify generated prompt_config contains intended selectors rather than copied source bodies;
 - report slugs, refs, and selectors.
+
+Command content should follow the same selector discipline: use stable context
+and knowledge selectors, keep `{{ chat.message }}` as the user request input,
+and avoid copying full source documents into the command body.
 
 Example:
 

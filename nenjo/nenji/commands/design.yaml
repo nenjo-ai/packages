@@ -1,0 +1,9 @@
+---
+schema: nenjo.command.v1
+manifest:
+  name: design
+  display_name: Design
+  path: ""
+  command: /design
+  description: Design resources, workflows, or agents with knowledge-guided context for Nenji.
+  content_path: nenjo/nenji/commands/design/command.md

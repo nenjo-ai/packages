@@ -13,13 +13,15 @@ downstream resources are wired.
 4. Create or update agents without broad assignments first.
 5. Apply prompt updates after the agent exists and has been read back by slug/ref.
 6. Create abilities and domains that reference existing tools and context.
-7. Assign abilities/domains/tool refs to agents only after those refs exist.
-8. Create councils before routines that reference those councils.
-9. Create routines with valid agent, gate, council, and terminal refs.
-10. Create projects before tasks and executions.
-11. Create tasks with exactly one executor surface: assigned agent ref or routine
+7. Create native commands after their prompt template, context, and knowledge
+   refs are known.
+8. Assign abilities/domains/tool refs to agents only after those refs exist.
+9. Create councils before routines that reference those councils.
+10. Create routines with valid agent, gate, council, and terminal refs.
+11. Create projects before tasks and executions.
+12. Create tasks with exactly one executor surface: assigned agent ref or routine
     ref.
-12. Start, pause, resume, or inspect executions only after project and task refs
+13. Start, pause, resume, or inspect executions only after project and task refs
     are valid.
 
 Packages are not in the platform write order for agents. Package manifests are
@@ -30,6 +32,7 @@ unless the user is explicitly authoring package files in an SDK/local context.
 
 - Agent work: `list_agents`, `get_agent`, `configure_agent`.
 - Ability work: `list_abilities`, `get_ability`, `configure_ability`.
+- Command work: `configure_command`.
 - Domain work: `list_domains`, `get_domain`, `configure_domain`.
 - Context work: `list_context_blocks`, `get_context_block`,
   `configure_context_block`.
