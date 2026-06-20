@@ -10,7 +10,7 @@ shared semantics.
 
 | Surface | Meaning | Indicators |
 |---|---|---|
-| `platform_ui` | Dashboard/editor fields shown to users | Chat, command selector, agent builder, routine editor, Library, projects, settings, workers |
+| `platform_ui` | Dashboard/editor fields shown to users | Chat, agent builder, routine editor, Library, projects, settings, workers |
 | `platform_tools` | Platform-backed tools and API operations | User asks Nenji to inspect, create, update, or verify live resources |
 | `sdk_manifest` | Local declarative manifest files | User asks for manifests, package files, import/export, or SDK config |
 | `sdk_runtime` | Runtime structs, builders, crates, traits, and execution APIs | User asks about embedding Nenjo, provider setup, tools, memory, or workers |
@@ -27,7 +27,6 @@ shared semantics.
 | "I need an agent that reviews incidents." | `platform_tools`, `shared_fields` | Design the agent and recommend platform reads/writes |
 | "Give me the manifest for that agent." | `sdk_manifest` | Provide local manifest structure |
 | "How should my agent read project reference material?" | `library_knowledge` | Route to Library knowledge tools |
-| "Add a /design command for Nenji." | `platform_tools`, `package_resource` | Distinguish native command authoring from package-installed command manifests |
 | "How does the packages repo expose Nenji?" | `package_resource` | Explain registry, package manifest, modules, imports, and `pkg.*` selectors |
 | "Why can’t Nenji update this resource?" | `permission_ref` | Explain missing scope family and user-controlled scope assignment |
 

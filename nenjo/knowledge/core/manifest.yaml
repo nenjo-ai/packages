@@ -84,8 +84,6 @@ manifest:
     - type: references
       target: design.domains
     - type: references
-      target: design.commands
-    - type: references
       target: design.context
     - type: references
       target: design.workflows
@@ -123,22 +121,6 @@ manifest:
       target: resources.domains
     - type: references
       target: design.abilities
-
-  - selector: design.commands
-    source_path: docs/design/command-design.md
-    title: Command Design
-    summary: "How to design explicit slash-triggered chat templates and decide when a command should be used instead of a domain, ability, routine, or agent."
-    kind: design
-    tags: ["intent:design", "resource:commands", "topic:prompting", "audience:builder"]
-    related:
-    - type: part_of
-      target: design.resource_design
-    - type: depends_on
-      target: resources.commands
-    - type: references
-      target: design.prompts
-    - type: references
-      target: building.template_vars
 
   - selector: design.councils
     source_path: docs/design/council-design.md
@@ -264,8 +246,6 @@ manifest:
     - type: related_to
       target: resources.domains
     - type: related_to
-      target: resources.commands
-    - type: related_to
       target: resources.mcp_servers
     - type: related_to
       target: resources.script_tools
@@ -284,33 +264,11 @@ manifest:
     - type: related_to
       target: resources.abilities
     - type: related_to
-      target: resources.commands
-    - type: related_to
       target: resources.agents
     - type: related_to
       target: resources.mcp_servers
     - type: related_to
       target: resources.script_tools
-    - type: references
-      target: reference.platform_scopes
-
-  - selector: resources.commands
-    source_path: docs/resources/commands.md
-    title: Commands
-    summary: "Resource-level model for slash commands as user-invoked chat templates with platform-authored or package file-backed content."
-    kind: resource
-    tags: ["intent:explain", "intent:build", "resource:commands", "topic:prompting"]
-    related:
-    - type: references
-      target: design.commands
-    - type: references
-      target: design.prompts
-    - type: depends_on
-      target: building.template_vars
-    - type: related_to
-      target: resources.agents
-    - type: related_to
-      target: resources.packages
     - type: references
       target: reference.platform_scopes
 

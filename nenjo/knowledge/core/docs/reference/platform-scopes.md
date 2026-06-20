@@ -14,7 +14,6 @@ for other resources.
 - `agents:read` / `agents:write`
 - `abilities:read` / `abilities:write`
 - `domains:read` / `domains:write`
-- `commands:read` / `commands:write`
 - `routines:read` / `routines:write`
 - `projects:read` / `projects:write`
 - `councils:read` / `councils:write`
