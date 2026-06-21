@@ -19,6 +19,7 @@ Examples:
 
 ```jinja
 {{ context.methodology }}
+{{ pkg.nenjo_ai.packages.context.agents.agent_delegation }}
 {{ pkg.nenjo_ai.packages.context.agents.sub_agents }}
 {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
 ```

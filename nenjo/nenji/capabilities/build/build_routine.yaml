@@ -27,8 +27,6 @@ manifest:
       projects, and related routines before wiring them together.
       </reads>
 
-      {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
-
       <seeded_knowledge>
         {{ pkg.nenjo_ai.packages.knowledge.core.resources.routines }}
         {{ pkg.nenjo_ai.packages.knowledge.core.design.workflows }}

@@ -26,8 +26,6 @@ manifest:
       existing Library docs, search/read the current docs and neighbors. If an
       existing doc cannot be read, stop instead of rewriting it from memory.
       </reads>
-
-      {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
       
       <seeded_knowledge>
         {{ pkg.nenjo_ai.packages.knowledge.core.resources.library }}

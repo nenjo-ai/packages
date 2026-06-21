@@ -1,0 +1,9 @@
+---
+schema: nenjo.command.v1
+manifest:
+  name: design_agent
+  display_name: Design Agent
+  path: ""
+  command: /design-agent
+  description: Design a focused Nenjo agent with role, prompts, memory, model, and capability assignments.
+  content_path: nenjo/commands/design-agent/command.md

@@ -9,7 +9,7 @@ decisions, traverse to the relevant resource, design, build, or reference doc.
 |---|---|
 | Agent | Primary behavioral unit that owns prompts, memory profile, model, and assigned capability refs |
 | Ability | Agent-invoked specialist execution mode exposed through a `tool_name` |
-| Domain | User-activated execution mode such as `#creator` |
+| Domain | User-activated execution mode such as `#review` |
 | Context Block | Reusable prompt context referenced by a stable path |
 | Routine | Workflow graph with steps, edges, gates, retries, and terminal states |
 | Council | Structured multi-agent collaboration group |

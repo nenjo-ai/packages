@@ -24,8 +24,6 @@ manifest:
       Read the current context block and its content when updating.
       </reads>
 
-      {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
-
       <seeded_knowledge>
         {{ pkg.nenjo_ai.packages.knowledge.core.resources.context_blocks }}
         {{ pkg.nenjo_ai.packages.knowledge.core.design.context }}

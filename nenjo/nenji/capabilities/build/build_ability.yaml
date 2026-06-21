@@ -27,8 +27,6 @@ manifest:
       exposes them before wiring those refs into the ability.
       </reads>
 
-      {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
-
       <knowledge>
         {{ pkg.nenjo_ai.packages.knowledge.core.resources.abilities }}
         {{ pkg.nenjo_ai.packages.knowledge.core.design.abilities }}

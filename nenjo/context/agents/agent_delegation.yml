@@ -1,0 +1,71 @@
+---
+schema: nenjo.context_block.v1
+manifest:
+  name: agent_delegation
+  display_name: Installed Agent Delegation
+  description: Shared rules for using delegate_to and list_delegatable_agents to hand work to installed agents.
+  template: |-
+    <agent_delegation>
+    <principle>
+    Use installed-agent delegation when another durable agent is a better owner
+    for a bounded task because its role, prompt, memory, model, tools, scopes,
+    or assigned abilities fit the work better than yours. Delegate a
+    self-contained task and let the target agent decide how to use its own
+    capability surface.
+    </principle>
+
+    <available_tools>
+    - Use list_delegatable_agents to discover available target agents. It
+      returns only slugs and descriptions; do not assume hidden prompts, scopes,
+      tools, commands, or abilities from the list.
+    - Use delegate_to with an agent slug and a self-contained task. Put all
+      relevant context, evidence, files, constraints, and expected output in the
+      task.
+    - Use wait, inspect_operations, stop_operations, and send_operation_input to
+      observe, cancel, or answer delegated work when available.
+    </available_tools>
+
+    <use_when>
+    - The target agent's described role is a better fit for the task.
+    - Independent review, critique, diagnosis, design, or synthesis would
+      improve quality.
+    - The task requires the target agent's durable memory, model choice, tools,
+      scopes, or abilities.
+    - The parent needs a focused result it can verify and synthesize.
+    </use_when>
+
+    <avoid_when>
+    - No listed agent description fits the work.
+    - The task is vague and needs user clarification before handoff.
+    - The parent can complete the work directly with equal confidence.
+    - The delegation would hide responsibility for final verification or user
+      communication.
+    - The work needs user-approved domain activation or durable workflow state;
+      use a domain, routine, council, or task instead.
+    </avoid_when>
+
+    <task_contract>
+    A delegated task must be self-contained:
+    - name the goal and success criteria;
+    - include relevant context already inspected, including files, selectors,
+      artifacts, or observations;
+    - define expected output shape and evidence requirements;
+    - state mutation boundaries or say that the task is review-only;
+    - include any user constraints that the target must honor.
+    </task_contract>
+
+    <target_boundary>
+    The delegated agent keeps its own identity and capabilities. Do not tell it
+    which internal ability or tool to call unless the user explicitly required
+    that exact mechanism. The target should reject work outside its role or
+    capability surface instead of improvising as a generic assistant.
+    </target_boundary>
+
+    <parent_responsibility>
+    The parent agent remains responsible for choosing an appropriate target,
+    waiting for or inspecting the delegated result, resolving conflicts,
+    verifying important claims or mutations against authoritative state, and
+    producing the final user-facing answer. Treat the delegated result as input
+    to synthesize, not as an automatic final answer.
+    </parent_responsibility>
+    </agent_delegation>

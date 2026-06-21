@@ -27,7 +27,7 @@ shared semantics.
 | "I need an agent that reviews incidents." | `platform_tools`, `shared_fields` | Design the agent and recommend platform reads/writes |
 | "Give me the manifest for that agent." | `sdk_manifest` | Provide local manifest structure |
 | "How should my agent read project reference material?" | `library_knowledge` | Route to Library knowledge tools |
-| "Add a /design command for Nenji." | `platform_tools`, `package_resource` | Distinguish native command authoring from package-installed command manifests |
+| "Add a /design-workflow command for Nenji." | `platform_tools`, `package_resource` | Distinguish native command authoring from package-installed command manifests |
 | "How does the packages repo expose Nenji?" | `package_resource` | Explain registry, package manifest, modules, imports, and `pkg.*` selectors |
 | "Why can’t Nenji update this resource?" | `permission_ref` | Explain missing scope family and user-controlled scope assignment |
 

@@ -1,4 +1,5 @@
 schema: nenjo.module_index.v1
 modules:
+  - agent_delegation.yml
   - ability_orchestration.yml
   - sub_agents.yml

@@ -12,6 +12,7 @@ composed by selector instead of copied into every agent or ability.
 
 | Area | Selector | Purpose |
 | --- | --- | --- |
+| Agents | `pkg.nenjo_ai.packages.context.agents.agent_delegation` | Delegate bounded work to installed agents with their own durable capability surface. |
 | Agents | `pkg.nenjo_ai.packages.context.agents.ability_orchestration` | Select, sequence, verify, and synthesize ability calls. |
 | Agents | `pkg.nenjo_ai.packages.context.agents.sub_agents` | Decide when and how to delegate to sub-agents. |
 | Knowledge | `pkg.nenjo_ai.packages.context.knowledge.knowledge_routing` | Use metadata-first retrieval and graph traversal. |
@@ -48,7 +49,8 @@ Then reference the blocks in prompts by package selector:
 Use the smallest context block that matches the behavior you want. For example,
 an ability that performs writes usually needs `write_discipline` and
 `tool_usage`; an agent that retrieves docs usually needs `knowledge_routing`;
-an orchestration-heavy agent may need `ability_orchestration` or `sub_agents`.
+an orchestration-heavy agent may need `ability_orchestration`, `sub_agents`, or
+`agent_delegation`.
 
 ## Authoring Notes
 
