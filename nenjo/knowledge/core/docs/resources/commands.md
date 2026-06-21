@@ -40,7 +40,7 @@ stable.
   short source-managed commands.
 - `content_path` — Preferred package manifest field for Nenjo-authored package
   commands with a separate Markdown file. It points to the command body, for example
-  `nenjo/commands/design-workflow/command.md`.
+  `design-workflow/command.md`.
 - `entry_path` — Runtime/plugin compatibility field for a file path relative to
   `root_path`.
 - `root_path` — Runtime/plugin compatibility field for the directory containing

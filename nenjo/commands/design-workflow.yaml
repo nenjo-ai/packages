@@ -6,4 +6,4 @@ manifest:
   path: ""
   command: /design-workflow
   description: Design resources, workflows, or agents with knowledge-guided context for Nenjo.
-  content_path: nenjo/commands/design-workflow/command.md
+  content_path: design-workflow/command.md

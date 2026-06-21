@@ -1,7 +1,7 @@
 ---
 schema: nenjo.package.v1
 name: commands
-version: "1.0.0"
+version: "1.0.1"
 description: Official Nenjo slash commands for explicit prompt workflows.
 
 dependencies:

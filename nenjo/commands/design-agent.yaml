@@ -6,4 +6,4 @@ manifest:
   path: ""
   command: /design-agent
   description: Design a focused Nenjo agent with role, prompts, memory, model, and capability assignments.
-  content_path: nenjo/commands/design-agent/command.md
+  content_path: design-agent/command.md
