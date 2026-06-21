@@ -170,6 +170,8 @@ exhaustion is not an authored failure branch; it fails the routine directly.
 - Name one or more `entry_steps`.
 - Assign `agent` on every `agent` and `gate` step.
 - Assign `council` only on `council` steps.
+- Add explicit `terminal` and `terminal_fail` steps before targeting them from
+  edges.
 - Add edge purpose metadata for fan-out edges so `route_next_steps` can show
   each downstream route clearly.
 - Use multiple incoming edges only when the target is an all-success join.

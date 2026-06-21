@@ -74,6 +74,9 @@ Routines are typically built using well-known patterns:
   Multiple entry steps start as parallel branches.
 - Every routine step has a stable `slug`. Edge `source_step`, edge
   `target_step`, and `entry_steps` should reference those step slugs.
+- Terminal outcomes must be explicit steps. Add a step with `step_type:
+  "terminal"` or `step_type: "terminal_fail"` and target that step slug from
+  edges; do not target an undeclared slug such as `terminal`.
 - Every non-terminal step must have at least one outgoing edge.
 - Terminal steps must not have outgoing edges.
 - Every step must be reachable from at least one entry step.
@@ -120,6 +123,8 @@ Routines provide strong observability — every step transition, gate decision, 
 - Creating overly complex graphs with too many steps
 - Using gates without clear acceptance criteria
 - Forgetting to define both success and failure terminal paths
+- Pointing an edge at `terminal` or `failed` without adding a matching terminal
+  or terminal_fail step to the graph
 - Creating cycles from non-gate steps, `on_pass` edges, or unbounded `on_fail`
   edges
 

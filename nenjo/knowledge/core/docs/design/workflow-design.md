@@ -78,6 +78,8 @@ ordinary routine nodes. A gate without an agent cannot execute because no model
 has been assigned to evaluate the gate criteria and call `pass_verdict`.
 Agent steps call `route_next_steps` instead: this records the agent verdict and,
 on pass, the auditable task decomposition for every downstream edge.
+Terminal outcomes are also ordinary graph steps: add an explicit `terminal` or
+`terminal_fail` step and point edges at that step slug.
 
 ## Common Patterns
 

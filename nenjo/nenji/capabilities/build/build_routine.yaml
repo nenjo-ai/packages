@@ -46,6 +46,7 @@ manifest:
       - Include all steps targeted by edges before writing the graph.
       - Each routine step must have a stable `slug`; edge `source_step`, edge `target_step`, and `entry_steps` must reference those step slugs.
       - Use one or more entry steps and at least one reachable terminal step.
+      - Terminal outcomes are explicit steps. Add a step with `step_type: "terminal"` or `step_type: "terminal_fail"` before targeting it from an edge; do not target an undeclared slug such as `terminal`.
       - Treat multiple entry steps as parallel branches.
       - Treat multiple activated incoming edges into a step as an all-success join.
       - Treat multiple outgoing edges from an agent step as deterministic fan-out; decompose the task so each downstream edge has a clear purpose.
