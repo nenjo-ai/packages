@@ -23,7 +23,7 @@ Packages that use these commands should declare the dependency:
 
 ```yaml
 dependencies:
-  commands: "^1.0.0"
+  commands: "^1.1.0"
 ```
 
 Commands are runtime resources installed from package modules. They are not

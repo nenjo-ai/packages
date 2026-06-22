@@ -32,8 +32,8 @@ schedule; include schedule metadata when configuring cron behavior.
 
 | Step Type      | Description                                                                 | Typical Use |
 |----------------|-----------------------------------------------------------------------------|-------------|
-| `agent`        | Executes one assigned agent; requires `agent`                               | Core work   |
-| `gate`         | Evaluates prior evidence and branches; requires `agent`; use gate criteria in `config` | Quality control, validation |
+| `agent`        | Executes one assigned agent; requires `agent`; use `config.instructions` for the step task | Core work   |
+| `gate`         | Evaluates prior evidence and branches; requires `agent`; use gate criteria and `config.instructions` | Quality control, validation |
 | `council`      | Runs one assigned council; requires `council`                               | Review, synthesis, voting |
 | `terminal`     | Successful end of the routine                                               | Success stop |
 | `terminal_fail`| Failed end of the routine                                                   | Explicit failed stop after an escalation path |
@@ -47,6 +47,15 @@ schedule; include schedule metadata when configuring cron behavior.
   pass, the decomposed task for each downstream edge.
 - Every **gate step** is exposed to `pass_verdict`. This records a structured
   gate pass/fail verdict and drives `on_pass` / `on_fail` routing.
+- Agent and gate steps receive the local step instructions from
+  `step.config.instructions` when present. Use this field to tell the assigned
+  agent exactly what work to perform for that step, what inputs or upstream
+  evidence to inspect, and what output or verdict standard to apply.
+- Step config is intentionally narrow. Use only `config.instructions` and,
+  when the prompt explicitly references it, `config.metadata`. Do not add
+  top-level `config.inputs`, `config.evaluation_criteria`, `config.max_attempts`,
+  or similar fields; they do not control execution. Retry budgets belong on
+  `on_fail` edge `metadata.max_attempts`.
 
 **Failure semantics differ by step type:**
 
@@ -90,6 +99,10 @@ Routines are typically built using well-known patterns:
 - Agent and gate steps must set `agent` to the executor agent slug. Council
   steps must set `council` to the council slug. For scheduled routines, set the
   routine trigger to `cron`; the graph still uses ordinary routine nodes.
+- Agent and gate steps should set `config.instructions` with step-specific task
+  instructions. The text should be concrete enough that the assigned agent can
+  execute the step without inferring its task from only the routine name, step
+  slug, or general agent prompt.
 - If an `on_fail` edge creates a retry cycle, the source step must be a `gate`
   and the retry remains bounded by `metadata.max_attempts` or the runner default.
 - Do not add an `on_exhausted` branch. Retry exhaustion fails the routine

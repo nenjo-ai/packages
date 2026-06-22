@@ -21,9 +21,9 @@ The package depends on:
 
 ```yaml
 dependencies:
-  commands: "^1.0.0"
-  context: "^1.0.0"
-  knowledge: "^1.0.0"
+  commands: "^1.1.0"
+  context: "^1.0.1"
+  knowledge: "^1.0.1"
 ```
 
 Those dependencies provide shared slash commands, operating context, and the

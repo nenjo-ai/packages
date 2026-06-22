@@ -33,9 +33,9 @@ name: nenji
 version: "1.0.0"
 
 dependencies:
-  commands: "^1.0.0"
-  context: "^1.0.0"
-  knowledge: "^1.0.0"
+  commands: "^1.1.0"
+  context: "^1.0.1"
+  knowledge: "^1.0.1"
 
 modules:
   - context/

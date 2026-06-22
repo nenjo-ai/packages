@@ -36,7 +36,7 @@ name: nenji
 version: "1.0.0"
 
 dependencies:
-  knowledge: "^1.0.0"
+  knowledge: "^1.0.1"
 
 modules:
   - nenji/agent.yaml

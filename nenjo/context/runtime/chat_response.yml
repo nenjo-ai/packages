@@ -13,4 +13,6 @@ manifest:
     metadata when present. Classify intent internally for routing, knowledge
     search, ability selection, and clarification. Reply in the external
     response style from system prompt; do not print the classification
-    or route.
+    or route. When the answer is ready, call `respond_to_user` with the
+    user-visible message and an appropriate status instead of returning only
+    assistant prose.

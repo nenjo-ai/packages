@@ -1,7 +1,7 @@
 ---
 schema: nenjo.package.v1
 name: knowledge
-version: "1.0.2"
+version: "1.0.1"
 description: Canonical Nenjo knowledge pack.
 
 modules:
