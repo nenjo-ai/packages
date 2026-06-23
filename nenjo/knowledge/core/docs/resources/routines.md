@@ -32,8 +32,8 @@ schedule; include schedule metadata when configuring cron behavior.
 
 | Step Type      | Description                                                                 | Typical Use |
 |----------------|-----------------------------------------------------------------------------|-------------|
-| `agent`        | Executes one assigned agent; requires `agent`                               | Core work   |
-| `gate`         | Evaluates prior evidence and branches; requires `agent`; use gate criteria in `config` | Quality control, validation |
+| `agent`        | Executes one assigned agent; requires `agent`; use `config.instructions` for the step task | Core work   |
+| `gate`         | Evaluates prior evidence and branches; requires `agent`; use gate criteria and `config.instructions` | Quality control, validation |
 | `council`      | Runs one assigned council; requires `council`                               | Review, synthesis, voting |
 | `terminal`     | Successful end of the routine                                               | Success stop |
 | `terminal_fail`| Failed end of the routine                                                   | Explicit failed stop after an escalation path |
@@ -47,6 +47,15 @@ schedule; include schedule metadata when configuring cron behavior.
   pass, the decomposed task for each downstream edge.
 - Every **gate step** is exposed to `pass_verdict`. This records a structured
   gate pass/fail verdict and drives `on_pass` / `on_fail` routing.
+- Agent and gate steps receive the local step instructions from
+  `step.config.instructions` when present. Use this field to tell the assigned
+  agent exactly what work to perform for that step, what inputs or upstream
+  evidence to inspect, and what output or verdict standard to apply.
+- Step config is intentionally narrow. Use only `config.instructions` and,
+  when the prompt explicitly references it, `config.metadata`. Do not add
+  top-level `config.inputs`, `config.evaluation_criteria`, `config.max_attempts`,
+  or similar fields; they do not control execution. Retry budgets belong on
+  `on_fail` edge `metadata.max_attempts`.
 
 **Failure semantics differ by step type:**
 
@@ -74,6 +83,9 @@ Routines are typically built using well-known patterns:
   Multiple entry steps start as parallel branches.
 - Every routine step has a stable `slug`. Edge `source_step`, edge
   `target_step`, and `entry_steps` should reference those step slugs.
+- Terminal outcomes must be explicit steps. Add a step with `step_type:
+  "terminal"` or `step_type: "terminal_fail"` and target that step slug from
+  edges; do not target an undeclared slug such as `terminal`.
 - Every non-terminal step must have at least one outgoing edge.
 - Terminal steps must not have outgoing edges.
 - Every step must be reachable from at least one entry step.
@@ -87,6 +99,10 @@ Routines are typically built using well-known patterns:
 - Agent and gate steps must set `agent` to the executor agent slug. Council
   steps must set `council` to the council slug. For scheduled routines, set the
   routine trigger to `cron`; the graph still uses ordinary routine nodes.
+- Agent and gate steps should set `config.instructions` with step-specific task
+  instructions. The text should be concrete enough that the assigned agent can
+  execute the step without inferring its task from only the routine name, step
+  slug, or general agent prompt.
 - If an `on_fail` edge creates a retry cycle, the source step must be a `gate`
   and the retry remains bounded by `metadata.max_attempts` or the runner default.
 - Do not add an `on_exhausted` branch. Retry exhaustion fails the routine
@@ -120,6 +136,8 @@ Routines provide strong observability — every step transition, gate decision, 
 - Creating overly complex graphs with too many steps
 - Using gates without clear acceptance criteria
 - Forgetting to define both success and failure terminal paths
+- Pointing an edge at `terminal` or `failed` without adding a matching terminal
+  or terminal_fail step to the graph
 - Creating cycles from non-gate steps, `on_pass` edges, or unbounded `on_fail`
   edges
 

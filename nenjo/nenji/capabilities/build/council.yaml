@@ -29,8 +29,6 @@ manifest:
       routines, and relevant context blocks before wiring the council together.
       </reads>
 
-      {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
-
       <seeded_knowledge>
         {{ pkg.nenjo_ai.packages.knowledge.core.resources.councils }}
         {{ pkg.nenjo_ai.packages.knowledge.core.design.councils }}

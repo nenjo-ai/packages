@@ -29,9 +29,9 @@ manifest:
     </phase>
 
     <phase name="ACT">
-    If writes are needed, require #creator and then use the narrowest builder
-    ability for the resource type. State the intended mutation, execute the
-    smallest valid change, verify, and report stable slugs, refs, or selectors.
+    If writes are needed, use the narrowest builder ability for the resource
+    type. State the intended mutation, execute the smallest valid change,
+    verify, and report stable slugs, refs, or selectors.
     </phase>
 
     <phase name="VERIFY">

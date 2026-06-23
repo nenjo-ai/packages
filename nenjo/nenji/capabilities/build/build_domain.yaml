@@ -28,8 +28,6 @@ manifest:
       context blocks before assigning them to the domain.
       </reads>
 
-      {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
-
       <seeded_knowledge>
         {{ pkg.nenjo_ai.packages.knowledge.core.resources.domains }}
         {{ pkg.nenjo_ai.packages.knowledge.core.design.domains }}
@@ -38,7 +36,7 @@ manifest:
 
       You MUST follow the following rules.
       <rules>
-      - Domains are explicit user-activated modes; use hash commands such as #creator.
+      - Domains are explicit user-activated modes; use hash commands such as #review.
       - Verify every assigned ability exists before writing the domain assignment list.
       - Use configure_domain as the only domain write tool for creation, metadata changes, prompt_config changes, and ability/MCP/script tool assignments.
       - For new domains, call configure_domain without `domain` and include metadata.name plus metadata.command.
@@ -53,4 +51,3 @@ manifest:
       {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
       
       {{ pkg.nenjo_ai.packages.context.output.ability_output }}
-

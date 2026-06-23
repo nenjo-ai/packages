@@ -36,7 +36,7 @@ A good command has:
 
 Include:
 
-- slash trigger, for example `/design`;
+- slash trigger, for example `/design-workflow`;
 - UI grouping path, or `""` for root-level;
 - description;
 - command content template;

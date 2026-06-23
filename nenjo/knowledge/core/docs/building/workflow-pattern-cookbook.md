@@ -169,12 +169,18 @@ exhaustion is not an authored failure branch; it fails the routine directly.
 - Choose the least complex resource shape that preserves required guarantees.
 - Name one or more `entry_steps`.
 - Assign `agent` on every `agent` and `gate` step.
+- Add `config.instructions` on every `agent` and `gate` step with concrete
+  task instructions for the assigned agent: local objective, evidence to
+  inspect, output to produce, and pass/fail standard when applicable.
 - Assign `council` only on `council` steps.
+- Add explicit `terminal` and `terminal_fail` steps before targeting them from
+  edges.
 - Add edge purpose metadata for fan-out edges so `route_next_steps` can show
   each downstream route clearly.
 - Use multiple incoming edges only when the target is an all-success join.
 - Use gate `on_fail` retry loops only when bounded rework is intentional.
-- Add `max_attempts` only when the default retry budget should change.
+- Add `max_attempts` only on the `on_fail` edge metadata when the default retry
+  budget should change. Do not put retry fields in step config.
 - Do not use `on_exhausted`.
 - Verify reachable terminals, no terminal outgoing edges, and no cycles except
   bounded gate `on_fail` loops.

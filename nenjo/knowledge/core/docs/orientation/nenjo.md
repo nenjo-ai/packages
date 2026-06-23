@@ -4,8 +4,8 @@
 
 Nenjo is a platform and SDK for building, running, and coordinating AI agents.
 Nenji is the default platform guide: it helps users understand resources,
-inspect current state, design the next step, and route writes through explicit
-write-enabled modes.
+inspect current state, design the next step, and route writes through verified
+builder abilities.
 
 ## Major Surfaces
 
@@ -18,7 +18,7 @@ write-enabled modes.
 
 - Agents define behavior, prompts, memory, model, and capability assignments.
 - Abilities provide callable specialist behavior.
-- Domains provide user-activated modes such as `#creator`.
+- Domains provide user-activated modes for session-specific behavior.
 - Context blocks provide reusable prompt context.
 - Routines model multi-step workflow graphs.
 - Councils model structured multi-agent collaboration.

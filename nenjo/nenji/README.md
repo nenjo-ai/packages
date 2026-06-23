@@ -1,23 +1,19 @@
 # Nenji
 
 Nenji is the official Nenjo platform guide package. It installs the `Nenji`
-agent, a user-activated `#creator` domain, build abilities, slash commands, and
-Nenji-specific context blocks for understanding, designing, reviewing, and
-safely changing Nenjo resources.
+agent, build abilities, and Nenji-specific context blocks for understanding,
+designing, reviewing, and safely changing Nenjo resources.
 
 Use this package when you want an agent that can explain how Nenjo works,
 inspect live platform state, design resource changes, and route platform writes
-through explicit write-enabled mode.
+through focused builder abilities.
 
 ## What It Includes
 
 - `agent.yaml`: the `Nenji` agent manifest.
-- `domains/creator.yaml`: the `#creator` domain for write-enabled platform
-  changes.
 - `capabilities/build/`: write abilities for agents, abilities, commands,
   domains, context blocks, Library knowledge, councils, routines, and project
   work.
-- `commands/`: slash command entrypoints such as `/design`.
 - `context/`: Nenji-specific context blocks for methodology and resource
   surface routing.
 
@@ -25,12 +21,13 @@ The package depends on:
 
 ```yaml
 dependencies:
-  context: "^1.0.0"
-  knowledge: "^1.0.0"
+  commands: "^1.1.0"
+  context: "^1.0.1"
+  knowledge: "^1.0.1"
 ```
 
-Those dependencies provide shared operating context and the Nenjo Core knowledge
-pack used by Nenji's prompts and abilities.
+Those dependencies provide shared slash commands, operating context, and the
+Nenjo Core knowledge pack used by Nenji's prompts and abilities.
 
 ## How To Use
 
@@ -39,16 +36,11 @@ from `https://github.com/nenjo-ai/packages.git`, this package is exposed as
 `@nenjo-ai/nenji`.
 
 After installation, select the `Nenji` agent in the platform for read, explain,
-design, review, or debug work. Nenji can inspect state and propose changes in
-normal mode.
+design, review, debug, and resource-building work. Nenji can inspect state,
+propose changes, and route requested platform mutations through its assigned
+builder abilities.
 
-Use `#creator` only when you want Nenji to create or modify platform resources:
-
-```text
-#creator create a focused release manager agent for this project
-```
-
-Creator mode enables the write abilities installed by this package:
+Nenji includes these builder abilities:
 
 - `build_agent`
 - `build_ability`
@@ -73,6 +65,7 @@ Nenji's prompts do reference context blocks and knowledge from its dependencies,
 for example:
 
 ```jinja
+{{ pkg.nenjo_ai.packages.context.agents.agent_delegation }}
 {{ pkg.nenjo_ai.packages.context.agents.ability_orchestration }}
 {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
 {{ pkg.nenjo_ai.packages.knowledge.core.resources.agents }}

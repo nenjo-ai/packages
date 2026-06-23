@@ -3,6 +3,7 @@ manifest:
   name: Nenjo Core
   description: Canonical Nenjo core knowledge organized for design, resource building, retrieval, and general questions.
   pack_id: nenjo.core
+  selector: pkg:nenjo-ai.packages.knowledge.core
   docs:
   - selector: orientation.nenjo
     source_path: docs/orientation/nenjo.md

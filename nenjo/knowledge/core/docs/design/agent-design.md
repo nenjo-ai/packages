@@ -45,6 +45,7 @@ context blocks themselves.
 | Performs platform writes | `pkg.nenjo_ai.packages.context.operations.write_discipline` |
 | Diagnoses failures or recovery paths | `pkg.nenjo_ai.packages.context.operations.failure_modes` |
 | Delegates to sub-agents | `pkg.nenjo_ai.packages.context.agents.sub_agents` |
+| Delegates to installed agents | `pkg.nenjo_ai.packages.context.agents.agent_delegation` |
 | Orchestrates abilities | `pkg.nenjo_ai.packages.context.agents.ability_orchestration` |
 | Depends on durable memory behavior | `pkg.nenjo_ai.packages.context.memory.remembrance` |
 | Runs routine tasks, gates, heartbeats, or chat wrappers | the matching `pkg.nenjo_ai.packages.context.runtime.*` selector |

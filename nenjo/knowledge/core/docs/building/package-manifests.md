@@ -16,6 +16,7 @@ unscoped package names:
 ```yaml
 schema: nenjo.registry.v1
 packages:
+  commands: nenjo/commands/package.yaml
   knowledge: nenjo/knowledge/package.yaml
   nenji: nenjo/nenji/package.yaml
   context: nenjo/context/package.yaml
@@ -32,12 +33,12 @@ name: nenji
 version: "1.0.0"
 
 dependencies:
-  context: "^1.0.0"
-  knowledge: "^1.0.0"
+  commands: "^1.1.0"
+  context: "^1.0.1"
+  knowledge: "^1.0.1"
 
 modules:
   - context/
-  - domains/creator.yaml
   - agent.yaml
 ```
 

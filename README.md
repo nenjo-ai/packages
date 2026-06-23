@@ -12,13 +12,15 @@ the package scope derived from the GitHub org:
 ```yaml
 schema: nenjo.registry.v1
 packages:
+  commands: nenjo/commands/package.yaml
   knowledge: nenjo/knowledge/package.yaml
   nenji: nenjo/nenji/package.yaml
   context: nenjo/context/package.yaml
 ```
 
 For this repository, `https://github.com/nenjo-ai/packages.git` installs those
-entries as `@nenjo-ai/knowledge`, `@nenjo-ai/nenji`, and `@nenjo-ai/context`.
+entries as `@nenjo-ai/commands`, `@nenjo-ai/knowledge`, `@nenjo-ai/nenji`, and
+`@nenjo-ai/context`.
 The scope is not authored in `packages.yaml`; it comes from the GitHub owner.
 Local test registries can set a scope in `nenpm.yml`, but published repo-backed
 registries must keep package keys and package manifest `name` fields unscoped.
@@ -34,7 +36,7 @@ name: nenji
 version: "1.0.0"
 
 dependencies:
-  knowledge: "^1.0.0"
+  knowledge: "^1.0.1"
 
 modules:
   - nenji/agent.yaml
@@ -126,8 +128,9 @@ package-relative directory during package resolution/import.
 
 ## Current Package Set
 
-This repository exposes three top-level packages:
+This repository exposes four top-level packages:
 
+- `@nenjo-ai/commands`
 - `@nenjo-ai/knowledge`
 - `@nenjo-ai/nenji`
 - `@nenjo-ai/context`

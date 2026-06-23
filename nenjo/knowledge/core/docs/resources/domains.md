@@ -24,7 +24,7 @@ domain instead of an ability.
 - `name` — Stable internal name.
 - `display_name` — Human-readable name.
 - `description` — What changes when the domain is active.
-- `command` — User activation command, usually `#name` such as `#creator`.
+- `command` — User activation command, usually `#name` such as `#review`.
 - `abilities` — Ability slugs/refs available in this mode.
 - `mcp_servers` — MCP server slugs/refs available in this mode.
 - `script_tools` — Script tool slugs/refs available in this mode.
@@ -61,7 +61,7 @@ user-controlled permission refs.
 
 ## Common Patterns
 
-- `#creator` — Write-enabled resource-building mode.
+- `#review` — Review-oriented mode with stricter critique behavior.
 - Production mode — Deployment-oriented behavior with stricter audit rules.
 - Legal review mode — Specialized review behavior and document-sensitive tools.
 - Debug mode — Additional diagnostic behavior for a session.

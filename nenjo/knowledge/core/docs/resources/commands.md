@@ -4,7 +4,8 @@
 
 Commands are user-facing slash commands that replace the normal chat template
 for a single chat turn. They let users invoke a named prompt workflow such as
-`/design` without switching domains or asking an agent to infer the mode.
+`/design-workflow` without switching domains or asking an agent to infer the
+mode.
 
 Use commands for explicit, lightweight prompt entrypoints. Use domains for
 user-approved mode changes, abilities for agent-invoked specialist tools, and
@@ -14,16 +15,17 @@ routines for persistent multi-step workflow graphs.
 
 A command:
 
-- Has a unique slash trigger such as `/design`.
+- Has a unique slash trigger such as `/design-workflow`.
 - May have a folder-like `path` used for UI grouping.
 - Has Markdown `content` that acts as the chat template for the turn.
 - Receives runtime template variables such as `{{ chat.message }}`.
 - Is either platform-authored native content or package-installed file-backed
   content.
 
-Root commands are ordinary slash commands such as `/design`. Do not model UI
-grouping by inventing colon subcommands such as `/design:workflows`; use
-`path` for grouping and keep the slash trigger stable.
+Root commands are ordinary slash commands such as `/design-workflow`. Do not
+model UI grouping by inventing colon subcommands such as
+`/design-workflow:resources`; use `path` for grouping and keep the slash trigger
+stable.
 
 ## Core Fields
 
@@ -38,7 +40,7 @@ grouping by inventing colon subcommands such as `/design:workflows`; use
   short source-managed commands.
 - `content_path` — Preferred package manifest field for Nenjo-authored package
   commands with a separate Markdown file. It points to the command body, for example
-  `nenjo/nenji/commands/design/command.md`.
+  `design-workflow/command.md`.
 - `entry_path` — Runtime/plugin compatibility field for a file path relative to
   `root_path`.
 - `root_path` — Runtime/plugin compatibility field for the directory containing
