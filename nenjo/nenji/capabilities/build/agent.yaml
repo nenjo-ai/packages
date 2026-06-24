@@ -47,6 +47,7 @@ manifest:
       - Use list_agents to discover existing agents and get_agent to inspect a target agent before updating it.
       - Use configure_agent as the only agent write tool for creation, metadata changes, prompt_config changes, and ability/domain/MCP server assignments.
       - For new agents, call configure_agent without `agent` and include metadata.name.
+      - Do not set `agent` to the intended new slug; `agent` is only an update selector for an existing agent returned by list_agents/get_agent.
       - For existing agents, call configure_agent with the current agent slug.
       - Put metadata fields under metadata, prompt changes under prompt_config, and assignment replacement lists under assignments.
       - When assigning abilities, domains, or MCP servers, pass the complete intended replacement list for that assignment field; omit fields that should remain unchanged.

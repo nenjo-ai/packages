@@ -1,0 +1,28 @@
+name: Validate Packages
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  nenpm-validate:
+    name: nenpm validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout packages
+        uses: actions/checkout@v4
+        with:
+          path: packages
+
+      - name: Install nenpm
+        run: |
+          curl -fsSL https://nenjo.ai/install | bash
+          echo "$HOME/.nenjo/bin" >> "$GITHUB_PATH"
+
+      - name: Run nenpm validation
+        working-directory: packages
+        run: nenpm validate --root .
