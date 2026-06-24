@@ -6,6 +6,8 @@ manifest:
   description: Shared rules for selecting, sequencing, and synthesizing callable abilities.
   template: |-
     <ability_orchestration>
+    Abilities can be invoked by using the "use_ability" tool and specifying the exact ability you want to invoke.
+
     <principle>
     Abilities are callable specialist capabilities. Use them when a bounded
     subtask benefits from focused instructions, narrower tools, independent
