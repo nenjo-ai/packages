@@ -103,6 +103,10 @@ Routines are typically built using well-known patterns:
   instructions. The text should be concrete enough that the assigned agent can
   execute the step without inferring its task from only the routine name, step
   slug, or general agent prompt.
+- Edges should use `metadata.purpose` to explain why the route exists and
+  `metadata.handoff_instructions` to tell the source agent what information to
+  pass to that target through `route_next_steps`. At runtime, joined target
+  steps receive one structured handoff block for each activated incoming edge.
 - If an `on_fail` edge creates a retry cycle, the source step must be a `gate`
   and the retry remains bounded by `metadata.max_attempts` or the runner default.
 - Do not add an `on_exhausted` branch. Retry exhaustion fails the routine
