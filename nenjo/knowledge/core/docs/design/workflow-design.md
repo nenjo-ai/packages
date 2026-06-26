@@ -14,6 +14,8 @@ Workflows should make dependencies, handoffs, review points, and terminal outcom
 - Where are gates or reviews required?
 - What evidence determines completion?
 - Which agent owns each step?
+- What state must cross each edge for the next step to continue?
+- How should joined branches preserve source-specific handoffs?
 
 ## Good Workflow Shape
 
@@ -24,7 +26,8 @@ A good workflow has:
 - dependency ordering;
 - assignment rules;
 - gate criteria where quality or risk matters;
-- observable execution state.
+- observable execution state;
+- explicit handoff contracts between steps.
 
 ## Minimum Workflow Design
 
@@ -37,6 +40,8 @@ Include:
   `step.config.instructions`, that tell the assigned agent exactly what to do
   for that step;
 - dependencies, parallelizable branches, and fan-in joins;
+- edge metadata with `metadata.purpose` and
+  `metadata.handoff_instructions` for the state each route must carry;
 - gate criteria and terminal outcomes;
 - expected artifacts, Library evidence, or execution output at each handoff;
 - retry, escalation, or human approval points;
@@ -66,6 +71,25 @@ is an all-success join and runs only after every required upstream branch passes
 Multiple outgoing edges from an agent step are deterministic fan-out: the agent
 must decompose the work so every downstream branch has a clear task. Use
 councils when the workflow needs deliberative or agent-driven branch routing.
+
+## Flow State Design
+
+For routine-backed workflows, design the flow state before writing the graph.
+Flow state is the runtime record of which entries, steps, edges, handoffs,
+joins, gate decisions, retries, and terminals are active or complete.
+
+Each edge is a handoff contract. Use `metadata.purpose` to explain why the
+route exists and `metadata.handoff_instructions` to tell the source agent what
+actual information to pass through `route_next_steps`. The handoff should
+contain source output, evidence, decisions, artifact refs, constraints,
+unresolved questions, or required fixes. It should not merely restate the target
+step instructions.
+
+For fan-out, each downstream edge should request different handoff content. For
+joins, the target step should state how to combine incoming handoff blocks while
+keeping source steps distinct. A joined step should not treat upstream branches
+as one blended transcript; it receives structured handoff blocks from activated
+incoming edges.
 
 For platform routines, keep ordinary flow acyclic. The valid retry shape is a
 bounded gate failure loop: a `gate` step may use an `on_fail` edge back to an
@@ -125,6 +149,7 @@ Terminal outcomes are also ordinary graph steps: add an explicit `terminal` or
 
 Use this when designing project work or routine structure. Read
 `classification.workflow_patterns` to choose the implementation approach,
-`building.workflow_pattern_cookbook` for concrete graph recipes, and
+`building.workflow_pattern_cookbook` for concrete graph recipes,
+`building.routine_flow_authoring` for edge metadata and handoff contracts, and
 `resources.tasks`, `resources.routines`, and `resources.executions` for exact
 mechanics.

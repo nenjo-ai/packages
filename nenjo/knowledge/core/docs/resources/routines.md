@@ -10,6 +10,8 @@ A routine is a directed graph consisting of:
 - **Steps** — Individual units of work (agent, gate, council, etc.)
 - **Edges** — Connections that define execution flow and dependencies
 - **Trigger** — What causes the routine to start (`task` or `cron`)
+- **Flow state** — Runtime state for activated entries, steps, edges,
+  handoffs, joins, retries, and terminals
 - **Optional metadata** — Custom configuration per routine
 
 Platform routine graphs are mostly acyclic. The one allowed cycle shape is a
@@ -44,7 +46,7 @@ schedule; include schedule metadata when configuring cron behavior.
 
 - Every **agent step** is exposed to `route_next_steps`. This is the agent
   step's terminal tool: it records `verdict`, `reasoning`, `output`, and, on
-  pass, the decomposed task for each downstream edge.
+  pass, the decomposed task and handoff for each downstream edge.
 - Every **gate step** is exposed to `pass_verdict`. This records a structured
   gate pass/fail verdict and drives `on_pass` / `on_fail` routing.
 - Agent and gate steps receive the local step instructions from
@@ -66,6 +68,29 @@ schedule; include schedule metadata when configuring cron behavior.
 - **Gate Step Failure**: If a gate step fails (returns a failure verdict), execution follows the explicitly defined `on_fail` edge. This allows graceful degradation, bounded rework, escalation, or routing to a failure path.
 
 This distinction ensures that critical work steps are treated as atomic (failure = routine failure), while gates can implement sophisticated error handling and branching.
+
+## Edge Metadata And Handoffs
+
+Edges carry authoring metadata that shapes runtime handoffs:
+
+- `metadata.purpose` explains why the route exists.
+- `metadata.handoff_instructions` tells the source agent what information to
+  pass to the target through `route_next_steps`.
+- `metadata.max_attempts` is used only on gate `on_fail` retry edges.
+
+Handoff instructions should request actual state for the downstream step:
+findings, decisions, artifact refs, changed files, failed criteria, unresolved
+questions, constraints, or implementation notes. Do not use handoff metadata to
+repeat the target step instructions.
+
+When an agent step activates multiple outgoing edges, the source agent must
+provide one `next_steps` item for each downstream route. Each item should follow
+that edge's handoff instructions and include the target step slug.
+
+When a target step has multiple activated incoming edges, it is an all-success
+join. The target receives one structured handoff block per activated incoming
+edge and should keep source steps distinct while synthesizing the combined
+state.
 
 ## Common Workflow Patterns
 
@@ -129,10 +154,13 @@ agent step failure fails the routine immediately.
 When a routine is triggered:
 
 1. The trigger (task or cron) provides initial context
-2. Steps execute according to the graph edges
-3. Gates evaluate output and decide the next path
-4. Councils run multi-agent collaboration when reached
-5. The routine ends at a `terminal` (success) or `terminal_fail` (failure)
+2. Entry steps become runnable
+3. Agent steps execute and call `route_next_steps` with downstream handoffs
+4. Gates evaluate output with `pass_verdict` and activate `on_pass` or `on_fail`
+5. Councils run multi-agent collaboration when reached
+6. Join targets wait for every activated incoming branch to pass
+7. The routine ends at a `terminal` (success), `terminal_fail` (failure), agent
+   step failure, or retry exhaustion
 
 Routines provide strong observability — every step transition, gate decision, and council output is recorded.
 
@@ -144,8 +172,12 @@ Routines provide strong observability — every step transition, gate decision, 
   or terminal_fail step to the graph
 - Creating cycles from non-gate steps, `on_pass` edges, or unbounded `on_fail`
   edges
+- Omitting handoff instructions, forcing downstream steps to infer needed state
+- Writing generic handoffs that restate target instructions instead of passing
+  source-specific evidence
 
 ## Best Practices
 - Start simple (Linear Pipeline or Gated Pipeline)
 - Use councils only when multiple perspectives or synthesis are genuinely needed
 - Keep individual steps focused — move complex logic into abilities or sub-agents
+- Treat each edge as a state handoff contract, especially for fan-out and joins

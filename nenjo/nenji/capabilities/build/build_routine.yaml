@@ -32,6 +32,7 @@ manifest:
         {{ pkg.nenjo_ai.packages.knowledge.core.design.workflows }}
         {{ pkg.nenjo_ai.packages.knowledge.core.classification.workflow_patterns }}
         {{ pkg.nenjo_ai.packages.knowledge.core.building.workflow_pattern_cookbook }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.building.routine_flow_authoring }}
       </seeded_knowledge>
 
       You MUST follow the following rules:
@@ -52,9 +53,11 @@ manifest:
       - Treat multiple activated incoming edges into a step as an all-success join.
       - Treat multiple outgoing edges from an agent step as deterministic fan-out; decompose the handoff so each downstream edge has a clear purpose.
       - Put branch purpose on edge metadata.purpose and source-agent handoff guidance on edge metadata.handoff_instructions so `route_next_steps` can show the agent what to pass to each downstream route.
+      - Treat every meaningful edge as a flow-state handoff contract. The handoff instructions must request concrete downstream state such as evidence, decisions, artifact refs, constraints, failed criteria, or open questions, not repeat the target step instructions.
+      - For joins, ensure each activated incoming edge can provide a distinct handoff block and the target step instructions explain how to combine upstream handoffs while preserving source identity.
       - Preserve explicit success and failure terminals when changing routine topology.
       - Validate gate pass/fail destinations before writing.
-      - Verify reachable terminals, branch destinations, joins, and cross-resource references after mutation.
+      - Verify reachable terminals, branch destinations, joins, edge handoff metadata, and cross-resource references after mutation.
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}

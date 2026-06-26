@@ -12,6 +12,17 @@ Use routines when the workflow shape itself must be durable, scheduled,
 auditable, or deterministic. Use agents, abilities, and councils when the
 workflow shape should remain flexible and intent-driven.
 
+## Authoring Rule
+
+When a pattern becomes a routine, design both topology and flow state. Every
+meaningful edge should explain:
+
+- why the route exists with `metadata.purpose`;
+- what state the source must pass with `metadata.handoff_instructions`;
+- whether a gate `on_fail` retry edge needs `metadata.max_attempts`.
+
+Use `building.routine_flow_authoring` for the full checklist.
+
 ## Prompt Chaining
 
 Intent: run a fixed sequence of transformations, analyses, or handoffs.
@@ -21,6 +32,19 @@ Routine shape:
 ```text
 entry_steps: [draft]
 draft -> review -> finalize -> done
+```
+
+Typical handoff metadata:
+
+```yaml
+draft -> review:
+  metadata:
+    purpose: Send draft output for review.
+    handoff_instructions: Include the draft, source assumptions, open risks, and acceptance criteria to check.
+review -> finalize:
+  metadata:
+    purpose: Send review findings for finalization.
+    handoff_instructions: Include approved content, required edits, rejected options, and unresolved issues.
 ```
 
 Use a routine when each phase needs its own owner, model, prompt, audit trail,
@@ -73,6 +97,19 @@ all-success join. Multiple outgoing edges from an agent are deterministic
 fan-out; the agent receives `route_next_steps` and must provide a task for every
 downstream edge.
 
+For joins, each incoming edge should request source-specific handoff state:
+
+```yaml
+research_api -> synthesize:
+  metadata:
+    purpose: Send API research findings to synthesis.
+    handoff_instructions: Include API constraints, endpoint behavior, risks, and evidence links.
+research_ui -> synthesize:
+  metadata:
+    purpose: Send UI research findings to synthesis.
+    handoff_instructions: Include user-flow findings, visual constraints, accessibility risks, and evidence links.
+```
+
 Use a routine when branch state and joins must be visible. Use sub-agents when
 parallel work is ad hoc. Use a council when the branches are independent
 perspectives that require synthesis.
@@ -91,6 +128,20 @@ plan -> worker_b
 worker_a -> synthesize
 worker_b -> synthesize
 synthesize -> done
+```
+
+For orchestrator fan-out, the planning step should produce a distinct handoff
+for each worker lane:
+
+```yaml
+plan -> worker_a:
+  metadata:
+    purpose: Assign lane A from the plan.
+    handoff_instructions: Include lane-specific objective, dependencies, expected output, and constraints.
+plan -> worker_b:
+  metadata:
+    purpose: Assign lane B from the plan.
+    handoff_instructions: Include lane-specific objective, dependencies, expected output, and constraints.
 ```
 
 Use a routine when worker lanes are predictable enough to model as steps. Use a
@@ -115,6 +166,17 @@ Use a gate for the evaluator. Gates call `pass_verdict`. The `on_fail` edge may
 loop back to an earlier step and is bounded by `metadata.max_attempts` or the
 runner default. Do not author `on_exhausted`; retry exhaustion fails the routine
 directly with a structured `retry_exhausted` result.
+
+The retry edge should carry repair state:
+
+```yaml
+review_gate -> implement:
+  condition: on_fail
+  metadata:
+    purpose: Send failed review findings back for bounded rework.
+    handoff_instructions: Include failed criteria, required fixes, evidence gaps, and reviewer notes.
+    max_attempts: 3
+```
 
 Use an agent self-reflection loop only when audit and deterministic retry
 budget are not important.
@@ -177,7 +239,11 @@ exhaustion is not an authored failure branch; it fails the routine directly.
   edges.
 - Add edge purpose metadata for fan-out edges so `route_next_steps` can show
   each downstream route clearly.
+- Add edge handoff instructions so each downstream step receives concrete
+  upstream state, not just generic routing.
 - Use multiple incoming edges only when the target is an all-success join.
+- For joins, ensure each incoming edge has a distinct handoff contract and the
+  target step instructions explain how to synthesize incoming handoffs.
 - Use gate `on_fail` retry loops only when bounded rework is intentional.
 - Add `max_attempts` only on the `on_fail` edge metadata when the default retry
   budget should change. Do not put retry fields in step config.

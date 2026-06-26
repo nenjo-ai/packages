@@ -12,6 +12,7 @@ These are the relevant seeded knowledge docs that you MUST read first using the 
 {{ pkg.nenjo_ai.packages.knowledge.core.design.workflows }}
 {{ pkg.nenjo_ai.packages.knowledge.core.classification.workflow_patterns }}
 {{ pkg.nenjo_ai.packages.knowledge.core.building.workflow_pattern_cookbook }}
+{{ pkg.nenjo_ai.packages.knowledge.core.building.routine_flow_authoring }}
 </seeded_knowledge>
 
 ---
@@ -29,7 +30,7 @@ These are the relevant seeded knowledge docs that you MUST read first using the 
 3. **Compose** - Produce a concrete design or workflow composition that:
    - Names the chosen primitives and why each was selected over alternatives.
    - Names fields, relationships, and constraints explicitly.
-   - Describes flow as step -> edge(condition) -> step for routines; name owners, dependencies, gates, and terminal outcomes for workflows.
+   - Describes flow as step -> edge(condition) -> step for routines; name owners, dependencies, gates, edge handoff contracts, and terminal outcomes for workflows.
    - Recommends a specific approach with tradeoffs when multiple are valid.
    - Uses realistic values unless the user has not chosen them.
 

@@ -19,6 +19,8 @@ semantics, parallelism, and cost.
 | Scheduling | Coupled to task or cron dispatch | Can run in chat, task, ability, council, or domain contexts |
 | Failure semantics | Explicit terminal, terminal_fail, gate retry exhaustion | Prompt and tool dependent |
 | Parallelism | Explicit entry steps, fan-out edges, and joins | Possible through sub-agents or council members, less graph-visible |
+| Flow-state visibility | Explicit activated edges, handoffs, joins, gate decisions, and retry state | Must be narrated or recorded by the agent |
+| Handoff contract | Edge metadata can define per-route handoff instructions | Handoffs depend on prompt discipline |
 | Cost/control | Predictable shape | More variable but often simpler for exploratory work |
 
 Use routines when the workflow shape is part of the product contract. Use
@@ -30,7 +32,7 @@ agents, abilities, or councils when the workflow shape is part of the reasoning.
 |---|---|---|---|
 | Prompt chaining | Run ordered transformations or analyses | Linear routine; one agent with structured phases | Use a routine when phases need audit, different owners, gates, or model choices |
 | Routing | Choose one path from task intent, context, or evidence | Router agent; council; routine branches; domain switch | Use an agent for fuzzy intent. Use a routine when route choice is an audited business process |
-| Parallelization | Run independent branches and combine results | Multiple `entry_steps`; agent fan-out plus join; council members; sub-agents | Use a routine for auditable branch state. Use a council for judgment. Use sub-agents for flexible speed |
+| Parallelization | Run independent branches and combine results | Multiple `entry_steps`; agent fan-out plus join; council members; sub-agents | Use a routine for auditable branch state and explicit handoffs. Use a council for judgment. Use sub-agents for flexible speed |
 | Orchestrator-workers | Decompose work, assign specialists, synthesize | Planner step -> worker branches -> synthesis; council leader and members; single agent delegation | Use a routine when worker lanes are predictable. Use an agent or council when decomposition is dynamic |
 | Evaluator-optimizer | Generate, evaluate, revise within a bounded budget | Gate `on_fail` retry loop with `max_attempts`; reviewer ability; self-reflection agent loop | Use a routine when retry count, evidence, and outcomes must be recorded |
 | Autonomous agent | Let one agent pursue a goal with tools over time | Single agent with abilities/domains/tools; scheduled routine wrapper when needed | Use an agent by default. Wrap in a routine only for scheduling, audit checkpoints, or deterministic handoffs |
@@ -50,8 +52,12 @@ agents, abilities, or councils when the workflow shape is part of the reasoning.
    step needs collaborative judgment.
 6. Keep routine ordinary flow acyclic. The only valid cycle is a bounded gate
    `on_fail` retry loop. Retry exhaustion fails the routine directly.
+7. Prefer a routine when downstream work must receive explicit handoff state
+   from known upstream branches or when joins must be auditable.
 
 ## Agent Guidance
 
 After choosing a pattern, read `design.workflows` for resource boundaries and
-`building.workflow_pattern_cookbook` for concrete Nenjo graph recipes.
+`building.workflow_pattern_cookbook` for concrete Nenjo graph recipes. Read
+`building.routine_flow_authoring` when the pattern uses fan-out, joins, gates,
+or edge handoff metadata.
