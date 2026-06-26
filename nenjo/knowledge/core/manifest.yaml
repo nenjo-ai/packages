@@ -208,7 +208,7 @@ manifest:
   - selector: design.workflows
     source_path: docs/design/workflow-design.md
     title: Workflow Design
-    summary: "How to design tasks, routines, councils, gates, executions, handoffs, dependencies, and review points."
+    summary: "How to design tasks, routines, councils, gates, executions, flow state, handoffs, dependencies, and review points."
     kind: design
     tags: ["intent:design", "domain:workflow", "resource:routines", "resource:tasks", "audience:builder"]
     related:
@@ -224,6 +224,8 @@ manifest:
       target: classification.workflow_patterns
     - type: references
       target: building.workflow_pattern_cookbook
+    - type: references
+      target: building.routine_flow_authoring
 
   - selector: resources.agents
     source_path: docs/resources/agents.md
@@ -348,7 +350,7 @@ manifest:
   - selector: resources.routines
     source_path: docs/resources/routines.md
     title: Routines
-    summary: "Resource-level model for workflow graphs, agents, gates, councils, triggers, and terminal outcomes."
+    summary: "Resource-level model for workflow graphs, agents, gates, councils, triggers, edge metadata, handoffs, flow state, and terminal outcomes."
     kind: resource
     tags: ["intent:explain", "intent:build", "resource:routines", "domain:workflow"]
     related:
@@ -360,6 +362,8 @@ manifest:
       target: resources.councils
     - type: references
       target: classification.workflow_patterns
+    - type: references
+      target: building.routine_flow_authoring
 
   - selector: resources.projects
     source_path: docs/resources/projects.md
@@ -396,7 +400,7 @@ manifest:
   - selector: resources.executions
     source_path: docs/resources/executions.md
     title: Executions
-    summary: "Resource-level model for stateful runtime runs across project tasks, chat, schedules, gates, heartbeats, and progress tracking."
+    summary: "Resource-level model for stateful runtime runs across project tasks, chat, schedules, gates, heartbeats, routine flow state, and progress tracking."
     kind: resource
     tags: ["intent:explain", "intent:build", "resource:executions", "domain:workflow"]
     related:
@@ -406,6 +410,8 @@ manifest:
       target: resources.tasks
     - type: references
       target: design.workflows
+    - type: related_to
+      target: resources.routines
 
   - selector: resources.context_blocks
     source_path: docs/resources/context-blocks.md
@@ -550,7 +556,7 @@ manifest:
   - selector: building.workflow_pattern_cookbook
     source_path: docs/building/workflow-pattern-cookbook.md
     title: Workflow Pattern Cookbook
-    summary: "Concrete Nenjo recipes for implementing workflow patterns as routines, agents, councils, abilities, domains, task sets, or combinations."
+    summary: "Concrete Nenjo recipes for implementing workflow patterns as routines, agents, councils, abilities, domains, task sets, or combinations, including edge handoff examples."
     kind: build
     tags: ["intent:build", "intent:design", "domain:workflow", "resource:routines", "topic:orchestration", "audience:builder"]
     related:
@@ -564,6 +570,26 @@ manifest:
       target: resources.councils
     - type: references
       target: resources.agents
+    - type: references
+      target: building.routine_flow_authoring
+
+  - selector: building.routine_flow_authoring
+    source_path: docs/building/routine-flow-authoring.md
+    title: Routine Flow Authoring
+    summary: "Practical routine authoring guide for flow state, edge metadata, handoff instructions, fan-out, joins, gate retries, and graph verification."
+    kind: build
+    tags: ["intent:build", "intent:design", "domain:workflow", "resource:routines", "topic:flow_state", "topic:orchestration", "audience:builder"]
+    related:
+    - type: depends_on
+      target: design.workflows
+    - type: depends_on
+      target: resources.routines
+    - type: references
+      target: resources.executions
+    - type: references
+      target: building.workflow_pattern_cookbook
+    - type: references
+      target: classification.workflow_patterns
 
   - selector: building.prompt_structuring
     source_path: docs/building/prompt-structuring.md
@@ -658,7 +684,7 @@ manifest:
   - selector: classification.workflow_patterns
     source_path: docs/classification/workflow-patterns.md
     title: Workflow Pattern Classification
-    summary: "Classification guide for workflow structures, including linear pipelines, gates, fan-out, reviews, councils, and escalation paths."
+    summary: "Classification guide for workflow structures, including linear pipelines, gates, fan-out, joins, handoff contracts, reviews, councils, and escalation paths."
     kind: classification
     tags: ["intent:classify", "domain:workflow", "topic:orchestration"]
     related:
@@ -670,6 +696,8 @@ manifest:
       target: resources.councils
     - type: references
       target: design.workflows
+    - type: references
+      target: building.routine_flow_authoring
 
   - selector: classification.search_patterns
     source_path: docs/classification/search-patterns.md
