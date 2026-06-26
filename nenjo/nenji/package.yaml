@@ -1,13 +1,13 @@
 ---
 schema: nenjo.package.v1
 name: nenji
-version: "1.0.3"
+version: "1.0.4"
 description: Nenjo platform guide, designer, reviewer, and orchestrator.
 
 dependencies:
   commands: "^1.1.0"
-  context: "^1.0.2"
-  knowledge: "^1.0.1"
+  context: "^1.0.3"
+  knowledge: "^1.0.2"
 
 modules:
   - context/

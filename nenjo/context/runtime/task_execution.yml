@@ -22,5 +22,13 @@ manifest:
     final action. Use verdict="fail" with reasoning and output when the step
     cannot continue. Use verdict="pass" with reasoning, output, and one
     next_steps item for each downstream route when the step should continue.
+    Each next_steps item must include the target_step and a concrete handoff
+    for that target. Follow the route's handoff_instructions when present.
+    The handoff should contain the actual information the downstream step needs,
+    not a restatement of this step's instructions.
+
+    When the active task includes routine_handoffs, treat them as authoritative
+    upstream inputs for the current step. If multiple upstream routes join into
+    this step, use every handoff block and keep their source steps distinct.
     Return a user-facing task update through the tool output; do not include
     internal classification labels.

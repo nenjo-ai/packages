@@ -39,6 +39,7 @@ manifest:
       - Verify upstream resources before wiring downstream references.
       - For routines, list/read referenced agents and councils before using their slugs.
       - If a referenced council, agent, domain, ability, context block, project, or task is missing, stop and return it as a remaining dependency for the matching builder.
+      - When calling `configure_routine`, set `routine` to the intended stable routine slug for both create and update. Do not provide platform UUIDs; the backend owns them and keeps the operation idempotent.
       - In routine graph steps, use the `agent` field with an agent slug for every `agent` step and every `gate` step.
       - Use `council` only for `council` steps. For scheduled routines, set trigger="cron"; the graph still uses ordinary routine nodes.
       - Keep ordinary routine flow acyclic. The only valid cycle is a gate `on_fail` retry loop.
@@ -49,9 +50,8 @@ manifest:
       - Terminal outcomes are explicit steps. Add a step with `step_type: "terminal"` or `step_type: "terminal_fail"` before targeting it from an edge; do not target an undeclared slug such as `terminal`.
       - Treat multiple entry steps as parallel branches.
       - Treat multiple activated incoming edges into a step as an all-success join.
-      - Treat multiple outgoing edges from an agent step as deterministic fan-out; decompose the task so each downstream edge has a clear purpose.
-      - Put branch purpose on edge metadata (`purpose`, `task`, or `description`) so `route_next_steps` can show the agent each downstream route.
-      - Use councils for deliberative routing or agent-driven branch choice; routines should make fan-out edges explicit and auditable.
+      - Treat multiple outgoing edges from an agent step as deterministic fan-out; decompose the handoff so each downstream edge has a clear purpose.
+      - Put branch purpose on edge metadata.purpose and source-agent handoff guidance on edge metadata.handoff_instructions so `route_next_steps` can show the agent what to pass to each downstream route.
       - Preserve explicit success and failure terminals when changing routine topology.
       - Validate gate pass/fail destinations before writing.
       - Verify reachable terminals, branch destinations, joins, and cross-resource references after mutation.
