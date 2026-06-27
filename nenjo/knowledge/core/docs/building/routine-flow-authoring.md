@@ -71,6 +71,26 @@ information to include in the handoff for that target. It should not repeat the
 target step instructions. It should specify the needed evidence, decisions,
 artifact refs, constraints, unresolved questions, or implementation notes.
 
+`metadata.handoff_schema` is required for every edge whose source step is an
+agent or gate. It is the enforced JSON object shape for the handoff payload that
+`route_next_steps` must submit for that edge. Choose the schema from the target
+step's required input state:
+
+- require every field the target cannot safely infer;
+- use strings for concise decisions, refs, file paths, notes, or criteria;
+- use arrays for repeated evidence, changed files, failed checks, requirements,
+  risks, or work items;
+- use nested objects when each repeated item needs named attributes;
+- use `enum` or `const` for bounded categories such as severity, lane, status,
+  approval state, or retry reason;
+- set `additionalProperties: false` unless the target intentionally accepts
+  open-ended structured state.
+
+Avoid broad catch-all schemas. A `{work: string}` schema is only appropriate
+when the target truly needs one free-form work item. Do not put instructions in
+the schema; put instructions in `metadata.handoff_instructions` and use the
+schema to enforce the payload shape.
+
 Use `metadata.max_attempts` only on a gate `on_fail` edge that loops back for
 bounded rework.
 
@@ -82,6 +102,25 @@ metadata:
   handoff_instructions: >-
     Include the changed files, tests run, unresolved risks, and any acceptance
     criteria that still need reviewer attention.
+  handoff_schema:
+    type: object
+    required: [changed_files, tests_run, unresolved_risks]
+    properties:
+      changed_files:
+        type: array
+        items:
+          type: string
+          minLength: 1
+      tests_run:
+        type: array
+        items:
+          type: string
+          minLength: 1
+      unresolved_risks:
+        type: array
+        items:
+          type: string
+    additionalProperties: false
 ```
 
 For fan-out, each outgoing edge should have different handoff instructions:
@@ -185,4 +224,3 @@ Before writing or updating a routine:
 - every cycle is a gate `on_fail` retry loop with bounded attempts;
 - there is no `on_exhausted` edge;
 - at least one terminal or terminal_fail step is reachable from each entry path.
-

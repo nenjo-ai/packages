@@ -3,7 +3,7 @@ schema: nenjo.context_block.v1
 manifest:
   name: task_execution
   display_name: Task Execution Runtime
-  description: Generic routine task runtime input and execution rules for agent steps.
+  description: Generic routine task runtime input and execution rules for routable steps.
   template: |-
     {% if task %}
     # Active Task
@@ -16,18 +16,22 @@ manifest:
     Execute or advance the routine task using available live state, source
     material, project context, metadata, and acceptance criteria. Treat routine
     step instructions as task-specific instructions when present. Classify the
-    work internally for routing and tool selection.
+    work internally for ability routing and tool selection.
 
     When the runtime exposes `route_next_steps`, use it exactly once as your
     final action. Use verdict="fail" with reasoning and output when the step
-    cannot continue. Use verdict="pass" with reasoning, output, and one
-    next_steps item for each downstream route when the step should continue.
-    Each next_steps item must include the target_step and a concrete handoff
-    for that target. Follow the route's handoff_instructions when present.
-    The handoff should contain the actual information the downstream step needs,
-    not a restatement of this step's instructions.
+    cannot continue or when a gate failure should stop. Use verdict="pass" with
+    reasoning, output, and one next_steps item for each activated downstream
+    route when the step should continue. For gate steps, verdict="fail" routes
+    activated on_fail edges when present.
 
-    When the active task includes routine_handoffs, treat them as authoritative
+    Each next_steps item must include the target_step and a concrete handoff
+    for that target. The handoff must match that route's handoff_schema. Follow
+    the route's handoff_instructions when present. The handoff should contain
+    the actual information the downstream step needs, not a restatement of this
+    step's instructions.
+
+    When routine.handoffs is present, treat it as authoritative
     upstream inputs for the current step. If multiple upstream routes join into
     this step, use every handoff block and keep their source steps distinct.
     Return a user-facing task update through the tool output; do not include
