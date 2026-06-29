@@ -47,8 +47,9 @@ schedule; include schedule metadata when configuring cron behavior.
 - Every **agent step** is exposed to `route_next_steps`. This is the agent
   step's terminal tool: it records `verdict`, `reasoning`, `output`, and, on
   pass, the decomposed task and handoff for each downstream edge.
-- Every **gate step** is exposed to `pass_verdict`. This records a structured
-  gate pass/fail verdict and drives `on_pass` / `on_fail` routing.
+- Every **gate step** is exposed to `route_next_steps`. It records the gate
+  `verdict`, `reasoning`, `output`, and handoff payloads for whichever branch
+  the verdict activates. Gate pass routes `on_pass`; gate fail routes `on_fail`.
 - Agent and gate steps receive the local step instructions from
   `step.config.instructions` when present. Use this field to tell the assigned
   agent exactly what work to perform for that step, what inputs or upstream
@@ -156,7 +157,8 @@ When a routine is triggered:
 1. The trigger (task or cron) provides initial context
 2. Entry steps become runnable
 3. Agent steps execute and call `route_next_steps` with downstream handoffs
-4. Gates evaluate output with `pass_verdict` and activate `on_pass` or `on_fail`
+4. Gates evaluate output and call `route_next_steps` to activate `on_pass` or
+   `on_fail`
 5. Councils run multi-agent collaboration when reached
 6. Join targets wait for every activated incoming branch to pass
 7. The routine ends at a `terminal` (success), `terminal_fail` (failure), agent

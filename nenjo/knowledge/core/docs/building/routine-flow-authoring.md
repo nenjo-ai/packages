@@ -15,12 +15,12 @@ A routine run advances through graph state, not just a list of steps:
 
 - entry activation: one or more `entry_steps` become runnable;
 - step execution: an agent, gate, or council produces a recorded result;
-- edge activation: a passed source step activates matching outgoing edges;
-- handoff creation: an agent step calls `route_next_steps` with one handoff per
-  downstream edge;
+- edge activation: an agent or gate verdict activates matching outgoing edges;
+- handoff creation: an agent or gate step calls `route_next_steps` with one
+  handoff per activated downstream edge;
 - join readiness: a target with multiple activated incoming edges waits until
   every required upstream handoff or result is present;
-- gate routing: a gate calls `pass_verdict`, then activates `on_pass` or
+- gate routing: a gate pass activates `on_pass`; a gate fail activates
   `on_fail`;
 - retry accounting: a gate `on_fail` loop consumes the edge retry budget;
 - terminal completion: the run reaches `terminal`, `terminal_fail`, or fails
@@ -146,9 +146,11 @@ For fan-out, each outgoing edge should have different handoff instructions:
 
 ## Handoff Rules
 
-When an agent step passes, it calls `route_next_steps` as its final action.
-The call records the step verdict, reasoning, output, and one `next_steps` item
-for each activated downstream route.
+When an agent or gate step completes, it calls `route_next_steps` as its final
+action. The call records the step verdict, reasoning, output, and one
+`next_steps` item for each activated downstream route. Agent pass verdicts route
+normal downstream work; agent fail verdicts fail the routine. Gate pass verdicts
+route `on_pass` edges; gate fail verdicts route `on_fail` edges when present.
 
 Each `next_steps` item should include:
 
@@ -183,7 +185,7 @@ ship path.
 
 ## Gate And Retry Flow
 
-Gates call `pass_verdict`, not `route_next_steps`. A gate pass activates
+Gates call `route_next_steps` with a pass/fail verdict. A gate pass activates
 `on_pass`; a gate fail activates `on_fail`.
 
 Use a retry loop only for bounded rework:

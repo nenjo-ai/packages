@@ -162,10 +162,11 @@ review_gate on_pass -> done
 review_gate on_fail -> implement [metadata.max_attempts = 3]
 ```
 
-Use a gate for the evaluator. Gates call `pass_verdict`. The `on_fail` edge may
-loop back to an earlier step and is bounded by `metadata.max_attempts` or the
-runner default. Do not author `on_exhausted`; retry exhaustion fails the routine
-directly with a structured `retry_exhausted` result.
+Use a gate for the evaluator. Gates call `route_next_steps` with a pass/fail
+verdict. A pass activates `on_pass`; a fail activates `on_fail`. The `on_fail`
+edge may loop back to an earlier step and is bounded by `metadata.max_attempts`
+or the runner default. Do not author `on_exhausted`; retry exhaustion fails the
+routine directly with a structured `retry_exhausted` result.
 
 The retry edge should carry repair state:
 

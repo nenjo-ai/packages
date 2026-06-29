@@ -134,9 +134,9 @@ text unless the prompt explicitly consumes `{{ routine.step.metadata }}`. Put
 retry limits on `on_fail` edge `metadata.max_attempts`, not on the step config.
 For scheduled routines, set the routine trigger to `cron`; the graph still uses
 ordinary routine nodes. A gate without an agent cannot execute because no model
-has been assigned to evaluate the gate criteria and call `pass_verdict`.
-Agent steps call `route_next_steps` instead: this records the agent verdict and,
-on pass, the auditable task decomposition for every downstream edge.
+has been assigned to evaluate the gate criteria and call `route_next_steps`.
+Agent and gate steps call `route_next_steps`: this records the step verdict and
+the auditable handoff payload for every activated downstream edge.
 Terminal outcomes are also ordinary graph steps: add an explicit `terminal` or
 `terminal_fail` step and point edges at that step slug.
 

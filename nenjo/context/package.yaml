@@ -1,7 +1,7 @@
 ---
 schema: nenjo.package.v1
 name: context
-version: "1.0.3"
+version: "1.0.4"
 description: Reusable context blocks for agent memory, tools, knowledge routing, delegation, runtime templates, and operations.
 
 modules:

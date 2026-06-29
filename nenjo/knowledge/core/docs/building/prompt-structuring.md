@@ -85,7 +85,7 @@ variables include:
 - `{{ project.working_dir }}`
 - `{{ routine }}`
 - `{{ routine.step.instructions }}`
-- `{{ gate.previous_output }}`
+- `{{ routine.handoffs }}`
 - `{{ memories }}`
 - `{{ artifacts }}`
 - `{{ git }}`
@@ -148,13 +148,15 @@ Example:
 
 Gate prompts should combine:
 
-- `{{ gate.previous_output }}`;
+- `{{ routine.handoffs }}`;
 - `{{ task.acceptance_criteria }}`;
-- routine step instructions or explicit prompt text;
-- required output schema for pass/fail decisions.
+- routine step instructions or explicit gate criteria;
+- downstream route handoff schemas for pass/fail routing.
 
 Use task acceptance criteria, routine step instructions, or explicit prompt text
-for gate criteria.
+for gate criteria. Gates should call `route_next_steps` as their final action
+with a pass or fail verdict and schema-valid handoffs for any activated
+downstream routes.
 
 ## Pitfalls To Avoid
 

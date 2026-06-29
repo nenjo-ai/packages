@@ -91,6 +91,8 @@ manifest:
     - type: references
       target: design.workflows
     - type: references
+      target: building.routine_flow_authoring
+    - type: references
       target: design.councils
     - type: references
       target: design.prompts
