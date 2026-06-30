@@ -51,8 +51,9 @@ manifest:
       - Terminal outcomes are explicit steps. Add a step with `step_type: "terminal"` or `step_type: "terminal_fail"` before targeting it from an edge; do not target an undeclared slug such as `terminal`.
       - Treat multiple entry steps as parallel branches.
       - Treat multiple activated incoming edges into a step as an all-success join.
-      - Treat multiple outgoing edges from an agent step as deterministic fan-out; decompose the handoff so each downstream edge has a clear purpose.
-      - Put branch purpose on edge metadata.purpose and source-agent handoff guidance on edge metadata.handoff_instructions so `route_next_steps` can show the agent what to pass to each downstream route.
+      - Treat multiple outgoing edges from an agent step as deterministic fan-out; decompose the handoff so each downstream edge has a clear purpose. Treat gate outgoing edges as verdict branches; on_pass edges route pass handoffs and on_fail edges route failure/retry handoffs.
+      - Put branch purpose on edge metadata.purpose, source-step handoff guidance on edge metadata.handoff_instructions, and the canonical object contract on edge metadata.handoff_schema so `route_next_steps` can show and enforce what the routable step must pass to each downstream route.
+      - Every edge whose source step is an agent or gate must define metadata.handoff_schema as a JSON object schema. Use type="object", required fields, properties, and additionalProperties=false for the concrete downstream payload shape.
       - Treat every meaningful edge as a flow-state handoff contract. The handoff instructions must request concrete downstream state such as evidence, decisions, artifact refs, constraints, failed criteria, or open questions, not repeat the target step instructions.
       - For joins, ensure each activated incoming edge can provide a distinct handoff block and the target step instructions explain how to combine upstream handoffs while preserving source identity.
       - Preserve explicit success and failure terminals when changing routine topology.

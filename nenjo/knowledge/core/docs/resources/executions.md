@@ -49,8 +49,7 @@ Routine flow state includes:
 - active entry steps from `entry_steps`;
 - step status and recorded step output;
 - activated outgoing edges;
-- `route_next_steps` verdicts and per-target handoffs from agent steps;
-- `pass_verdict` results from gate steps;
+- `route_next_steps` verdicts and per-target handoffs from agent and gate steps;
 - join readiness for steps with multiple activated incoming edges;
 - retry attempt counts for gate `on_fail` loops;
 - terminal, terminal_fail, agent failure, or retry-exhausted completion state.

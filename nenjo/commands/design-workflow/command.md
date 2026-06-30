@@ -30,6 +30,8 @@ These are the relevant seeded knowledge docs that you MUST read first using the 
 3. **Compose** - Produce a concrete design or workflow composition that:
    - Names the chosen primitives and why each was selected over alternatives.
    - Names fields, relationships, and constraints explicitly.
+   - Reads `building.routine_flow_authoring` before recommending concrete
+     routine topology, edge metadata, handoff schemas, fan-out, joins, or gate retries.
    - Describes flow as step -> edge(condition) -> step for routines; name owners, dependencies, gates, edge handoff contracts, and terminal outcomes for workflows.
    - Recommends a specific approach with tradeoffs when multiple are valid.
    - Uses realistic values unless the user has not chosen them.

@@ -3,13 +3,10 @@ schema: nenjo.context_block.v1
 manifest:
   name: gate_evaluation
   display_name: Gate Evaluation Runtime
-  description: Generic gate runtime input and verdict rules.
+  description: Generic gate runtime input and route_next_steps verdict rules.
   template: |-
-    <previous_output>
-    {{ gate.previous_output }}
-    </previous_output>
     {% if task %}
-    # Current active task context.
+    # Active Task
     {{ task }}
     {% endif %}
     {% if routine %}
@@ -17,10 +14,16 @@ manifest:
     {{ routine }}
     {% endif %}
 
-    Evaluate the previous output against the active task acceptance criteria, routine step instructions, and project context. Keep scoring and
-    routing internal.
+    Evaluate the authoritative upstream routine.handoffs against the active task
+    acceptance criteria, routine step instructions, gate criteria, and project
+    context. Keep scoring and routing internal.
 
-    When the runtime exposes `pass_verdict`, use it to record the gate verdict
-    with pass/fail status, evidence, and required fixes before finishing. Return
-    the verdict, key reasons, and required fixes or next action in user-facing
-    terms.
+    When the runtime exposes `route_next_steps`, use it exactly once as your
+    final action. Use verdict="pass" with reasoning, output, and one next_steps
+    item for each activated downstream pass route. Use verdict="fail" with
+    reasoning and output when the gate fails, cannot evaluate, or should stop;
+    fail verdicts route activated on_fail edges when present.
+
+    Each next_steps item must include the target_step and a concrete handoff for
+    that target. The handoff must match that route's handoff_schema and follow
+    the route's handoff_instructions when present.

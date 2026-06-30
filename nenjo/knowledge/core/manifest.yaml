@@ -91,6 +91,8 @@ manifest:
     - type: references
       target: design.workflows
     - type: references
+      target: building.routine_flow_authoring
+    - type: references
       target: design.councils
     - type: references
       target: design.prompts
@@ -208,7 +210,7 @@ manifest:
   - selector: design.workflows
     source_path: docs/design/workflow-design.md
     title: Workflow Design
-    summary: "How to design tasks, routines, councils, gates, executions, flow state, handoffs, dependencies, and review points."
+    summary: "How to design tasks, routines, councils, gates, executions, flow state, handoffs, handoff schemas, dependencies, and review points."
     kind: design
     tags: ["intent:design", "domain:workflow", "resource:routines", "resource:tasks", "audience:builder"]
     related:
@@ -576,7 +578,7 @@ manifest:
   - selector: building.routine_flow_authoring
     source_path: docs/building/routine-flow-authoring.md
     title: Routine Flow Authoring
-    summary: "Practical routine authoring guide for flow state, edge metadata, handoff instructions, fan-out, joins, gate retries, and graph verification."
+    summary: "Practical routine authoring guide for flow state, edge metadata, handoff instructions, handoff schemas, fan-out, joins, gate retries, and graph verification."
     kind: build
     tags: ["intent:build", "intent:design", "domain:workflow", "resource:routines", "topic:flow_state", "topic:orchestration", "audience:builder"]
     related:

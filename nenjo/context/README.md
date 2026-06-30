@@ -21,7 +21,7 @@ composed by selector instead of copied into every agent or ability.
 | Operations | `pkg.nenjo_ai.packages.context.operations.write_discipline` | Sequence, risk-classify, and verify writes. |
 | Runtime | `pkg.nenjo_ai.packages.context.runtime.chat_response` | Generic chat runtime input and response rules. |
 | Runtime | `pkg.nenjo_ai.packages.context.runtime.task_execution` | Generic routine task-step input, `route_next_steps`, project context, metadata, and reporting rules. |
-| Runtime | `pkg.nenjo_ai.packages.context.runtime.gate_evaluation` | Generic gate runtime input, `pass_verdict`, and verdict rules. |
+| Runtime | `pkg.nenjo_ai.packages.context.runtime.gate_evaluation` | Generic gate runtime input, `route_next_steps`, and verdict routing rules. |
 | Runtime | `pkg.nenjo_ai.packages.context.runtime.heartbeat_check` | Generic heartbeat runtime input and reporting rules. |
 | Tools | `pkg.nenjo_ai.packages.context.tools.tool_usage` | Choose, sequence, and parallelize tools safely. |
 

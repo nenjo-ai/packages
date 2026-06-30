@@ -41,7 +41,8 @@ Include:
   for that step;
 - dependencies, parallelizable branches, and fan-in joins;
 - edge metadata with `metadata.purpose` and
-  `metadata.handoff_instructions` for the state each route must carry;
+  `metadata.handoff_instructions` for the state each route must carry, plus
+  `metadata.handoff_schema` for every agent or gate source edge;
 - gate criteria and terminal outcomes;
 - expected artifacts, Library evidence, or execution output at each handoff;
 - retry, escalation, or human approval points;
@@ -85,6 +86,28 @@ contain source output, evidence, decisions, artifact refs, constraints,
 unresolved questions, or required fixes. It should not merely restate the target
 step instructions.
 
+Choose `metadata.handoff_schema` from the downstream step's minimum required
+state, not from the source step's full output. Every edge whose source is an
+`agent` or `gate` must use a JSON object schema. Prefer a small object with
+named, required fields and `additionalProperties: false`. Use:
+
+- `string` fields for concise findings, artifact refs, file paths, decisions,
+  criteria, or notes the target must read;
+- arrays when the target needs a list of homogeneous items such as changed
+  files, failed checks, risks, requirements, or evidence links;
+- nested objects when one item has multiple required attributes, such as
+  `{path, reason, status}`;
+- `enum` or `const` for bounded states such as severity, verdict category, lane,
+  approval state, or retry reason;
+- booleans only when the target needs a true binary fact, and name the field so
+  the meaning is unambiguous.
+
+Do not choose a schema that is just `{work: string}` unless the downstream step
+genuinely only needs one free-form work item. Do not use the schema to encode
+instructions, optional commentary, or everything the source agent might know.
+The schema is the enforceable payload shape; `handoff_instructions` explains how
+to fill that shape well.
+
 For fan-out, each downstream edge should request different handoff content. For
 joins, the target step should state how to combine incoming handoff blocks while
 keeping source steps distinct. A joined step should not treat upstream branches
@@ -111,9 +134,9 @@ text unless the prompt explicitly consumes `{{ routine.step.metadata }}`. Put
 retry limits on `on_fail` edge `metadata.max_attempts`, not on the step config.
 For scheduled routines, set the routine trigger to `cron`; the graph still uses
 ordinary routine nodes. A gate without an agent cannot execute because no model
-has been assigned to evaluate the gate criteria and call `pass_verdict`.
-Agent steps call `route_next_steps` instead: this records the agent verdict and,
-on pass, the auditable task decomposition for every downstream edge.
+has been assigned to evaluate the gate criteria and call `route_next_steps`.
+Agent and gate steps call `route_next_steps`: this records the step verdict and
+the auditable handoff payload for every activated downstream edge.
 Terminal outcomes are also ordinary graph steps: add an explicit `terminal` or
 `terminal_fail` step and point edges at that step slug.
 

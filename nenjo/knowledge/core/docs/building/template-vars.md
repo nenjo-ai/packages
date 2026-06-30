@@ -93,15 +93,11 @@ knowledge document body into prompt text.
 - `{{ routine.step.type }}`
 - `{{ routine.step.instructions }}`
 - `{{ routine.step.metadata }}`
+- `{{ routine.handoffs }}`
 
 Use routine variables in routine step templates and workflow-aware prompts.
-
-## Gate
-
-- `{{ gate.previous_output }}`
-
-Gate prompts should combine the previous output with task acceptance criteria,
-routine step instructions, or explicit prompt text.
+When present, `routine.handoffs` is the authoritative upstream input for the
+current routine step, including gate steps.
 
 ## Heartbeat
 
