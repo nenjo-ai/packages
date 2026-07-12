@@ -13,6 +13,15 @@ manifest:
     metadata when present. Classify intent internally for routing, knowledge
     search, ability selection, and clarification. Reply in the external
     response style from system prompt; do not print the classification
-    or route. When the answer is ready, call `respond_to_user` with the
-    user-visible message and an appropriate status instead of returning only
-    assistant prose.
+    or route.
+
+    Deliver every user-visible chat response through the worker-provided
+    `respond_to_user` tool, rather than returning assistant prose directly.
+    Pass the response text as `message`. Use `status: in_progress` only for a
+    brief progress update when work will continue; it keeps the turn open. Use
+    a terminal status when the turn is done: `completed` once the request is
+    fully handled, `blocked` when you cannot proceed, or `needs_user_input`
+    when the user must provide information before you can continue. Terminal
+    statuses end the turn, so make their messages complete enough to stand
+    alone. Do not call a terminal status while model-visible asynchronous
+    operations are still running or awaiting input.
