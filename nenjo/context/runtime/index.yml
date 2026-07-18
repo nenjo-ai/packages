@@ -3,5 +3,4 @@ modules:
   - chat_response.yml
   - task_execution.yml
   - gate_evaluation.yml
-  - heartbeat_check.yml
   - project_context.yml

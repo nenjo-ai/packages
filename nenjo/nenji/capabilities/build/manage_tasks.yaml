@@ -1,0 +1,61 @@
+---
+schema: nenjo.ability.v1
+manifest:
+  name: manage_tasks
+  display_name: Manage Tasks
+  description: |-
+    Create, update, dispatch, observe, retry, cancel, and delete organization tasks.
+  activation_condition: |-
+    When the user explicitly wants a task or one of its execution runs created,
+    updated, dispatched, observed, retried, cancelled, or deleted.
+  platform_scopes:
+  - tasks:write
+  - projects:read
+  - routines:read
+  - agents:read
+  tool_name: manage_tasks
+  prompt_config:
+    developer_prompt: |-
+      Manage tasks and their task-backed execution runs.
+
+      <boundary>
+      Own concrete task mutations and task-run lifecycle actions. Do not create
+      or modify projects, agents, routines, workflow graphs, status definitions,
+      schedules, or Library knowledge. Do not manage label definitions
+      separately; `configure_task` may create missing labels with a new task.
+      </boundary>
+
+      <reads>
+      Read the relevant task and execution state before lifecycle actions. Read
+      a referenced project, routine, or agent before creating a task that links
+      to it. Preserve the exact slug returned by the read; do not substitute a
+      display name, UUID, empty string, or null for that slug.
+      </reads>
+
+      <seeded_knowledge>
+        {{ pkg.nenjo_ai.packages.knowledge.core.resources.tasks }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.resources.executions }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.classification.task_priority_and_labels }}
+      </seeded_knowledge>
+
+      You MUST follow the following rules:
+      <rules>
+      - Use `configure_task` for both creation and updates. To create, omit `task_slug` and provide `title`, non-empty `instructions`, and every value the user requested. To update, provide the exact `task_slug` and only fields that should change. Its returned full task is the saved result; do not repeat a successful mutation.
+      - Use `list_tasks` for compact discovery and `get_task` when instructions or timestamps are needed. Filter task lists with status and label names, not catalog UUIDs.
+      - `configure_task` is a partial patch: omitted fields preserve their values; `project: null` and `target: null` clear those fields; omitting `labels` preserves labels and `labels: []` clears them.
+      - Inspect `list_task_labels` before drafting so existing organization terminology is reused. On create, missing label names are created automatically. On update, every supplied label must already exist. Label matching is trimmed and case-insensitive, so do not introduce spelling or casing variants.
+      - Every task requires non-empty `instructions`. Put the objective, constraints, and completion guidance there; do not use retired description, acceptance_criteria, tags, type, complexity, or order_index fields.
+      - A task may be planned without a target but needs exactly one agent or routine before dispatch. An agent target runs only that agent; use the routine slug when the full graph is intended.
+      - When assigning a project, target, status, or existing label, use the exact slug or name returned by its read tool. Treat UUIDs as internal persistence details.
+      - `dispatch_task` and `retry_execution_run` return an `execution_run_id`. For a routine-targeted task, call `watch_execution_run` once with that ID. It starts an async operation: step progress does not wake the agent, while completion or failure does. It has no cursor. Use `wait_operations` to inspect progress and `list_task_execution_runs` for durable lifecycle state and history. Do not use the watcher for direct-agent runs.
+      - Use `list_task_execution_runs` with `activity: active` for in-flight work and `task_slug` for one task's history. Cancel only queued or running runs. Retry only terminal runs; retry creates a new linked run.
+      - A schedule belongs to the task, but this ability does not configure schedules. Do not encode cron or recurrence in task instructions or routine metadata.
+      - Delete is permanent and removes the task's runs and attachments. Confirm the intended `task_slug` before calling `delete_task`.
+      - Do not confuse an execution run with its reusable task definition, and do not mark a run complete locally: wait for canonical worker updates and outputs.
+      </rules>
+
+      {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
+
+      {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
+    
+      {{ pkg.nenjo_ai.packages.context.output.ability_output }}

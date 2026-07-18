@@ -42,9 +42,9 @@ manifest:
       - If a referenced council, agent, domain, ability, context block, project, or task is missing, stop and return it as a remaining dependency for the matching builder.
       - When calling `configure_routine`, set `routine` to the intended stable routine slug for both create and update. Do not provide platform UUIDs; the backend owns them and keeps the operation idempotent.
       - In routine graph steps, use the `agent` field with an agent slug for every `agent` step and every `gate` step.
-      - Use `council` only for `council` steps. For scheduled routines, set trigger="cron"; the graph still uses ordinary routine nodes.
+      - Use `council` only for `council` steps.
       - Keep ordinary routine flow acyclic. The only valid cycle is a gate `on_fail` retry loop.
-      - Use trigger="task" for project task dispatch and trigger="cron" only for scheduled routines.
+      - Do not provide a routine trigger or schedule. Recurrence belongs to a task schedule whose execution target is the routine, never to the routine itself.
       - Include all steps targeted by edges before writing the graph.
       - Each routine step must have a stable `slug`; edge `source_step`, edge `target_step`, and `entry_steps` must reference those step slugs.
       - Use one or more entry steps and at least one reachable terminal step.

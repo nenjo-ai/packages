@@ -207,8 +207,9 @@ Intent: give one agent a goal and let it decide tool use and intermediate
 steps.
 
 Prefer a single agent with focused abilities, domains, tools, and knowledge.
-Wrap it in a routine only when the agent needs scheduled execution, explicit
-handoffs, gate checkpoints, or durable audit around a larger process.
+Use a routine when the work needs explicit handoffs, gate checkpoints, or
+durable audit around a larger process. Schedule a task targeting either the
+agent or that routine when the work must recur.
 
 ## Approval Or Escalation
 

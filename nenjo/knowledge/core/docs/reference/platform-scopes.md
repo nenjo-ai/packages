@@ -16,6 +16,7 @@ for other resources.
 - `domains:read` / `domains:write`
 - `commands:read` / `commands:write`
 - `routines:read` / `routines:write`
+- `tasks:read` / `tasks:write`
 - `projects:read` / `projects:write`
 - `councils:read` / `councils:write`
 - `context_blocks:read` / `context_blocks:write`

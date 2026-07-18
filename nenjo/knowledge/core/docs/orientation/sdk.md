@@ -51,12 +51,13 @@ owns all platform execution logic.
   generic knowledge tools for metadata-first document retrieval.
 - `nenjo-sessions` owns storage-neutral session, transcript, checkpoint, trace,
   and lease contracts.
-- `nenjo-harness` owns platform command handling around an assembled provider:
-  chat, task, cron, heartbeat, manifest, repo, domain, session, trace, and
-  active execution registries.
+- `nenjo-harness` owns session lifecycle plus the durable task inbox, task
+  schedule evaluation, shared concurrency gate, checkpoints, and task runtime
+  events around an assembled provider.
 - `nenjo-worker` owns the concrete worker process: config, bootstrap, event
-  loop, provider/tool assembly, native tools, local library document sync,
-  session storage, cleanup, and platform connectivity.
+  loop, provider/tool assembly, native tools, schedule snapshot caching,
+  transport adaptation, local library document sync, cleanup, and platform
+  connectivity.
 - `nenjo-platform`, `nenjo-events`, `nenjo-eventbus`, `nenjo-secure-envelope`,
   and `nenjo-crypto-auth` own platform REST/MCP contracts, wire events,
   transport, encrypted envelopes, enrollment, and key-provider behavior.

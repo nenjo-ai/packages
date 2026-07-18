@@ -39,9 +39,9 @@ unless the user is explicitly authoring package files in an SDK/local context.
 - Routine work: `create_routine`, `update_routine`.
 - Council work: `create_council`, `update_council`, `update_council_member`.
 - Project work: `create_project`, `update_project`.
-- Task work: `create_project_tasks`, `update_project_task`.
-- Execution work: `start_project_execution`, `pause_project_execution`,
-  `resume_project_execution`.
+- Task work: `configure_task`, `delete_task`, `dispatch_task`.
+- Execution work: `list_task_execution_runs`, `watch_execution_run`,
+  `cancel_execution_run`, `retry_execution_run`.
 - Library pack work: `create_knowledge_pack`, `update_knowledge_pack`.
 - Library doc work: `create_knowledge_doc`, `update_knowledge_doc`,
   `delete_knowledge_doc`.

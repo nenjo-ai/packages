@@ -3,7 +3,7 @@
 ## Purpose
 
 Use this guide when composing agent, ability, domain, command, routine, gate,
-heartbeat, and context-block prompts.
+and context-block prompts.
 
 Good prompts separate stable behavior from runtime context and source material.
 They seed only the docs needed for discovery, then require tools for current
@@ -15,7 +15,7 @@ state and full source reads.
    boundaries.
 2. Developer prompt — routing rules, tool-use expectations, and tactical
    behavior.
-3. Runtime template — chat, task, gate, routine, heartbeat, memory,
+3. Runtime template — chat, task, gate, routine, memory,
    artifact, project, and Git variables.
    Command content uses the same template rules as chat templates for the
    invoked turn.
@@ -80,7 +80,7 @@ variables include:
 
 - `{{ chat.message }}`
 - `{{ task }}`
-- `{{ task.acceptance_criteria }}`
+- `{{ task.instructions }}`
 - `{{ project }}`
 - `{{ project.working_dir }}`
 - `{{ routine }}`
@@ -149,12 +149,12 @@ Example:
 Gate prompts should combine:
 
 - `{{ routine.handoffs }}`;
-- `{{ task.acceptance_criteria }}`;
+- `{{ task.instructions }}`;
 - routine step instructions or explicit gate criteria;
 - downstream route handoff schemas for pass/fail routing.
 
-Use task acceptance criteria, routine step instructions, or explicit prompt text
-for gate criteria. Gates should call `route_next_steps` as their final action
+Put completion guidance in task instructions, routine step instructions, or
+explicit gate prompt text. Gates should call `route_next_steps` as their final action
 with a pass or fail verdict and schema-valid handoffs for any activated
 downstream routes.
 

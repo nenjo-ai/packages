@@ -8,11 +8,12 @@ Library knowledge, routines, councils, models, workers, and settings.
 ## Main Areas
 
 - Chat for direct interaction with agents and councils.
-- Agent builder for behavior, prompts, model selection, assignments, and
-  heartbeat settings.
-- Routine editor for workflow graphs, gates, retries, councils, and schedules.
+- Agent builder for behavior, prompts, model selection, and assignments.
+- Routine editor for workflow graphs, gates, retries, and councils.
+- Task pages for organization work, optional project association, execution
+  targets, schedules, and run history.
 - Council editor for leaders, members, strategy, and collaboration structure.
-- Project pages for tasks, execution runs, repository sync, and project settings.
+- Project pages for repository context and project settings.
 - Library for source material, knowledge metadata, and graph relationships.
 - Settings for models, workers, security posture, and user-controlled permission
   setup.

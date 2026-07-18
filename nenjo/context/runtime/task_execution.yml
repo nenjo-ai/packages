@@ -3,7 +3,7 @@ schema: nenjo.context_block.v1
 manifest:
   name: task_execution
   display_name: Task Execution Runtime
-  description: Generic routine task runtime input and execution rules for routable steps.
+  description: Generic task runtime input and execution rules for direct and routine-targeted work.
   template: |-
     {% if task %}
     # Active Task
@@ -13,8 +13,8 @@ manifest:
     # Current active routine context. If the routine step instructions are present, you MUST follow them.
     {{ routine }}
     {% endif %}
-    Execute or advance the routine task using available live state, source
-    material, project context, metadata, and acceptance criteria. Treat routine
+    Execute or advance the task using its instructions, available live state,
+    source material, optional project context, and metadata. Treat routine
     step instructions as task-specific instructions when present. Classify the
     work internally for ability routing and tool selection.
 

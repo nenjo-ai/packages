@@ -42,7 +42,7 @@ manifest:
     - depends_on: read or inspect when prerequisites, ordering, or required context may affect correctness;
     - references: traverse for exact facts, examples, conventions, or source material;
     - defines: traverse when a term, schema, resource, field, or contract must be precise;
-    - classifies: traverse when choosing categories, routing, task type, risk, or workflow pattern;
+    - classifies: traverse when choosing categories, routing, task labels, risk, or workflow pattern;
     - part_of: traverse upward for broader context or downward when the current doc is too general;
     - governs: traverse when rules, policy, permissions, compliance, or constraints may control the answer;
     - extends: traverse when specialization, variants, or inherited behavior matter;
@@ -74,4 +74,3 @@ manifest:
 
     If the task requires broad overview knowledge, prefer a breadth first search and read the most relevant documents  
     </knowledge_routing_intructions> 
-

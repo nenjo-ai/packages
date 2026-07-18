@@ -34,7 +34,7 @@ A good workflow has:
 Include:
 
 - whether the shape is a task set, routine, council, or combination;
-- trigger or starting condition;
+- task dispatch and, when recurring work is needed, the task schedule;
 - steps and their owners, including the `agent` slug for every agent or gate step;
 - task instructions for each agent and gate step, written as
   `step.config.instructions`, that tell the assigned agent exactly what to do
@@ -53,14 +53,15 @@ domain mode, task set, or combination. Choose by the required guarantees:
 
 | Need | Prefer |
 |---|---|
-| Deterministic step order, joins, retries, or scheduled dispatch | routine |
+| Deterministic step order, joins, retries, or explicit handoffs | routine |
 | Fuzzy intent routing or adaptive planning | agent |
 | Narrow reusable specialist operation | ability |
 | Multiple perspectives, critique, voting, or synthesis | council |
 | User-approved operating mode or permission boundary | domain |
 | Trackable user/project work item | task |
 
-Routines are coupled to task or cron scheduling and dispatch. They provide the
+Routines are started through task dispatch. A task may be manual or scheduled,
+and its execution target may be the routine. Routines provide the
 strongest audit trail for step results, gate decisions, fan-out, fan-in, and
 bounded retry loops. Agents are more flexible and intent-driven, and can run in
 chat, task, domain, ability, or council contexts, but their intermediate control
@@ -132,8 +133,8 @@ Keep step config typed and minimal: only `instructions` and optional `metadata`
 are supported. Put acceptance criteria and input references in the instruction
 text unless the prompt explicitly consumes `{{ routine.step.metadata }}`. Put
 retry limits on `on_fail` edge `metadata.max_attempts`, not on the step config.
-For scheduled routines, set the routine trigger to `cron`; the graph still uses
-ordinary routine nodes. A gate without an agent cannot execute because no model
+To run a routine periodically, schedule a task whose execution target is that
+routine. A gate without an agent cannot execute because no model
 has been assigned to evaluate the gate criteria and call `route_next_steps`.
 Agent and gate steps call `route_next_steps`: this records the step verdict and
 the auditable handoff payload for every activated downstream edge.
@@ -149,16 +150,14 @@ Terminal outcomes are also ordinary graph steps: add an explicit `terminal` or
 - orchestrator-workers as planner/worker/synthesis steps, a council, or one
   orchestrator agent with abilities;
 - evaluator-optimizer as a gate `on_fail` retry loop when audit matters;
-- autonomous agent as a single agent unless scheduling or checkpoints require a
-  routine wrapper;
+- autonomous agent as a single agent, optionally targeted by a scheduled task;
 - approval or escalation as gates and explicit terminal outcomes.
 
-## Routine Trigger Choice
+## Task Dispatch And Scheduling
 
-- Use `task` when a project task should start the workflow and provide the
-  initial work context.
-- Use `cron` when the routine itself owns a schedule and should run
-  periodically.
+- A task supplies the initial work context for a routine execution.
+- Recurrence belongs to the task schedule. The scheduled task targets either a
+  routine or a single agent.
 
 ## Boundary Rules
 

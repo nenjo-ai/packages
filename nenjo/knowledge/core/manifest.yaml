@@ -336,7 +336,7 @@ manifest:
   - selector: resources.tasks
     source_path: docs/resources/tasks.md
     title: Tasks
-    summary: "Resource-level model for project work units with status, dependencies, assignment, priority, complexity, and readiness semantics."
+    summary: "Resource-level model for organization tasks with optional projects, status rows, labels, execution targets, schedules, and shared execution semantics."
     kind: resource
     tags: ["intent:explain", "intent:build", "resource:tasks", "domain:project_work"]
     related:
@@ -347,12 +347,12 @@ manifest:
     - type: related_to
       target: resources.agents
     - type: references
-      target: classification.task_types
+      target: classification.task_priority_and_labels
 
   - selector: resources.routines
     source_path: docs/resources/routines.md
     title: Routines
-    summary: "Resource-level model for workflow graphs, agents, gates, councils, triggers, edge metadata, handoffs, flow state, and terminal outcomes."
+    summary: "Resource-level model for task-targetable workflow graphs, agents, gates, councils, edge metadata, handoffs, flow state, and terminal outcomes."
     kind: resource
     tags: ["intent:explain", "intent:build", "resource:routines", "domain:workflow"]
     related:
@@ -376,7 +376,7 @@ manifest:
     related:
     - type: governs
       target: resources.tasks
-    - type: governs
+    - type: related_to
       target: resources.executions
     - type: governs
       target: resources.memory
@@ -402,11 +402,11 @@ manifest:
   - selector: resources.executions
     source_path: docs/resources/executions.md
     title: Executions
-    summary: "Resource-level model for stateful runtime runs across project tasks, chat, schedules, gates, heartbeats, routine flow state, and progress tracking."
+    summary: "Resource-level model for task-scoped manual, retry, and scheduled runs plus routine flow state, lifecycle, and progress tracking."
     kind: resource
     tags: ["intent:explain", "intent:build", "resource:executions", "domain:workflow"]
     related:
-    - type: part_of
+    - type: related_to
       target: resources.projects
     - type: depends_on
       target: resources.tasks
@@ -653,10 +653,10 @@ manifest:
     - type: references
       target: design.knowledge
 
-  - selector: classification.task_types
-    source_path: docs/classification/task-types.md
-    title: Task Type Classification
-    summary: "Classification guide for valid task types, priority, urgency, and complexity across Nenjo projects."
+  - selector: classification.task_priority_and_labels
+    source_path: docs/classification/task-priority-and-labels.md
+    title: Task Priority And Labels
+    summary: "Classification guide for task priority and organization-owned labels."
     kind: classification
     tags: ["intent:classify", "resource:tasks", "domain:project_work", "topic:priority"]
     related:

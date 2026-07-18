@@ -32,7 +32,7 @@ Include:
 - developer prompt operating loop, tool policy, retrieval policy, and verification rules;
 - context block imports for reusable guidance;
 - knowledge seeds for compact retrieval starting points;
-- template variables needed for chat, task, gate, or heartbeat modes;
+- template variables needed for chat, task, or gate modes;
 - memory guidance for what should be remembered;
 - verification plan for rendered prompt sections and token cost.
 
@@ -52,7 +52,7 @@ Include:
 
 - Putting mutable project context into stable prompts.
 - Duplicating Library or package knowledge inside prompts.
-- Mixing chat, task, gate, and heartbeat behavior into one template.
+- Mixing chat, task, and gate behavior into one template.
 - Seeding too many knowledge docs instead of giving the agent a compact index and
   retrieval instructions.
 - Making templates print internal labels such as `Intent:` or `Route:` as part

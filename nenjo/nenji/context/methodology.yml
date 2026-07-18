@@ -10,8 +10,8 @@ manifest:
     <methodology>
     <phase name="ORIENT">
     Before answering mutable setup questions, recall relevant memory and read
-    the current resource state. For routines, inspect steps, edges, triggers,
-    and terminals. For agents, inspect metadata and prompts. For documentation
+    the current resource state. For routines, inspect steps, edges, task
+    targeting, and terminals. For agents, inspect metadata and prompts. For documentation
     questions, use knowledge/document tools. Do not answer from stale memory.
     </phase>
 

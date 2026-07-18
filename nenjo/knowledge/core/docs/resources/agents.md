@@ -17,8 +17,11 @@ An agent owns its behavior and runtime surface:
 - assigned abilities;
 - assigned domains;
 - assigned MCP servers;
-- assigned script tools;
-- optional heartbeat schedule.
+- assigned script tools.
+
+Agents do not own schedules. Recurring agent work is represented by an ordinary
+task whose execution target is the agent and whose schedule is owned by that
+task.
 
 Platform scopes are attached to agents as permission refs, but agents must not
 grant or change their own scopes. Scope assignment is controlled by users and
@@ -29,9 +32,8 @@ platform policy.
 | Mode | Description | Primary Template |
 |---|---|---|
 | chat | User conversation | `templates.chat` |
-| task | Routine agent-step execution | `templates.task` |
+| task | Direct task or routine agent-step execution | `templates.task` |
 | gate | Evaluation of prior output | `templates.gate` |
-| heartbeat | Periodic autonomous check | `templates.heartbeat` |
 | council | Council member or leader work | `templates.task` adapted by the runtime |
 
 The agent's identity and memory profile remain stable across modes. The runtime
@@ -45,7 +47,7 @@ reusable context block.
 For generic behavior, prefer one-line runtime templates that include reusable
 runtime context blocks, for example
 `{{ pkg.nenjo_ai.packages.context.runtime.task_execution }}`. Put task, project,
-metadata, routine, gate, or heartbeat variable framing inside that context block
+metadata, routine, or gate variable framing inside that context block
 instead of duplicating it across agent templates.
 
 ## Prompt Configuration
@@ -56,9 +58,8 @@ should be handled separately when the platform exposes separate tools.
 - `system_prompt` — stable identity and principles.
 - `developer_prompt` — tactical behavior, routing, and tool-use guidance.
 - `templates.chat` — chat wrapper.
-- `templates.task` — routine agent-step execution wrapper.
+- `templates.task` — direct task and routine agent-step execution wrapper.
 - `templates.gate` — gate evaluation wrapper.
-- `templates.heartbeat` — heartbeat wrapper.
 
 ## Assigned Capability Surface
 
