@@ -31,8 +31,8 @@ without guessing what happened upstream.
 
 ## Authoring Sequence
 
-1. Name the routine trigger: `task` for project task dispatch or `cron` for a
-   scheduled routine.
+1. If the workflow must recur, plan a scheduled task whose execution target is
+   the routine.
 2. List steps with stable slugs, step types, and owners.
 3. Write `config.instructions` for every `agent` and `gate` step.
 4. Draw edges with source, target, and condition.

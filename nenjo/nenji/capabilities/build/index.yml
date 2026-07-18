@@ -8,4 +8,4 @@ modules:
   - build_library.yaml
   - council.yaml
   - build_routine.yaml
-  - manage_project_work.yaml
+  - manage_tasks.yaml

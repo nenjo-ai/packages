@@ -9,7 +9,6 @@ A routine is a directed graph consisting of:
 
 - **Steps** — Individual units of work (agent, gate, council, etc.)
 - **Edges** — Connections that define execution flow and dependencies
-- **Trigger** — What causes the routine to start (`task` or `cron`)
 - **Flow state** — Runtime state for activated entries, steps, edges,
   handoffs, joins, retries, and terminals
 - **Optional metadata** — Custom configuration per routine
@@ -20,15 +19,12 @@ earlier step. The runner uses `metadata.max_attempts` when present and defaults
 to 3 attempts when it is omitted. If the retry budget is exhausted, the routine
 fails directly with a structured `retry_exhausted` result.
 
-## Triggers
+## Task Dispatch
 
-| Trigger | Description                              | Common Use Case                     |
-|---------|------------------------------------------|-------------------------------------|
-| `task`  | Started when a project task is dispatched to the routine | Project work that needs a reusable workflow |
-| `cron`  | Started by a schedule on the routine | Periodic maintenance, monitoring, reports |
-
-Use `task` for normal user/project work. Use `cron` only when the routine owns a
-schedule; include schedule metadata when configuring cron behavior.
+A routine starts when a task whose execution target is that routine is
+dispatched. The task supplies runtime context and may be run manually, retried,
+or activated by its own schedule. Routines do not own trigger, timer, or
+schedule metadata.
 
 ## Step Types
 
@@ -123,8 +119,7 @@ Routines are typically built using well-known patterns:
 - Gate outgoing edges must use `on_pass` and/or `on_fail`; do not use `always`
   from a gate.
 - Agent and gate steps must set `agent` to the executor agent slug. Council
-  steps must set `council` to the council slug. For scheduled routines, set the
-  routine trigger to `cron`; the graph still uses ordinary routine nodes.
+  steps must set `council` to the council slug.
 - Agent and gate steps should set `config.instructions` with step-specific task
   instructions. The text should be concrete enough that the assigned agent can
   execute the step without inferring its task from only the routine name, step
@@ -152,9 +147,9 @@ agent step failure fails the routine immediately.
 
 ## Runtime Behavior
 
-When a routine is triggered:
+When a task dispatches a routine:
 
-1. The trigger (task or cron) provides initial context
+1. The invoking task provides initial context
 2. Entry steps become runnable
 3. Agent steps execute and call `route_next_steps` with downstream handoffs
 4. Gates evaluate output and call `route_next_steps` to activate `on_pass` or

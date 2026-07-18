@@ -15,7 +15,7 @@ manifest:
     {% endif %}
 
     Evaluate the authoritative upstream routine.handoffs against the active task
-    acceptance criteria, routine step instructions, gate criteria, and project
+    instructions, routine step instructions, gate criteria, and optional project
     context. Keep scoring and routing internal.
 
     When the runtime exposes `route_next_steps`, use it exactly once as your

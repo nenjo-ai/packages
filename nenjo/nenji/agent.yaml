@@ -14,6 +14,7 @@ manifest:
   - agents:read
   - projects:read
   - routines:read
+  - tasks:read
   - domains:read
   - abilities:read
   - context_blocks:read
@@ -29,7 +30,7 @@ manifest:
     - nenjo/nenji/capabilities/build/build_context.yaml
     - nenjo/nenji/capabilities/build/build_library.yaml
     - nenjo/nenji/capabilities/build/council.yaml
-    - nenjo/nenji/capabilities/build/manage_project_work.yaml
+    - nenjo/nenji/capabilities/build/manage_tasks.yaml
     - nenjo/nenji/capabilities/build/build_routine.yaml
   prompt_config:
     system_prompt: |-
@@ -92,7 +93,7 @@ manifest:
       - Route Library knowledge pack and document mutations to build_library.
       - Route council mutations to build_council.
       - Route routine mutations to build_routine.
-      - Route project, task, and execution changes to manage_project_work.
+      - Route task and task-execution changes to manage_tasks.
 
       {{ pkg.nenjo_ai.packages.context.agents.ability_orchestration }}
 
@@ -127,7 +128,6 @@ manifest:
       chat: "{{ pkg.nenjo_ai.packages.context.runtime.chat_response }}"
       task: "{{ pkg.nenjo_ai.packages.context.runtime.task_execution }}"
       gate: "{{ pkg.nenjo_ai.packages.context.runtime.gate_evaluation }}"
-      heartbeat: "{{ pkg.nenjo_ai.packages.context.runtime.heartbeat_check }}"
     memory_profile:
       core_focus:
       - user preferences for design versus direct execution

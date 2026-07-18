@@ -14,8 +14,8 @@ decisions, traverse to the relevant resource, design, build, or reference doc.
 | Routine | Workflow graph with steps, edges, gates, retries, and terminal states |
 | Council | Structured multi-agent collaboration group |
 | Project | Work container for tasks, executions, settings, repository context, and project-scoped memory |
-| Task | Trackable project work item with one executor surface: agent ref or routine ref |
-| Execution | Runtime run of project work, routine work, chat, heartbeat, or gate behavior |
+| Task | Organization-owned work item with an optional project, one agent-or-routine execution target, and an optional schedule |
+| Execution | One manual, retry, or scheduled invocation of a task |
 | Library | Platform source-material surface exposed to agents through knowledge tools |
 | Knowledge Pack | Searchable source-material pack with metadata, graph edges, and full-document reads |
 | Package | Versioned installable bundle of Nenjo resources; not currently agent-mutable |

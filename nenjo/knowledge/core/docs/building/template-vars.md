@@ -4,7 +4,7 @@
 
 Template variables are runtime context references available inside prompts and
 context block templates. They connect stable prompt text with the active agent,
-chat message, task, project, routine, gate, heartbeat, Git context, memory,
+chat message, task, project, routine, gate, Git context, memory,
 artifacts, context blocks, and knowledge-pack indexes.
 
 Use this reference for variable lookup. For composition patterns, read
@@ -35,15 +35,11 @@ the command trigger stripped.
 - `{{ task }}`
 - `{{ task.id }}`
 - `{{ task.title }}`
-- `{{ task.description }}`
-- `{{ task.acceptance_criteria }}`
-- `{{ task.tags }}`
-- `{{ task.source }}`
+- `{{ task.instructions }}`
+- `{{ task.labels }}`
 - `{{ task.status }}`
 - `{{ task.priority }}`
-- `{{ task.type }}`
 - `{{ task.slug }}`
-- `{{ task.complexity }}`
 
 Task variables belong in routine task execution templates, routine step prompts,
 and gate evaluation prompts. Prefer `{{ task }}` for compact full context and
@@ -98,14 +94,6 @@ knowledge document body into prompt text.
 Use routine variables in routine step templates and workflow-aware prompts.
 When present, `routine.handoffs` is the authoritative upstream input for the
 current routine step, including gate steps.
-
-## Heartbeat
-
-- `{{ heartbeat.previous_output }}`
-- `{{ heartbeat.last_run_at }}`
-- `{{ heartbeat.next_run_at }}`
-
-Use heartbeat variables for recurring checks and maintenance loops.
 
 ## Git
 

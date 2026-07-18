@@ -50,7 +50,7 @@ Nenji includes these builder abilities:
 - `build_library`
 - `build_council`
 - `build_routine`
-- `manage_project_work`
+- `manage_tasks`
 
 Nenji's write flow is intentionally conservative: it reads current state before
 mutation, uses the narrowest matching ability, and verifies writes by reading

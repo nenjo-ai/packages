@@ -42,7 +42,7 @@ Agent implications:
 
 - Treat the synced repository as the workspace for implementation tasks.
 - Inspect worktree state before making claims about code changes.
-- Tie task acceptance criteria to verifiable repository changes.
+- Tie task completion guidance and instructions to verifiable repository changes.
 - Keep Git/worktree guidance in prompts for code-working agents.
 
 ## Library Relationship
@@ -82,5 +82,5 @@ project metadata tools for task or library work.
 
 - Treating projects as document stores.
 - Treating library knowledge as memory.
-- Starting execution before task executor refs and dependencies are valid.
+- Dispatching a task before it has a valid execution target and runnable status.
 - Describing repository-backed changes without inspecting the worktree.

@@ -16,7 +16,7 @@ semantics, parallelism, and cost.
 | Auditability | Strong step, edge, gate, and retry trail | Weaker unless the agent records evidence explicitly |
 | Determinism | Graph controls order, dependencies, and joins | Model decides flow dynamically |
 | Flexibility | Lower because topology is authored up front | Higher because intent and context can shape execution |
-| Scheduling | Coupled to task or cron dispatch | Can run in chat, task, ability, council, or domain contexts |
+| Scheduling | Started by a task, which may own a schedule | Can run in chat, task, ability, council, or domain contexts |
 | Failure semantics | Explicit terminal, terminal_fail, gate retry exhaustion | Prompt and tool dependent |
 | Parallelism | Explicit entry steps, fan-out edges, and joins | Possible through sub-agents or council members, less graph-visible |
 | Flow-state visibility | Explicit activated edges, handoffs, joins, gate decisions, and retry state | Must be narrated or recorded by the agent |
@@ -35,7 +35,7 @@ agents, abilities, or councils when the workflow shape is part of the reasoning.
 | Parallelization | Run independent branches and combine results | Multiple `entry_steps`; agent fan-out plus join; council members; sub-agents | Use a routine for auditable branch state and explicit handoffs. Use a council for judgment. Use sub-agents for flexible speed |
 | Orchestrator-workers | Decompose work, assign specialists, synthesize | Planner step -> worker branches -> synthesis; council leader and members; single agent delegation | Use a routine when worker lanes are predictable. Use an agent or council when decomposition is dynamic |
 | Evaluator-optimizer | Generate, evaluate, revise within a bounded budget | Gate `on_fail` retry loop with `max_attempts`; reviewer ability; self-reflection agent loop | Use a routine when retry count, evidence, and outcomes must be recorded |
-| Autonomous agent | Let one agent pursue a goal with tools over time | Single agent with abilities/domains/tools; scheduled routine wrapper when needed | Use an agent by default. Wrap in a routine only for scheduling, audit checkpoints, or deterministic handoffs |
+| Autonomous agent | Let one agent pursue a goal with tools over time | Single agent with abilities/domains/tools; scheduled task targeting the agent | Use an agent by default. Use a routine only for audit checkpoints or deterministic handoffs |
 | Human/tool approval | Pause or gate progress on external approval or evidence | Gate step; explicit terminal_fail/escalation path; agent asks user/tool | Use a routine when approval is a workflow checkpoint |
 | Adversarial review | Challenge an answer before acceptance | Council with critic/reviewer roles; routine generate -> critique -> gate | Use a council for contested judgment. Use a routine when the challenge path must be explicit |
 
@@ -44,8 +44,8 @@ agents, abilities, or councils when the workflow shape is part of the reasoning.
 1. Start with a single agent if the work is fuzzy, conversational, or
    intent-driven.
 2. Add an ability when a narrow reusable specialist operation is enough.
-3. Use a routine when step order, audit trail, retry budget, or scheduled
-   dispatch matters.
+3. Use a routine when step order, audit trail, retry budget, or explicit
+   handoffs matter. Put recurrence on the task that targets it.
 4. Use a council when independent perspectives, voting, critique, or synthesis
    add real signal.
 5. Combine routine and council when the macro workflow is deterministic but one

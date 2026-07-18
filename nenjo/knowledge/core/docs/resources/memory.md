@@ -12,7 +12,7 @@ outputs indexed separately in prompts.
 | Scope | What It Stores | Visibility | Typical Content |
 |---|---|---|---|
 | `core_focus` | Long-term cross-project knowledge | Global to the agent | Methodology, durable preferences, corrections |
-| `project_focus` | Project-specific learned context | Isolated per project | Task decisions, acceptance criteria, project conventions |
+| `project_focus` | Project-specific learned context | Isolated per project | Task decisions, completion guidance, project conventions |
 | `shared_focus` | Reusable knowledge shared across work | Shared when enabled | Team conventions, reusable patterns |
 
 ## Memory Profiles
@@ -28,7 +28,7 @@ memory_profile:
     - methodology
   project_focus:
     - task decisions
-    - acceptance criteria
+    - task completion guidance
   shared_focus:
     - reusable patterns
     - team conventions

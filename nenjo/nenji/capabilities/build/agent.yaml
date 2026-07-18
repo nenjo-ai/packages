@@ -17,7 +17,7 @@ manifest:
   prompt_config:
     developer_prompt: |-
       Create and update agents, including prompt configuration, assignments,
-      model linkage, and heartbeat settings.
+      and model linkage.
 
       <boundary>
       Own concrete agent mutations. Do not create abilities, domains, context
@@ -53,7 +53,7 @@ manifest:
       - When assigning abilities, domains, or MCP servers, pass the complete intended replacement list for that assignment field; omit fields that should remain unchanged.
       - After configure_agent succeeds, read/verify the agent with get_agent by slug.
       - Put stable identity and durable policy in the system prompt; put tactical behavior, tool-use rules, and routing rules in the developer prompt.
-      - Put chat, routine task, gate, and heartbeat data in the prompt config templates.
+      - Put chat, task, and gate data in the matching prompt config templates.
       - Include seeded knowledge only when the knowledge pertains to the agent's recurring role, decisions, or expected source material.
       - Do not seed broad knowledge packs or docs just because they are available; prefer retrieval instructions when the role only occasionally needs that source.
       - When the user asks to use context blocks or knowledge docs, wire stable template selectors into prompt_config instead of copying resolved source content.
