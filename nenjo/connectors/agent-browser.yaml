@@ -5,6 +5,11 @@ manifest:
   display_name: Agent Browser
   description: Browser automation using the agent-browser CLI installed on the worker.
   transport: stdio
+  command: agent-browser
+  args:
+    - mcp
+    - --tools
+    - core
   metadata:
-    runtime:
-      connector: agent_browser
+    nenjo:
+      managed_connector: agent_browser
