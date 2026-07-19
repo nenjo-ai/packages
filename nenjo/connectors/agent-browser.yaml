@@ -1,0 +1,10 @@
+---
+schema: nenjo.mcp_server.v1
+manifest:
+  name: agent_browser
+  display_name: Agent Browser
+  description: Browser automation using the agent-browser CLI installed on the worker.
+  transport: stdio
+  metadata:
+    runtime:
+      connector: agent_browser
