@@ -1,5 +1,6 @@
 ---
 schema: nenjo.context_block.v1
+slug: resource-surface-routing
 manifest:
   name: resource_surface_routing
   display_name: Resource Surface Routing

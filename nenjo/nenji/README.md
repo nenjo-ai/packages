@@ -1,8 +1,9 @@
 # Nenji
 
 Nenji is the official Nenjo platform guide package. It installs the `Nenji`
-agent, build abilities, and Nenji-specific context blocks for understanding,
-designing, reviewing, and safely changing Nenjo resources.
+agent and Nenji-specific context blocks for understanding, designing, reviewing,
+and safely changing Nenjo resources. Its builder abilities are supplied by the
+standalone `capabilities` dependency.
 
 Use this package when you want an agent that can explain how Nenjo works,
 inspect live platform state, design resource changes, and route platform writes
@@ -11,19 +12,19 @@ through focused builder abilities.
 ## What It Includes
 
 - `agent.yaml`: the `Nenji` agent manifest.
-- `capabilities/build/`: write abilities for agents, abilities, commands,
-  domains, context blocks, Library knowledge, councils, routines, and project
-  work.
 - `context/`: Nenji-specific context blocks for methodology and resource
   surface routing.
+- `@nenjo-ai/capabilities`: write abilities for agents, abilities, commands,
+  domains, context blocks, Library knowledge, councils, routines, and tasks.
 
 The package depends on:
 
 ```yaml
 dependencies:
-  commands: "^1.1.0"
-  context: "^1.0.1"
-  knowledge: "^1.0.1"
+  capabilities: "^1.0.0"
+  commands: "^1.2.0"
+  context: "^1.1.0"
+  knowledge: "^1.3.0"
 ```
 
 Those dependencies provide shared slash commands, operating context, and the
@@ -40,7 +41,7 @@ design, review, debug, and resource-building work. Nenji can inspect state,
 propose changes, and route requested platform mutations through its assigned
 builder abilities.
 
-Nenji includes these builder abilities:
+Nenji assigns these builder abilities from `@nenjo-ai/capabilities`:
 
 - `build_agent`
 - `build_ability`
@@ -59,7 +60,13 @@ back the changed resource.
 ## Prompt And Package References
 
 Installed agents, domains, and abilities are resolved through package modules
-and runtime imports. They are not referenced with `pkg.*` prompt variables.
+and logical refs. They are not referenced with `pkg.*` prompt variables.
+
+For example, Nenji's stable assignment for task management is:
+
+```text
+pkg:@nenjo-ai/packages:capabilities:ability:manage-tasks
+```
 
 Nenji's prompts do reference context blocks and knowledge from its dependencies,
 for example:

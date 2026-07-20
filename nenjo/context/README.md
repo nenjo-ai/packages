@@ -22,7 +22,7 @@ composed by selector instead of copied into every agent or ability.
 | Runtime | `pkg.nenjo_ai.packages.context.runtime.chat_response` | Generic chat runtime input and response rules. |
 | Runtime | `pkg.nenjo_ai.packages.context.runtime.task_execution` | Generic routine task-step input, `route_next_steps`, project context, metadata, and reporting rules. |
 | Runtime | `pkg.nenjo_ai.packages.context.runtime.gate_evaluation` | Generic gate runtime input, `route_next_steps`, and verdict routing rules. |
-| Tools | `pkg.nenjo_ai.packages.context.tools.tool_usage` | Choose, sequence, and parallelize tools safely. |
+| Tools | `pkg.nenjo_ai.packages.context.tools.host_tools` | Choose between scoped filesystem, repository, and shell tools. |
 
 ## How To Use
 
@@ -34,20 +34,20 @@ Packages that use these blocks should declare the dependency:
 
 ```yaml
 dependencies:
-  context: "^1.0.1"
+  context: "^1.1.0"
 ```
 
 Then reference the blocks in prompts by package selector:
 
 ```jinja
-{{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
+{{ pkg.nenjo_ai.packages.context.tools.host_tools }}
 {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
 {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
 ```
 
 Use the smallest context block that matches the behavior you want. For example,
 an ability that performs writes usually needs `write_discipline` and
-`tool_usage`; an agent that retrieves docs usually needs `knowledge_routing`;
+`host_tools`; an agent that retrieves docs usually needs `knowledge_routing`;
 an orchestration-heavy agent may need `ability_orchestration`, `sub_agents`, or
 `agent_delegation`.
 

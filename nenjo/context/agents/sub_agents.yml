@@ -1,5 +1,6 @@
 ---
 schema: nenjo.context_block.v1
+slug: sub-agents
 manifest:
   name: sub_agents
   display_name: Sub-Agent Delegation

@@ -1,4 +1,5 @@
 schema: nenjo.knowledge.v1
+slug: core
 manifest:
   name: Nenjo Core
   description: Canonical Nenjo core knowledge organized for design, resource building, retrieval, and general questions.

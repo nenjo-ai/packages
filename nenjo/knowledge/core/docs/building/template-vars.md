@@ -130,7 +130,7 @@ Context blocks render by their refs, for example:
 
 ```jinja
 {{ context.methodology }}
-{{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
+{{ pkg.nenjo_ai.packages.context.tools.host_tools }}
 {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
 ```
 

@@ -41,7 +41,7 @@ context blocks themselves.
 | Agent Need | Useful Context Selector |
 |---|---|
 | Finds and reads Library/package docs | `pkg.nenjo_ai.packages.context.knowledge.knowledge_routing` |
-| Uses tools frequently or must sequence reads/writes | `pkg.nenjo_ai.packages.context.tools.tool_usage` |
+| Uses filesystem, repository, or shell tools | `pkg.nenjo_ai.packages.context.tools.host_tools` |
 | Performs platform writes | `pkg.nenjo_ai.packages.context.operations.write_discipline` |
 | Diagnoses failures or recovery paths | `pkg.nenjo_ai.packages.context.operations.failure_modes` |
 | Delegates to sub-agents | `pkg.nenjo_ai.packages.context.agents.sub_agents` |

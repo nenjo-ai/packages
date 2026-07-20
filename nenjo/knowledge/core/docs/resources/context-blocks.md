@@ -21,7 +21,7 @@ Examples:
 {{ context.methodology }}
 {{ pkg.nenjo_ai.packages.context.agents.agent_delegation }}
 {{ pkg.nenjo_ai.packages.context.agents.sub_agents }}
-{{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
+{{ pkg.nenjo_ai.packages.context.tools.host_tools }}
 ```
 
 Use package context refs for package-installed context blocks. Use local context

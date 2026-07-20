@@ -1,5 +1,6 @@
 ---
 schema: nenjo.context_block.v1
+slug: failure-modes
 manifest:
   name: failure_modes
   display_name: Failure Modes

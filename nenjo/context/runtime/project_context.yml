@@ -1,5 +1,6 @@
 ---
 schema: nenjo.context_block.v1
+slug: project-context
 manifest:
   name: project_context
   display_name: Project Context
@@ -14,4 +15,3 @@ manifest:
     # Current actiev git context.
     {{ git }}
     {% endif %}
-

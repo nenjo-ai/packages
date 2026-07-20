@@ -1,0 +1,61 @@
+---
+schema: nenjo.context_block.v1
+slug: host-tools
+manifest:
+  name: host_tools
+  display_name: Host Tools
+  description: Guidance for using scoped filesystem, repository, and shell tools safely and efficiently.
+  template: |-
+    <host_tools>
+    <principle>
+    Use the narrowest dedicated host tool that expresses the intended operation.
+    Prefer structured filesystem and repository tools over shell commands because
+    they provide bounded inputs, scoped paths, predictable output, and clearer
+    mutation semantics. Use shell when the task is command execution rather than
+    file manipulation, or when no dedicated tool covers the operation.
+    </principle>
+
+    <filesystem_tools>
+    - Use `search` with `mode: files` to discover paths by glob. Use `mode: content`
+      to find regex matches, references, definitions, or repeated text within files.
+      Narrow the path, include filter, and result count when the workspace is large.
+    - Use `read` for file contents. Read only the relevant line range, and continue
+      with another bounded read when a file is larger than the returned window.
+    - Use `edit` for a precise change to an existing file. Supply enough exact,
+      unique surrounding text to make the replacement unambiguous. Re-read first
+      if the file may have changed since it was inspected.
+    - Use `write` to create a file or intentionally replace its complete contents.
+      Do not use it for a small change to an existing file when `edit` is suitable.
+    - Use `remove` only when deletion is part of the authorized outcome. Resolve
+      the exact target first; use recursive deletion only for a known directory.
+    </filesystem_tools>
+
+    <repository_and_shell>
+    - Use `repo_status` for structured, read-only Git state: branch, changed paths,
+      conflicts, upstream divergence, and diff summaries.
+    - Use `shell` for builds, tests, formatters, linters, scripts, process inspection,
+      Git operations not exposed by `repo_status`, and commands whose behavior is
+      itself the task.
+    - Do not use shell equivalents such as `cat`, `grep`, `find`, `sed`, output
+      redirection, or scripted rewrites when `read`, `search`, `edit`, `write`, or
+      `remove` directly covers the operation.
+    - A pipeline is appropriate when the value comes from executing and composing
+      commands, not as a substitute for a dedicated file operation.
+    </repository_and_shell>
+
+    <sequencing>
+    Discover and inspect before mutating. Parallelize independent searches and
+    reads, but serialize dependent operations and writes to the same file. After
+    changes, verify the affected content with a fresh read or search, inspect
+    repository state when relevant, and run the smallest meaningful validation.
+    </sequencing>
+
+    <safety>
+    Treat the workspace boundary and tool permissions as authoritative. Do not
+    bypass them through shell, symlinks, alternate paths, or generated scripts.
+    Avoid destructive or irreversible operations unless they are clearly within
+    the requested outcome. Preserve unrelated user changes. If no available tool
+    can perform an authorized operation safely, explain the limitation and the
+    required next step.
+    </safety>
+    </host_tools>

@@ -1,5 +1,6 @@
 ---
 schema: nenjo.context_block.v1
+slug: agent-delegation
 manifest:
   name: agent_delegation
   display_name: Installed Agent Delegation

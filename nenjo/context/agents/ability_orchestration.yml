@@ -1,5 +1,6 @@
 ---
 schema: nenjo.context_block.v1
+slug: ability-orchestration
 manifest:
   name: ability_orchestration
   display_name: Ability Orchestration

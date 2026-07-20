@@ -1,5 +1,6 @@
 ---
 schema: nenjo.context_block.v1
+slug: ability-output
 manifest:
   name: ability_output
   display_name: Ability Output

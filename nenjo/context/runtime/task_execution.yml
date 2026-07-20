@@ -1,5 +1,6 @@
 ---
 schema: nenjo.context_block.v1
+slug: task-execution
 manifest:
   name: task_execution
   display_name: Task Execution Runtime

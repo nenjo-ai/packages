@@ -1,5 +1,6 @@
 ---
 schema: nenjo.ability.v1
+slug: build-domain
 manifest:
   name: build_domain
   display_name: Build Domain
@@ -48,6 +49,6 @@ manifest:
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
 
-      {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
+      {{ pkg.nenjo_ai.packages.context.tools.host_tools }}
       
       {{ pkg.nenjo_ai.packages.context.output.ability_output }}

@@ -3,6 +3,7 @@ schema: nenjo.registry.v1
 name: Nenjo Official Packages
 description: Official Nenjo package registry for agents, abilities, domains, commands, context blocks, knowledge, MCP integrations, and routines.
 packages:
+  capabilities: nenjo/capabilities/package.yaml
   commands: nenjo/commands/package.yaml
   connectors: nenjo/connectors/package.yaml
   knowledge: nenjo/knowledge/package.yaml

@@ -1,5 +1,6 @@
 ---
 schema: nenjo.context_block.v1
+slug: write-discipline
 manifest:
   name: write_discipline
   display_name: Write Discipline

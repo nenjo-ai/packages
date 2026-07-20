@@ -1,5 +1,6 @@
 ---
 schema: nenjo.context_block.v1
+slug: gate-evaluation
 manifest:
   name: gate_evaluation
   display_name: Gate Evaluation Runtime
