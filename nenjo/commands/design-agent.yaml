@@ -1,5 +1,6 @@
 ---
 schema: nenjo.command.v1
+slug: design-agent
 manifest:
   name: design_agent
   display_name: Design Agent

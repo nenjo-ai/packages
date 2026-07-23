@@ -1,5 +1,6 @@
 ---
 schema: nenjo.context_block.v1
+slug: remembrance
 manifest:
   name: remembrance
   display_name: Remembrance

@@ -34,7 +34,7 @@ Use context-block selectors for reusable behavior:
 
 ```jinja
 {{ context.methodology }}
-{{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
+{{ pkg.nenjo_ai.packages.context.tools.host_tools }}
 ```
 
 Use knowledge-pack selectors as discovery indexes, then require knowledge tools

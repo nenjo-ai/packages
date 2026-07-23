@@ -12,6 +12,7 @@ the package scope derived from the GitHub org:
 ```yaml
 schema: nenjo.registry.v1
 packages:
+  capabilities: nenjo/capabilities/package.yaml
   commands: nenjo/commands/package.yaml
   connectors: nenjo/connectors/package.yaml
   knowledge: nenjo/knowledge/package.yaml
@@ -21,7 +22,8 @@ packages:
 
 For this repository, `https://github.com/nenjo-ai/packages.git` installs those
 entries as `@nenjo-ai/commands`, `@nenjo-ai/connectors`,
-`@nenjo-ai/knowledge`, `@nenjo-ai/nenji`, and `@nenjo-ai/context`.
+`@nenjo-ai/knowledge`, `@nenjo-ai/nenji`, `@nenjo-ai/context`, and
+`@nenjo-ai/capabilities`.
 The scope is not authored in `packages.yaml`; it comes from the GitHub owner.
 Local test registries can set a scope in `nenpm.yml`, but published repo-backed
 registries must keep package keys and package manifest `name` fields unscoped.
@@ -34,19 +36,20 @@ a list of root module entrypoints:
 ```yaml
 schema: nenjo.package.v1
 name: nenji
-version: "1.0.0"
+version: "1.3.0"
 
 dependencies:
-  knowledge: "^1.0.1"
+  capabilities: "^1.0.0"
+  knowledge: "^1.3.0"
 
 modules:
-  - nenji/agent.yaml
+  - context/
+  - agent.yaml
 ```
 
 Modules are package-relative resource manifest paths or directory references
 that start resolution. The resolver follows wrapper-level local imports
-transitively, so `nenji` only needs to list `nenji/agent.yaml`; the agent
-imports its capabilities, domain, and context modules. Directory references
+transitively. Directory references
 must contain an explicit `index.yml` or `index.yaml` file; the resolver never
 imports a directory by implicit file listing. The installer infers runtime
 behavior from each resolved module manifest schema, for example
@@ -54,7 +57,7 @@ behavior from each resolved module manifest schema, for example
 `nenjo.knowledge.v1`.
 
 ```yaml
-# nenji/capabilities/build/index.yml
+# nenjo/capabilities/build/index.yml
 schema: nenjo.module_index.v1
 modules:
   - agent.yaml
@@ -67,19 +70,35 @@ Module files may also bundle multiple resources:
 schema: nenjo.modules.v1
 resources:
   - schema: nenjo.ability.v1
+    slug: build-agent
     manifest:
       name: build_agent
   - schema: nenjo.ability.v1
+    slug: build-routine
     manifest:
       name: build_routine
 ```
 
 Bundled resources are referenced with `#resource_name` selectors. The official
 packages currently use single-resource module files, so imports can point
-directly at files or indexed directories without fragments. Nenji's installed
-write capability modules are grouped under `nenjo/nenji/capabilities/build/`;
-package dependencies and runtime imports live in `*.package.yaml` and the module
-manifests instead of per-ability directories.
+directly at files or indexed directories without fragments. Nenji's write
+abilities live in the standalone `capabilities` package and are assigned to the
+Nenji agent through stable logical refs.
+
+Every package resource declares a stable top-level `slug`. Display names and
+package versions may change without changing this authored identity. Runtime
+storage slugs are repository-, package-, and version-qualified as required by
+the resource kind, while agent-visible dependency references are versionless:
+
+```yaml
+schema: nenjo.agent.v1
+slug: nenji
+manifest:
+  name: Nenji
+  assignments:
+    abilities:
+      - pkg:@nenjo-ai/packages:capabilities:ability:manage-tasks
+```
 
 ## Prompt Selectors
 
@@ -105,11 +124,10 @@ outside the pure runtime `manifest` body:
 
 ```yaml
 schema: nenjo.agent.v1
+slug: nenji
 imports:
-  abilities:
-    - ./capabilities/build/
   context:
-    - ./shared/context/methodology.yml
+    - ./context/methodology.yml
 
 manifest:
   name: Nenji
@@ -129,8 +147,9 @@ package-relative directory during package resolution/import.
 
 ## Current Package Set
 
-This repository exposes five top-level packages:
+This repository exposes six top-level packages:
 
+- `@nenjo-ai/capabilities`
 - `@nenjo-ai/commands`
 - `@nenjo-ai/connectors`
 - `@nenjo-ai/knowledge`

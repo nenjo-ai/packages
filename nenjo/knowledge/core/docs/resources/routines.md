@@ -164,7 +164,9 @@ Routines provide strong observability — every step transition, gate decision, 
 ## Pitfalls to Avoid
 - Creating overly complex graphs with too many steps
 - Using gates without clear acceptance criteria
-- Forgetting to define both success and failure terminal paths
+- Leaving an authored success or failure terminal unreachable. Not every
+  routine needs both terminal kinds: agent failure and bounded retry exhaustion
+  fail directly without an explicit `terminal_fail` step.
 - Pointing an edge at `terminal` or `failed` without adding a matching terminal
   or terminal_fail step to the graph
 - Creating cycles from non-gate steps, `on_pass` edges, or unbounded `on_fail`

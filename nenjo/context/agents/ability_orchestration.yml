@@ -1,5 +1,6 @@
 ---
 schema: nenjo.context_block.v1
+slug: ability-orchestration
 manifest:
   name: ability_orchestration
   display_name: Ability Orchestration
@@ -40,6 +41,26 @@ manifest:
     - Use parallel ability calls only when subtasks are independent and their
       outputs can be synthesized afterward.
     </sequencing>
+
+    <operation_lifecycle>
+    Ability operations own their internal tool loop and may recover from
+    validation errors without parent intervention.
+
+    - A failed child tool call is not a failed ability operation. If the
+      operation status is still `running`, let the ability consume the error,
+      revise its work, and continue.
+    - Use `wait` as the default next action while an operation is running.
+      Recoverable tool-error events explicitly recommend waiting.
+    - Use `inspect` for observation or final output, not as a reason to take
+      over work the child is still handling.
+    - Use `send_input` when the operation reports `needs_input`; do not use it
+      to micromanage ordinary self-correction.
+    - Use `stop` only to cancel obsolete or incorrect work, or when an
+      operation is genuinely stalled. Do not stop and reinvoke an ability just
+      to amend a recoverable validation error.
+    - Treat only `completed`, `failed`, and `stopped` as terminal operation
+      states. Verify important mutations after completion.
+    </operation_lifecycle>
 
     <broad_intents>
     For requests that combine multiple outcomes, orchestrate rather than

@@ -21,7 +21,9 @@ or package-owned source material.
   scope is derived from the source owner.
 - Modules are package-relative files or directories with explicit indexes.
 - Wrapper-level `imports` compose local resources inside a package.
-- Package assignments resolve package-local paths to runtime slugs/refs.
+- Package resources declare stable top-level slugs independent of display names.
+- Dependency assignments use versionless, repository-qualified logical refs,
+  such as `pkg:@nenjo-ai/packages:capabilities:ability:manage-tasks`.
 
 ## Prompt Selectors
 
@@ -31,7 +33,7 @@ knowledge variables.
 Examples:
 
 ```jinja
-{{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
+{{ pkg.nenjo_ai.packages.context.tools.host_tools }}
 {{ pkg.nenjo_ai.packages.knowledge.core.resources.agents }}
 ```
 

@@ -1,8 +1,7 @@
 ---
 schema: nenjo.agent.v1
+slug: nenji
 imports:
-  abilities:
-  - ./capabilities/build/
   context:
   - ./context/methodology.yml
   - ./context/resource_surface_routing.yml
@@ -23,15 +22,15 @@ manifest:
   - mcp_servers:read
   assignments:
     abilities:
-    - nenjo/nenji/capabilities/build/agent.yaml
-    - nenjo/nenji/capabilities/build/build_ability.yaml
-    - nenjo/nenji/capabilities/build/build_command.yaml
-    - nenjo/nenji/capabilities/build/build_domain.yaml
-    - nenjo/nenji/capabilities/build/build_context.yaml
-    - nenjo/nenji/capabilities/build/build_library.yaml
-    - nenjo/nenji/capabilities/build/council.yaml
-    - nenjo/nenji/capabilities/build/manage_tasks.yaml
-    - nenjo/nenji/capabilities/build/build_routine.yaml
+    - pkg:@nenjo-ai/packages:capabilities:ability:build-agent
+    - pkg:@nenjo-ai/packages:capabilities:ability:build-ability
+    - pkg:@nenjo-ai/packages:capabilities:ability:build-command
+    - pkg:@nenjo-ai/packages:capabilities:ability:build-domain
+    - pkg:@nenjo-ai/packages:capabilities:ability:build-context
+    - pkg:@nenjo-ai/packages:capabilities:ability:build-library
+    - pkg:@nenjo-ai/packages:capabilities:ability:build-council
+    - pkg:@nenjo-ai/packages:capabilities:ability:manage-tasks
+    - pkg:@nenjo-ai/packages:capabilities:ability:build-routine
   prompt_config:
     system_prompt: |-
       You are Nenji, the Nenjo platform guide.
@@ -105,7 +104,7 @@ manifest:
       </write_routing>
 
       {{ context.resource_surface_routing }}
-      {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
+      {{ pkg.nenjo_ai.packages.context.tools.host_tools }}
       {{ pkg.nenjo_ai.packages.context.agents.sub_agents }}
 
       Before delegating work, understand the domain of the task or question at hand. You own the responsibility

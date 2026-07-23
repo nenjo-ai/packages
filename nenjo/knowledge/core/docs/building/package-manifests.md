@@ -16,6 +16,7 @@ unscoped package names:
 ```yaml
 schema: nenjo.registry.v1
 packages:
+  capabilities: nenjo/capabilities/package.yaml
   commands: nenjo/commands/package.yaml
   knowledge: nenjo/knowledge/package.yaml
   nenji: nenjo/nenji/package.yaml
@@ -30,12 +31,13 @@ author GitHub-style scopes in repo-backed package keys or package `name` fields.
 ```yaml
 schema: nenjo.package.v1
 name: nenji
-version: "1.0.0"
+version: "1.3.0"
 
 dependencies:
-  commands: "^1.1.0"
-  context: "^1.0.1"
-  knowledge: "^1.0.1"
+  capabilities: "^1.0.0"
+  commands: "^1.2.0"
+  context: "^1.1.0"
+  knowledge: "^1.3.0"
 
 modules:
   - context/
@@ -51,7 +53,11 @@ entrypoints. Module paths are package-relative.
 - Directory modules require `index.yml` or `index.yaml`.
 - Wrapper-level `imports` compose local package resources transitively.
 - Module bundles can contain multiple resources under `nenjo.modules.v1`.
-- Package assignments resolve package-local paths to runtime slugs/refs.
+- Every package resource declares an immutable top-level `slug`.
+- Cross-package assignments use repository-qualified logical refs such as
+  `pkg:@nenjo-ai/packages:capabilities:ability:manage-tasks`.
+- Logical refs are stable and versionless; installation records retain the
+  exact package version.
 
 Supported package resource kinds include agents, abilities, domains, context
 blocks, knowledge packs, MCP servers, script tools, commands, hooks, skills, and
@@ -74,7 +80,7 @@ The `pkg.*` namespace is only for package-installed context blocks and package
 knowledge variables:
 
 ```jinja
-{{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
+{{ pkg.nenjo_ai.packages.context.tools.host_tools }}
 {{ pkg.nenjo_ai.packages.knowledge.core.resources.agents }}
 ```
 

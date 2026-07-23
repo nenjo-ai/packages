@@ -1,5 +1,6 @@
 ---
 schema: nenjo.mcp_server.v1
+slug: agent-browser
 manifest:
   name: agent_browser
   display_name: Agent Browser

@@ -1,5 +1,6 @@
 ---
 schema: nenjo.context_block.v1
+slug: notifications
 manifest:
   name: notifications
   display_name: Notifications

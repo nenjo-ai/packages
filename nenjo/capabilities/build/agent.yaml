@@ -1,5 +1,6 @@
 ---
 schema: nenjo.ability.v1
+slug: build-agent
 manifest:
   name: build_agent
   display_name: Build Agent
@@ -57,7 +58,7 @@ manifest:
       - Include seeded knowledge only when the knowledge pertains to the agent's recurring role, decisions, or expected source material.
       - Do not seed broad knowledge packs or docs just because they are available; prefer retrieval instructions when the role only occasionally needs that source.
       - When the user asks to use context blocks or knowledge docs, wire stable template selectors into prompt_config instead of copying resolved source content.
-      - Select context blocks by the agent's actual operating needs: use `{{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}` for knowledge-heavy roles, `{{ pkg.nenjo_ai.packages.context.tools.tool_usage }}` for tool-heavy roles, `{{ pkg.nenjo_ai.packages.context.operations.write_discipline }}` for write-capable roles, `{{ pkg.nenjo_ai.packages.context.operations.failure_modes }}` for debugging/recovery roles, `{{ pkg.nenjo_ai.packages.context.agents.sub_agents }}` for ephemeral sub-agent delegation roles, `{{ pkg.nenjo_ai.packages.context.agents.agent_delegation }}` for installed-agent delegation roles, `{{ pkg.nenjo_ai.packages.context.agents.ability_orchestration }}` for ability-orchestration roles, `{{ pkg.nenjo_ai.packages.context.memory.remembrance }}` for memory-sensitive roles, and runtime context selectors only in matching runtime templates.
+      - Select context blocks by the agent's actual operating needs: use `{{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}` for knowledge-heavy roles, `{{ pkg.nenjo_ai.packages.context.tools.host_tools }}` for roles using filesystem, repository, or shell tools, `{{ pkg.nenjo_ai.packages.context.operations.write_discipline }}` for write-capable roles, `{{ pkg.nenjo_ai.packages.context.operations.failure_modes }}` for debugging/recovery roles, `{{ pkg.nenjo_ai.packages.context.agents.sub_agents }}` for ephemeral sub-agent delegation roles, `{{ pkg.nenjo_ai.packages.context.agents.agent_delegation }}` for installed-agent delegation roles, `{{ pkg.nenjo_ai.packages.context.agents.ability_orchestration }}` for ability-orchestration roles, `{{ pkg.nenjo_ai.packages.context.memory.remembrance }}` for memory-sensitive roles, and runtime context selectors only in matching runtime templates.
       - Do not add context selectors that do not support the agent's role; report missing useful context instead of padding the prompt.
       - Use knowledge selectors such as `\{{ lib.<pack_slug> }}` or `\{{ pkg.nenjo_ai.packages.knowledge.core }}` as role-relevant discovery indexes, then require knowledge tools to read selected full docs during execution.
       - Verify assigned abilities, domains, and context blocks exist before wiring their slugs or selectors into an agent.
@@ -67,6 +68,6 @@ manifest:
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
 
-      {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
+      {{ pkg.nenjo_ai.packages.context.tools.host_tools }}
 
       {{ pkg.nenjo_ai.packages.context.output.ability_output }}

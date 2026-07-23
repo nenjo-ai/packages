@@ -1,5 +1,6 @@
 ---
 schema: nenjo.context_block.v1
+slug: chat-response
 manifest:
   name: chat_response
   display_name: Chat Response Runtime

@@ -1,5 +1,6 @@
 ---
 schema: nenjo.command.v1
+slug: design-workflow
 manifest:
   name: design_workflow
   display_name: Design Workflow

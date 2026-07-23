@@ -1,5 +1,6 @@
 ---
 schema: nenjo.ability.v1
+slug: build-routine
 manifest:
   name: build_routine
   display_name: Build Routine
@@ -54,15 +55,20 @@ manifest:
       - Treat multiple outgoing edges from an agent step as deterministic fan-out; decompose the handoff so each downstream edge has a clear purpose. Treat gate outgoing edges as verdict branches; on_pass edges route pass handoffs and on_fail edges route failure/retry handoffs.
       - Put branch purpose on edge metadata.purpose, source-step handoff guidance on edge metadata.handoff_instructions, and the canonical object contract on edge metadata.handoff_schema so `route_next_steps` can show and enforce what the routable step must pass to each downstream route.
       - Every edge whose source step is an agent or gate must define metadata.handoff_schema as a JSON object schema. Use type="object", required fields, properties, and additionalProperties=false for the concrete downstream payload shape.
+      - Treat the caller's requested topology as intent, not proof that the graph is valid. Normalize it to the platform invariants before the first write, and explain any semantic adjustment in the final result.
+      - Before calling `configure_routine`, preflight every declared step for reachability and every agent/gate edge for purpose, handoff instructions, and a concrete handoff schema. This includes `on_pass` edges whose target is a terminal step.
+      - For bounded gate rework, use `gate on_fail -> earlier_step` with metadata.max_attempts. Retry exhaustion fails directly; do not add an otherwise-unreachable `terminal_fail` step solely for exhaustion.
       - Treat every meaningful edge as a flow-state handoff contract. The handoff instructions must request concrete downstream state such as evidence, decisions, artifact refs, constraints, failed criteria, or open questions, not repeat the target step instructions.
       - For joins, ensure each activated incoming edge can provide a distinct handoff block and the target step instructions explain how to combine upstream handoffs while preserving source identity.
       - Preserve explicit success and failure terminals when changing routine topology.
       - Validate gate pass/fail destinations before writing.
+      - If `configure_routine` returns a recoverable validation error, use that error to correct and retry the graph within this same ability operation. Do not require the parent to stop and reinvoke you for fixable graph validation.
       - Verify reachable terminals, branch destinations, joins, edge handoff metadata, and cross-resource references after mutation.
+      - After a successful write, call `get_routine` and verify the persisted graph before finishing. Use `finish` with status `failed` only for a non-recoverable blocker or missing dependency.
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
 
-      {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
+      {{ pkg.nenjo_ai.packages.context.tools.host_tools }}
 
       {{ pkg.nenjo_ai.packages.context.output.ability_output }}

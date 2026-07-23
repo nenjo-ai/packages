@@ -1,5 +1,6 @@
 ---
 schema: nenjo.context_block.v1
+slug: knowledge-routing
 manifest:
   name: knowledge_routing
   display_name: Knowledge Routing

@@ -1,5 +1,6 @@
 ---
 schema: nenjo.ability.v1
+slug: build-council
 manifest:
   name: build_council
   display_name: Build Council
@@ -41,7 +42,6 @@ manifest:
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
       
-      {{ pkg.nenjo_ai.packages.context.tools.tool_usage }}
+      {{ pkg.nenjo_ai.packages.context.tools.host_tools }}
 
       {{ pkg.nenjo_ai.packages.context.output.ability_output }}
-

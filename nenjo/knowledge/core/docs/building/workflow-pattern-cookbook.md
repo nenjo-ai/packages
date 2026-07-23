@@ -171,11 +171,50 @@ routine directly with a structured `retry_exhausted` result.
 The retry edge should carry repair state:
 
 ```yaml
-review_gate -> implement:
+- source_step: implement
+  target_step: review_gate
+  condition: always
+  metadata:
+    purpose: Send implementation evidence for review.
+    handoff_instructions: >-
+      Include changed files, tests run, unresolved risks, and acceptance
+      criteria that still need reviewer attention.
+    handoff_schema:
+      type: object
+      required: [changed_files, tests_run, unresolved_risks]
+      properties:
+        changed_files: {type: array, items: {type: string}}
+        tests_run: {type: array, items: {type: string}}
+        unresolved_risks: {type: array, items: {type: string}}
+      additionalProperties: false
+- source_step: review_gate
+  target_step: done
+  condition: on_pass
+  metadata:
+    purpose: Record the approved implementation result.
+    handoff_instructions: Include the pass verdict and approval summary.
+    handoff_schema:
+      type: object
+      required: [verdict, summary]
+      properties:
+        verdict: {type: string, const: pass}
+        summary: {type: string}
+      additionalProperties: false
+- source_step: review_gate
+  target_step: implement
   condition: on_fail
   metadata:
     purpose: Send failed review findings back for bounded rework.
     handoff_instructions: Include failed criteria, required fixes, evidence gaps, and reviewer notes.
+    handoff_schema:
+      type: object
+      required: [failed_criteria, required_fixes, evidence_gaps, reviewer_notes]
+      properties:
+        failed_criteria: {type: array, items: {type: string}}
+        required_fixes: {type: array, items: {type: string}}
+        evidence_gaps: {type: array, items: {type: string}}
+        reviewer_notes: {type: string}
+      additionalProperties: false
     max_attempts: 3
 ```
 
