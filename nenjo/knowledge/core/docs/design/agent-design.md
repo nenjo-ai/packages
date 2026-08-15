@@ -13,6 +13,9 @@ An agent is the right unit when behavior needs a durable identity, stable prompt
 - Which tools should be available by default, and which should require a domain or platform-controlled path?
 - Which abilities, domains, context blocks, MCP servers, and knowledge packs are required at start?
 - What model should be assigned, and why is that model appropriate for the expected work?
+- Will the agent receive images, documents, audio, or other artifact inputs?
+  If so, can its chat model accept those modalities directly, or must a user
+  configure an organization analysis capability default?
 
 ## Good Agent Shape
 
@@ -74,6 +77,8 @@ Include:
 - role-relevant seeded knowledge selectors, if any;
 - role-relevant context block selectors, if any;
 - model slug or model requirements;
+- required artifact input modalities and any separate organization analysis
+  capability defaults;
 - memory profile focus areas;
 - runtime templates only when chat, task, or gate behavior differs;
 

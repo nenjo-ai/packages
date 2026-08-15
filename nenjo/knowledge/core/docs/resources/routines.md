@@ -1,7 +1,11 @@
 # Routines — Structured Workflow Graphs
 
 ## Purpose
-Routines are directed workflow graphs that orchestrate agents, gates, councils, and terminal steps. They provide deterministic, auditable, and maintainable execution paths instead of relying on a single unstructured agent pass. Routines are the primary way to express complex, multi-step business logic in Nenjo.
+Routines are directed workflow graphs that orchestrate agents, gates, human
+reviews, councils, and terminal steps. They provide deterministic, auditable,
+and maintainable execution paths instead of relying on a single unstructured
+agent pass. Routines are the primary way to express complex, multi-step
+business logic in Nenjo.
 
 ## Core Model
 
@@ -13,11 +17,10 @@ A routine is a directed graph consisting of:
   handoffs, joins, retries, and terminals
 - **Optional metadata** — Custom configuration per routine
 
-Platform routine graphs are mostly acyclic. The one allowed cycle shape is a
-bounded gate failure loop: a `gate` step may send an `on_fail` edge back to an
-earlier step. The runner uses `metadata.max_attempts` when present and defaults
-to 3 attempts when it is omitted. If the retry budget is exhausted, the routine
-fails directly with a structured `retry_exhausted` result.
+Platform routine graphs are mostly acyclic. A gate may use a bounded `on_fail`
+rework loop. A human review may use an unbounded, reviewer-driven
+`changes_requested` loop back to an earlier step. `metadata.max_attempts`
+applies only to gate `on_fail` retry edges; never put it on human outcome edges.
 
 ## Task Dispatch
 
@@ -32,6 +35,7 @@ schedule metadata.
 |----------------|-----------------------------------------------------------------------------|-------------|
 | `agent`        | Executes one assigned agent; requires `agent`; use `config.instructions` for the step task | Core work   |
 | `gate`         | Evaluates prior evidence and branches; requires `agent`; use gate criteria and `config.instructions` | Quality control, validation |
+| `human`        | Pauses execution for a reviewer; requires `config.request` with a non-empty `title` | Approval, rejection, revision requests |
 | `council`      | Runs one assigned council; requires `council`                               | Review, synthesis, voting |
 | `terminal`     | Successful end of the routine                                               | Success stop |
 | `terminal_fail`| Failed end of the routine                                                   | Explicit failed stop after an escalation path |
@@ -50,11 +54,13 @@ schedule metadata.
   `step.config.instructions` when present. Use this field to tell the assigned
   agent exactly what work to perform for that step, what inputs or upstream
   evidence to inspect, and what output or verdict standard to apply.
-- Step config is intentionally narrow. Use only `config.instructions` and,
-  when the prompt explicitly references it, `config.metadata`. Do not add
+- Agent and gate config is intentionally narrow. Use only
+  `config.instructions` and, when the prompt explicitly references it,
+  `config.metadata`. Human steps instead require `config.request`; a
+  `terminal_fail` step may define `config.failure_reason`. Do not add
   top-level `config.inputs`, `config.evaluation_criteria`, `config.max_attempts`,
-  or similar fields; they do not control execution. Retry budgets belong on
-  `on_fail` edge `metadata.max_attempts`.
+  or similar fields; they do not control execution. Retry budgets belong only
+  on gate `on_fail` edge `metadata.max_attempts`.
 
 **Failure semantics differ by step type:**
 
@@ -63,12 +69,18 @@ schedule metadata.
   **entire routine fails** immediately. There is no `on_fail` edge for agent
   steps.
 - **Gate Step Failure**: If a gate step fails (returns a failure verdict), execution follows the explicitly defined `on_fail` edge. This allows graceful degradation, bounded rework, escalation, or routing to a failure path.
+- **Human Review**: A human step pauses the routine. A resolution activates
+  every outgoing edge matching `approved`, `changes_requested`, or `rejected`.
+  The same outcome may have multiple outgoing edges, producing deterministic
+  fan-out with one immutable decision handoff. Human outcome edges do not use
+  `metadata.max_attempts` or target-specific handoff schemas.
 
 This distinction ensures that critical work steps are treated as atomic (failure = routine failure), while gates can implement sophisticated error handling and branching.
 
 ## Edge Metadata And Handoffs
 
-Edges carry authoring metadata that shapes runtime handoffs:
+Edges leaving agents and gates carry authoring metadata that shapes runtime
+handoffs:
 
 - `metadata.purpose` explains why the route exists.
 - `metadata.handoff_instructions` tells the source agent what information to
@@ -79,6 +91,19 @@ Handoff instructions should request actual state for the downstream step:
 findings, decisions, artifact refs, changed files, failed criteria, unresolved
 questions, constraints, or implementation notes. Do not use handoff metadata to
 repeat the target step instructions.
+
+When a handoff contains an uploaded artifact ID, declare it as a semantic
+artifact reference rather than a generic string:
+
+```yaml
+artifact_id:
+  type: string
+  format: nenjo-artifact-id
+```
+
+Only properties with `format: nenjo-artifact-id` are validated, authorized,
+and rendered as artifacts during human review. A UUID-looking ordinary string
+is not an artifact reference.
 
 When an agent step activates multiple outgoing edges, the source agent must
 provide one `next_steps` item for each downstream route. Each item should follow
@@ -100,7 +125,8 @@ Routines are typically built using well-known patterns:
 
 ## Graph Rules
 
-- Routine graphs must be acyclic except bounded gate failure loops.
+- Routine graphs must be acyclic except bounded gate `on_fail` loops and human
+  `changes_requested` revision loops.
 - One or more entry steps should be present. Use `entry_steps` to name them.
   Multiple entry steps start as parallel branches.
 - Every routine step has a stable `slug`. Edge `source_step`, edge
@@ -115,9 +141,17 @@ Routines are typically built using well-known patterns:
   target step runs only after all upstream branches required for that path pass.
 - Every routine must have at least one reachable terminal step: `terminal` or
   `terminal_fail`.
-- Edge `condition` values are `always`, `on_pass`, or `on_fail`.
+- Edge `condition` values are `always`, `on_pass`, `on_fail`, `approved`,
+  `changes_requested`, or `rejected`.
 - Gate outgoing edges must use `on_pass` and/or `on_fail`; do not use `always`
   from a gate.
+- Human outgoing edges must use `approved`, `changes_requested`, or `rejected`.
+  Each of the three fixed resolutions must have at least one route. Multiple
+  edges may share one outcome when the branches later converge before a single
+  terminal result.
+- Human steps require `config.request.title`, cannot be entry steps, and must
+  receive at least one incoming handoff. Incoming edges to one human step must
+  have unique source steps.
 - Agent and gate steps must set `agent` to the executor agent slug. Council
   steps must set `council` to the council slug.
 - Agent and gate steps should set `config.instructions` with step-specific task
@@ -155,8 +189,10 @@ When a task dispatches a routine:
 4. Gates evaluate output and call `route_next_steps` to activate `on_pass` or
    `on_fail`
 5. Councils run multi-agent collaboration when reached
-6. Join targets wait for every activated incoming branch to pass
-7. The routine ends at a `terminal` (success), `terminal_fail` (failure), agent
+6. Human steps open a durable review request and resume through the selected
+   outcome edge or edges
+7. Join targets wait for every activated incoming branch to pass
+8. The routine ends at a `terminal` (success), `terminal_fail` (failure), agent
    step failure, or retry exhaustion
 
 Routines provide strong observability — every step transition, gate decision, and council output is recorded.
@@ -169,8 +205,9 @@ Routines provide strong observability — every step transition, gate decision, 
   fail directly without an explicit `terminal_fail` step.
 - Pointing an edge at `terminal` or `failed` without adding a matching terminal
   or terminal_fail step to the graph
-- Creating cycles from non-gate steps, `on_pass` edges, or unbounded `on_fail`
-  edges
+- Creating cycles outside gate `on_fail` or human `changes_requested` edges
+- Treating an artifact UUID as an artifact handoff without declaring
+  `format: nenjo-artifact-id`
 - Omitting handoff instructions, forcing downstream steps to infer needed state
 - Writing generic handoffs that restate target instructions instead of passing
   source-specific evidence

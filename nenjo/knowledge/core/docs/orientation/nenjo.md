@@ -26,6 +26,9 @@ builder abilities.
   project-scoped memory.
 - Library knowledge provides explicit source material and graph traversal; read
   `resources.library` for the platform-centered model.
+- Artifacts provide immutable organization files, revisions, catalog paths,
+  media-aware reads, task/chat inputs, and human-review handoff references;
+  read `resources.artifacts` for the tool contract.
 - Packages install reusable resource bundles but are not an agent-mutable
   surface; read `resources.packages` for package boundaries and selectors.
 

@@ -14,7 +14,8 @@ This doc complements `design.workflows`, which chooses the workflow shape,
 A routine run advances through graph state, not just a list of steps:
 
 - entry activation: one or more `entry_steps` become runnable;
-- step execution: an agent, gate, or council produces a recorded result;
+- step execution: an agent, gate, or council produces a recorded result, while
+  a human step opens a durable review pause;
 - edge activation: an agent or gate verdict activates matching outgoing edges;
 - handoff creation: an agent or gate step calls `route_next_steps` with one
   handoff per activated downstream edge;
@@ -23,6 +24,8 @@ A routine run advances through graph state, not just a list of steps:
 - gate routing: a gate pass activates `on_pass`; a gate fail activates
   `on_fail`;
 - retry accounting: a gate `on_fail` loop consumes the edge retry budget;
+- human resolution: approval, requested changes, or rejection activates every
+  matching human outcome edge;
 - terminal completion: the run reaches `terminal`, `terminal_fail`, or fails
   directly because an agent step failed or retry budget was exhausted.
 
@@ -34,10 +37,11 @@ without guessing what happened upstream.
 1. If the workflow must recur, plan a scheduled task whose execution target is
    the routine.
 2. List steps with stable slugs, step types, and owners.
-3. Write `config.instructions` for every `agent` and `gate` step.
+3. Write `config.instructions` for every `agent` and `gate` step, and
+   `config.request` for every `human` step.
 4. Draw edges with source, target, and condition.
-5. Add edge metadata that explains why the edge exists and what the source must
-   hand off to the target.
+5. For edges leaving agents and gates, add metadata that explains why the edge
+   exists and what the source must hand off to the target.
 6. Mark one or more `entry_steps`.
 7. Add explicit `terminal` and, when useful, `terminal_fail` steps.
 8. Verify reachability, joins, retry loops, and terminal paths before writing.
@@ -53,14 +57,17 @@ instructions tell the assigned executor:
 - what acceptance standard applies;
 - what downstream consumers will need.
 
-Keep step config narrow. Use only `instructions` and optional `metadata` when
-the prompt explicitly consumes `{{ routine.step.metadata }}`. Do not put
+Keep agent and gate config narrow. Use only `instructions` and optional
+`metadata` when the prompt explicitly consumes `{{ routine.step.metadata }}`.
+Human steps use `request`; terminal-fail steps may use `failure_reason`. Do not put
 `inputs`, `evaluation_criteria`, `max_attempts`, or routing fields in step
 config. Retry budgets belong on `on_fail` edge `metadata.max_attempts`.
 
 ## Edge Metadata
 
-Use edge metadata to define the handoff contract between steps.
+Use edge metadata to define the handoff contract leaving agent and gate steps.
+Human outcome edges carry the scheduler's immutable decision handoff; they do
+not define target-specific handoff schemas.
 
 `metadata.purpose` should explain why the route exists in business or workflow
 terms. It helps the source agent distinguish downstream paths when
@@ -85,6 +92,16 @@ step's required input state:
   approval state, or retry reason;
 - set `additionalProperties: false` unless the target intentionally accepts
   open-ended structured state.
+
+For an uploaded artifact, use a string property with
+`format: nenjo-artifact-id`. This is required for the runtime to recognize,
+authorize, and display the artifact reference:
+
+```yaml
+report_artifact:
+  type: string
+  format: nenjo-artifact-id
+```
 
 Avoid broad catch-all schemas. A `{work: string}` schema is only appropriate
 when the target truly needs one free-form work item. Do not put instructions in
@@ -210,6 +227,47 @@ metadata:
 Do not add an `on_exhausted` edge. When the retry budget is exhausted, the run
 fails directly with structured retry-exhausted result data.
 
+## Human Review Flow
+
+A human step cannot be an entry step. It requires at least one incoming
+handoff and a request contract. `approval` is optional and collects structured
+answers only when the reviewer approves:
+
+```yaml
+slug: review_report
+name: Review report
+step_type: human
+config:
+  request:
+    title: "Review {{ task.title }}"
+    approval:
+      fields:
+        - id: release_lane
+          label: Release lane
+          type: single_select
+          required: true
+          options:
+            type: static
+            values:
+              - value: canary
+                label: Canary
+              - value: all
+                label: All users
+```
+
+Approval fields support `single_select` and `multi_select`. Options may be
+static as above or derived from arrays in named incoming handoffs with JSON
+Pointer projections. Each incoming edge must have a unique source step so those
+input names are unambiguous.
+
+The fixed outgoing conditions are `approved`, `changes_requested`, and
+`rejected`, and every human step needs at least one edge for each outcome. One
+outcome may fan out to multiple targets; resolution activates every matching
+edge with the same immutable decision handoff. Those fan-out branches must
+converge before entering one terminal step. A `changes_requested` edge may loop
+back to an earlier agent step. Human revision rounds are reviewer-driven, so
+never put `max_attempts` on a human edge.
+
 ## Verification Checklist
 
 Before writing or updating a routine:
@@ -218,11 +276,15 @@ Before writing or updating a routine:
 - every non-terminal step has at least one outgoing edge;
 - every terminal step has no outgoing edges;
 - every agent and gate step has an `agent` slug and `config.instructions`;
+- every human step has a valid `config.request.title`, is not an entry step,
+  has uniquely named incoming source steps, and has at least one edge for each
+  human outcome;
 - every council step has a `council` slug;
-- every meaningful edge has `metadata.purpose` and
-  `metadata.handoff_instructions`;
+- every edge leaving an agent or gate has `metadata.purpose`,
+  `metadata.handoff_instructions`, and an object `metadata.handoff_schema`;
 - every fan-out edge has a distinct handoff contract;
 - every join target has instructions for combining upstream handoffs;
-- every cycle is a gate `on_fail` retry loop with bounded attempts;
+- every cycle is either a bounded gate `on_fail` loop or a human
+  `changes_requested` revision loop;
 - there is no `on_exhausted` edge;
 - at least one terminal or terminal_fail step is reachable from each entry path.

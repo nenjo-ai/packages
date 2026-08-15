@@ -12,6 +12,7 @@ definition.
 An execution run records:
 
 - the task and optional project snapshot;
+- ordered immutable artifact inputs snapshotted from the task;
 - the selected agent or routine target;
 - trigger `manual`, `retry`, or `schedule`;
 - schedule occurrence identity when applicable;
@@ -85,6 +86,7 @@ When a task targets a routine, its execution adds graph-level state:
 - activated edges and per-target handoffs;
 - join readiness;
 - gate verdicts and bounded retry attempts;
+- pending human-review rounds, immutable inputs, decisions, and resume state;
 - terminal, terminal-fail, agent-failure, or retry-exhausted outcome.
 
 For fan-out, the run records which downstream edges were activated and the
@@ -93,7 +95,9 @@ required activated upstream branch passes and provides its handoff.
 
 When debugging a routine-targeted task, inspect both task-run lifecycle and
 routine flow state. A run can be healthy while a join is waiting or a bounded
-gate retry is pending.
+gate retry is pending. A human-review pause is also durable execution state: the
+platform stores the request and returns the resolution only to the worker
+enrollment that originated the checkpoint.
 
 ## Guidance
 

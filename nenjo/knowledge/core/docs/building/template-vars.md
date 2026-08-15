@@ -5,7 +5,7 @@
 Template variables are runtime context references available inside prompts and
 context block templates. They connect stable prompt text with the active agent,
 chat message, task, project, routine, gate, Git context, memory,
-artifacts, context blocks, and knowledge-pack indexes.
+context blocks, and knowledge-pack indexes.
 
 Use this reference for variable lookup. For composition patterns, read
 `building.prompt_structuring`.
@@ -106,7 +106,7 @@ current routine step, including gate steps.
 Use Git variables when task execution depends on repository state or local
 workspace paths.
 
-## Memory And Artifacts
+## Memory
 
 - `{{ memories }}`
 - `{{ memories.core }}`
@@ -116,13 +116,11 @@ workspace paths.
 - `{{ memory_profile.core_focus }}`
 - `{{ memory_profile.project_focus }}`
 - `{{ memory_profile.shared_focus }}`
-- `{{ artifacts }}`
-- `{{ artifacts.project }}`
-- `{{ artifacts.workspace }}`
 
-Memory is learned context. Artifacts are saved generated outputs or workspace
-files. Library and package knowledge remain explicit source material retrieved
-through knowledge tools.
+Memory is learned context. Organization artifacts are not prompt variables;
+browse and inspect them with `list_artifacts` and `read_artifact`, or receive
+them as typed chat/task inputs. Library and package knowledge remain explicit
+source material retrieved through knowledge tools.
 
 ## Context Blocks
 
@@ -153,4 +151,7 @@ Use this when the prompt needs the current timestamp.
 - Treating knowledge pack indexes as full source material.
 - Copying resolved context or knowledge bodies instead of using selectors.
 - Treating memory as Library knowledge.
+- Treating artifact access as a template-variable surface; the canonical
+  artifact-access contract uses typed chat/task inputs and the
+  `list_artifacts`/`read_artifact` tools.
 - Embedding platform-scope assumptions in prompt templates.

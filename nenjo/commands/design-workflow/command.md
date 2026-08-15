@@ -36,7 +36,10 @@ These are the relevant seeded knowledge docs that you MUST read first using the 
    - Recommends a specific approach with tradeoffs when multiple are valid.
    - Uses realistic values unless the user has not chosen them.
 
-4. **Save** - If the design is complex enough that the user may revise, approve, or build it later, save the full design as an artifact before summarizing.
+4. **Save** - If the design is complex enough that the user may revise, approve,
+   or build it later, use the dedicated artifact tools to publish the full
+   design as an immutable catalog artifact before summarizing. Report its
+   catalog path and artifact ID.
 
 5. **Report** - Return a concise design summary that makes the composition legible:
    - List the primitives and components used and how they connect.

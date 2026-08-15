@@ -16,12 +16,13 @@ composed by selector instead of copied into every agent or ability.
 | Agents | `pkg.nenjo_ai.packages.context.agents.ability_orchestration` | Select, sequence, verify, and synthesize ability calls. |
 | Agents | `pkg.nenjo_ai.packages.context.agents.sub_agents` | Decide when and how to delegate to sub-agents. |
 | Knowledge | `pkg.nenjo_ai.packages.context.knowledge.knowledge_routing` | Use metadata-first retrieval and graph traversal. |
-| Memory | `pkg.nenjo_ai.packages.context.memory.remembrance` | Recall, store, and update durable memory and artifact context. |
+| Memory | `pkg.nenjo_ai.packages.context.memory.remembrance` | Recall and update durable memory while keeping immutable artifacts on their tool-backed surface. |
 | Operations | `pkg.nenjo_ai.packages.context.operations.failure_modes` | Classify failures and debug from evidence. |
 | Operations | `pkg.nenjo_ai.packages.context.operations.write_discipline` | Sequence, risk-classify, and verify writes. |
 | Runtime | `pkg.nenjo_ai.packages.context.runtime.chat_response` | Generic chat runtime input and response rules. |
 | Runtime | `pkg.nenjo_ai.packages.context.runtime.task_execution` | Generic routine task-step input, `route_next_steps`, project context, metadata, and reporting rules. |
 | Runtime | `pkg.nenjo_ai.packages.context.runtime.gate_evaluation` | Generic gate runtime input, `route_next_steps`, and verdict routing rules. |
+| Tools | `pkg.nenjo_ai.packages.context.tools.artifact_tools` | Browse, inspect, publish, and revise immutable organization artifacts. |
 | Tools | `pkg.nenjo_ai.packages.context.tools.host_tools` | Choose between scoped filesystem, repository, and shell tools. |
 
 ## How To Use
@@ -34,13 +35,14 @@ Packages that use these blocks should declare the dependency:
 
 ```yaml
 dependencies:
-  context: "^1.1.0"
+  context: "^1.3.0"
 ```
 
 Then reference the blocks in prompts by package selector:
 
 ```jinja
 {{ pkg.nenjo_ai.packages.context.tools.host_tools }}
+{{ pkg.nenjo_ai.packages.context.tools.artifact_tools }}
 {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
 {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
 ```

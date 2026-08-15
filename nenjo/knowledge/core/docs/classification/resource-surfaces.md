@@ -16,6 +16,7 @@ shared semantics.
 | `sdk_runtime` | Runtime structs, builders, crates, traits, and execution APIs | User asks about embedding Nenjo, provider setup, tools, memory, or workers |
 | `sdk_runtime_boundary` | Crate ownership and worker/harness separation | User asks where code lives or what owns sessions/tools/events |
 | `library_knowledge` | Platform source material exposed through knowledge tools | User asks about policies, docs, source material, Library items, or graph retrieval |
+| `artifact_catalog` | Immutable organization files exposed through artifact tools and the Library Artifacts tab | User asks to attach, publish, revise, browse, render, or inspect a file |
 | `package_resource` | Installable bundle and package-installed resources | User asks about `packages.yaml`, `nenjo.package.v1`, `pkg.*`, or package modules |
 | `permission_ref` | Platform scope and tool availability | User asks why a tool is unavailable or how permissions are granted |
 | `shared_fields` | Semantics common across surfaces | User asks what a field means independent of UI/API/manifest |
@@ -27,6 +28,7 @@ shared semantics.
 | "I need an agent that reviews incidents." | `platform_tools`, `shared_fields` | Design the agent and recommend platform reads/writes |
 | "Give me the manifest for that agent." | `sdk_manifest` | Provide local manifest structure |
 | "How should my agent read project reference material?" | `library_knowledge` | Route to Library knowledge tools |
+| "Inspect this uploaded image or the latest report." | `artifact_catalog` | Use the attached artifact ref or browse/read the organization artifact catalog |
 | "Add a /design-workflow command for Nenji." | `platform_tools`, `package_resource` | Distinguish native command authoring from package-installed command manifests |
 | "How does the packages repo expose Nenji?" | `package_resource` | Explain registry, package manifest, modules, imports, and `pkg.*` selectors |
 | "Why can’t Nenji update this resource?" | `permission_ref` | Explain missing scope family and user-controlled scope assignment |

@@ -34,6 +34,8 @@ worker inbox, and concurrency limit.
 - `priority` — `low`, `medium`, `high`, or `critical`.
 - `assignee_user_id` — Optional human assignee.
 - `execution_target` — Optional agent or routine target.
+- `artifact_ids` — Ordered immutable organization artifacts supplied as model
+  inputs when the task executes.
 - `labels` / `label_ids` — Organization-owned task labels.
 - `slug` — Optional stable human-readable reference.
 - `metadata` — Additional non-secret structured data.
@@ -124,6 +126,23 @@ Agents with task scopes use task-centered tools:
 Task scheduling is configured through the task schedule surface; it is not an
 alternate routine or agent configuration.
 
+## Artifact Inputs
+
+In the dashboard, attaching a file uploads it as an immutable artifact behind
+the scenes and adds its ID to the task. The user should select the local file
+once; they should not have to publish it first and then select it again.
+
+Manual dispatch, retry, and scheduled activation resolve the same ordered task
+artifact inputs. Each run receives authoritative media type, size, and digest
+metadata, while the worker decrypts and verifies bytes inside its trusted
+boundary. Replacing the task's attachment list changes future runs but does not
+mutate prior artifact revisions or run snapshots.
+
+The current agent-facing `configure_task` tool does not expose `artifact_ids`.
+Do not invent that argument. Use the dashboard/API attachment surface for task
+association; `upload_artifact` alone publishes a file but does not attach it to
+a task.
+
 ## Pitfalls To Avoid
 
 - Treating every task as project-owned.
@@ -140,3 +159,4 @@ alternate routine or agent configuration.
 - Using retired task fields instead of `instructions`, labels, and status rows.
 - Dispatching a backlog task before moving it to a runnable workflow status.
 - Treating scheduled occurrences as a separate execution model.
+- Assuming `upload_artifact` automatically attaches the result to a task.

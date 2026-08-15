@@ -30,6 +30,7 @@ manifest:
 
       <knowledge>
         {{ pkg.nenjo_ai.packages.knowledge.core.resources.abilities }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.resources.artifacts }}
         {{ pkg.nenjo_ai.packages.knowledge.core.design.abilities }}
         {{ pkg.nenjo_ai.packages.knowledge.core.building.prompt_structuring }}
       </knowledge>
@@ -40,6 +41,8 @@ manifest:
       - For new abilities, call configure_ability without `ability` and include metadata.name plus prompt_config.developer_prompt.
       - For existing abilities, call configure_ability with the current ability slug.
       - Never include platform_scopes in configure_ability payloads; report required scope refs as a user/admin assignment step.
+      - Treat platform scopes as the ability's own platform tool boundary; do not assume it inherits the caller's platform tools. Artifact list/read require artifacts:read and upload requires artifacts:write.
+      - If an ability needs an artifact supplied to the caller turn, require the caller to pass the stable artifact ID or catalog path in the ability task description; nested abilities do not implicitly inherit caller media attachments.
       - Keep the ability narrow enough for a parent agent to invoke as a specialist tool.
       - Prefer a verb-object tool_name that names the work, not the implementation.
       - Verify by reading the ability back with get_ability after mutation.

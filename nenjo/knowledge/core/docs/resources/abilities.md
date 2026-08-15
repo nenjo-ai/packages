@@ -40,7 +40,14 @@ When an ability is invoked:
 3. It keeps the caller's system framing.
 4. It replaces developer guidance with its own specialist prompt.
 5. It receives its configured tool refs.
-6. It returns control to the caller with a focused result.
+6. Platform tools are rebuilt from the ability's own `platform_scopes`; the
+   ability does not inherit the caller's platform write authority.
+7. Host tools remain capability-scoped to the worker workspace.
+8. It returns control to the caller with a focused result.
+
+The caller should pass stable artifact IDs or catalog paths in the ability task
+description when specialist work depends on an artifact. A nested ability does
+not implicitly receive the caller turn's media attachments.
 
 ## Tools
 
@@ -62,4 +69,6 @@ user/platform operation.
 - Using abilities for long-running ownership; use an agent instead.
 - Using abilities for explicit user modes; use a domain instead.
 - Hiding broad privilege expansion behind an ability.
+- Assuming the caller's platform scopes or attached media are implicitly
+  inherited by the nested ability.
 - Creating many overlapping abilities instead of one clear specialist contract.

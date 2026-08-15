@@ -2,11 +2,14 @@
 
 ## Purpose
 
-The Library is the platform-centered source material surface. It stores explicit
-knowledge items and exposes them to agents through knowledge pack metadata,
-search, graph traversal, and full-document reads.
+The Library is the dashboard home for organization content. It presents
+Knowledge and Artifacts as separate tabs with different runtime semantics.
+Knowledge stores explicit source material and exposes it to agents through
+knowledge pack metadata, search, graph traversal, and full-document reads.
+Artifacts provide a filesystem-like catalog of immutable organization files.
 
-Library knowledge is separate from projects, memory, artifacts, and packages.
+Library knowledge is separate from projects, memory, artifact bytes, and
+packages even though knowledge and artifacts share Library navigation.
 
 ## What Belongs In The Library
 
@@ -16,10 +19,10 @@ Library knowledge is separate from projects, memory, artifacts, and packages.
 - Research notes and source-backed guidance.
 - Project-relevant references that should remain explicit source material.
 
-## What Does Not Belong In The Library
+## What Does Not Belong In Library Knowledge
 
 - Learned preferences or corrections; use memory.
-- Generated outputs; use artifacts.
+- Generated outputs and uploaded files; publish them to the Artifacts tab.
 - Task definitions; use project tasks.
 - Package manifests; use packages and package manifests.
 
@@ -31,6 +34,10 @@ Use these tools to retrieve Library knowledge:
 - `search_knowledge`
 - `list_knowledge_neighbors`
 - `read_knowledge_doc`
+
+Use `list_artifacts` and `read_artifact` for the adjacent artifact catalog.
+Artifact upload and revision use `upload_artifact`; they do not create or
+update knowledge documents.
 
 Use these tools to maintain Library knowledge only when the active mode has the
 proper Library write surface:

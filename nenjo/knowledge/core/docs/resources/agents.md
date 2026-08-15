@@ -74,6 +74,11 @@ Use the minimum surface needed for the job. Agents can recommend needed
 capabilities, but permission and scope changes must be performed by users or
 platform-controlled setup.
 
+Chat and task requests may include typed immutable artifact inputs. The runtime
+routes supported media to the agent's chat model or to an organization
+capability default. Artifact catalog tools are exposed by platform scope policy;
+they are not prompt variables or ordinary filesystem paths.
+
 ## Tools
 
 Use these platform tools for agent work:

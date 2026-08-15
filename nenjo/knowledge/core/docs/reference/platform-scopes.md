@@ -17,6 +17,7 @@ for other resources.
 - `commands:read` / `commands:write`
 - `routines:read` / `routines:write`
 - `tasks:read` / `tasks:write`
+- `artifacts:read` / `artifacts:write`
 - `projects:read` / `projects:write`
 - `councils:read` / `councils:write`
 - `context_blocks:read` / `context_blocks:write`
@@ -26,6 +27,20 @@ for other resources.
 
 Available scopes can evolve with the platform. Read current platform state or
 tool policy before asserting exact availability.
+
+Artifact agent tools use the dedicated artifact scope family:
+
+- `artifacts:read` exposes `list_artifacts` and `read_artifact`;
+- `artifacts:write` additionally exposes `upload_artifact` and implies artifact
+  read access.
+
+Task scopes do not grant artifact access, and artifact scopes do not grant task
+access. Scope assignment remains a user/platform action.
+
+Organization-member API authorization separately uses `reviews:read` and
+`reviews:write` for the dashboard review inbox and decisions. Those are not
+agent manifest tool scopes, and agents should not be configured to impersonate
+human reviewers.
 
 ## Agent Guidance
 

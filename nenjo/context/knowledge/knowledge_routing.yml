@@ -61,7 +61,7 @@ manifest:
     - the seeded summary already answers a low-stakes orientation question;
     - the user asks for a narrow fact contained in one selected reference;
     - graph edges are weakly related and would broaden the search unnecessarily;
-    - live resource state or user-provided data is the primary source of truth.
+    - live resource state or user-provided data is the canonical truth.
     </when_to_traverse>
 
     <selection_rules>
