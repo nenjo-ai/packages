@@ -40,7 +40,7 @@ Include:
   `step.config.instructions`, that tell the assigned agent exactly what to do
   for that step;
 - dependencies, parallelizable branches, and fan-in joins;
-- edge metadata with `metadata.purpose` and
+- edge metadata on agent/gate source edges with `metadata.purpose` and
   `metadata.handoff_instructions` for the state each route must carry, plus
   `metadata.handoff_schema` for every agent or gate source edge;
 - gate criteria and terminal outcomes;
@@ -80,20 +80,23 @@ For routine-backed workflows, design the flow state before writing the graph.
 Flow state is the runtime record of which entries, steps, edges, handoffs,
 joins, gate decisions, retries, and terminals are active or complete.
 
-Each edge is a handoff contract. Use `metadata.purpose` to explain why the
-route exists and `metadata.handoff_instructions` to tell the source agent what
-actual information to pass through `route_next_steps`. The handoff should
-contain source output, evidence, decisions, artifact refs, constraints,
-unresolved questions, or required fixes. It should not merely restate the target
-step instructions.
+Each edge leaving an agent or gate is an authored handoff contract. Use
+`metadata.purpose` to explain why the route exists and
+`metadata.handoff_instructions` to tell the source agent what actual
+information to pass through `route_next_steps`. The handoff should contain
+source output, evidence, decisions, artifact refs, constraints, unresolved
+questions, or required fixes. It should not merely restate the target step
+instructions. Human outcome edges instead carry the scheduler's immutable
+decision handoff.
 
 Choose `metadata.handoff_schema` from the downstream step's minimum required
 state, not from the source step's full output. Every edge whose source is an
 `agent` or `gate` must use a JSON object schema. Prefer a small object with
 named, required fields and `additionalProperties: false`. Use:
 
-- `string` fields for concise findings, artifact refs, file paths, decisions,
-  criteria, or notes the target must read;
+- `string` fields for concise findings, file paths, decisions, criteria, or
+  notes the target must read. Artifact ID strings additionally require
+  `format: nenjo-artifact-id`;
 - arrays when the target needs a list of homogeneous items such as changed
   files, failed checks, risks, requirements, or evidence links;
 - nested objects when one item has multiple required attributes, such as
@@ -115,12 +118,20 @@ keeping source steps distinct. A joined step should not treat upstream branches
 as one blended transcript; it receives structured handoff blocks from activated
 incoming edges.
 
-For platform routines, keep ordinary flow acyclic. The valid retry shape is a
-bounded gate failure loop: a `gate` step may use an `on_fail` edge back to an
-earlier step. Set `metadata.max_attempts` when the retry budget should differ
-from the runner default of 3 attempts. When the retry edge exhausts its budget,
-the routine fails directly with a structured `retry_exhausted` result; do not
-model exhaustion as a separate branch.
+For platform routines, keep ordinary flow acyclic. A `gate` step may use an
+`on_fail` edge back to an earlier step for bounded rework. A human step may use
+a reviewer-driven `changes_requested` edge back to an earlier step. Set
+`metadata.max_attempts` only on a gate `on_fail` edge when its retry budget
+should differ from the runner default of 3 attempts. Human review edges never
+use this limit. When a gate retry edge exhausts its budget, the routine fails
+directly with a structured `retry_exhausted` result; do not model exhaustion as
+a separate branch.
+
+A human step cannot be an entry step and must receive at least one incoming
+handoff. Give it a `config.request.title` and at least one outgoing edge for
+each fixed outcome: `approved`, `changes_requested`, and `rejected`. Incoming
+edges must have unique source steps. An outcome may fan out, but those branches
+must converge before one terminal result.
 
 When writing a routine graph with platform tools, each step owner is explicit:
 use `agent` for `agent` and `gate` steps, and `council` for `council` steps.
@@ -129,10 +140,12 @@ Agent and gate steps should also include task-specific instructions in
 objective, inputs to inspect, output to produce, and any evidence or acceptance
 standard the assigned agent must use. Do not rely on the routine name, step
 slug, or the agent's general prompt to carry the step-specific work.
-Keep step config typed and minimal: only `instructions` and optional `metadata`
-are supported. Put acceptance criteria and input references in the instruction
-text unless the prompt explicitly consumes `{{ routine.step.metadata }}`. Put
-retry limits on `on_fail` edge `metadata.max_attempts`, not on the step config.
+Keep step config typed and minimal. Agent and gate steps use `instructions` and
+optional `metadata`; human steps require `request`; terminal-fail steps may use
+`failure_reason`. Put acceptance criteria and input references in the
+instruction text unless the prompt explicitly consumes
+`{{ routine.step.metadata }}`. Put retry limits only on gate `on_fail` edge
+`metadata.max_attempts`, not on the step config or human outcome edges.
 To run a routine periodically, schedule a task whose execution target is that
 routine. A gate without an agent cannot execute because no model
 has been assigned to evaluate the gate criteria and call `route_next_steps`.
@@ -151,7 +164,8 @@ Terminal outcomes are also ordinary graph steps: add an explicit `terminal` or
   orchestrator agent with abilities;
 - evaluator-optimizer as a gate `on_fail` retry loop when audit matters;
 - autonomous agent as a single agent, optionally targeted by a scheduled task;
-- approval or escalation as gates and explicit terminal outcomes.
+- human approval as a human step with `approved`, `changes_requested`, and
+  `rejected` outcomes; agent-evaluated approval as a gate.
 
 ## Task Dispatch And Scheduling
 

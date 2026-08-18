@@ -15,7 +15,7 @@ workflow shape should remain flexible and intent-driven.
 ## Authoring Rule
 
 When a pattern becomes a routine, design both topology and flow state. Every
-meaningful edge should explain:
+edge leaving an agent or gate should explain:
 
 - why the route exists with `metadata.purpose`;
 - what state the source must pass with `metadata.handoff_instructions`;
@@ -267,6 +267,23 @@ Use a gate when pass/fail criteria can be evaluated by an assigned agent. Use
 `terminal_fail` for explicit authored failure or escalation outcomes. Retry
 exhaustion is not an authored failure branch; it fails the routine directly.
 
+When a person must decide, use a human step instead of an approval gate:
+
+```text
+entry_steps: [produce]
+produce -> review
+review approved -> done
+review changes_requested -> produce
+review rejected -> failed
+```
+
+The human step requires `config.request.title`. The incoming edge must carry a
+concrete handoff schema. Artifact properties must use
+`format: nenjo-artifact-id`. Do not set `max_attempts` on the
+`changes_requested` loop; that limit is only for gate `on_fail` retries. Add at
+least one route for every fixed human outcome. If one outcome fans out, converge
+its branches before one terminal result.
+
 ## Authoring Checklist
 
 - Choose the least complex resource shape that preserves required guarantees.
@@ -276,18 +293,21 @@ exhaustion is not an authored failure branch; it fails the routine directly.
   task instructions for the assigned agent: local objective, evidence to
   inspect, output to produce, and pass/fail standard when applicable.
 - Assign `council` only on `council` steps.
+- Add `config.request.title` on every `human` step and route all human outcomes
+  with at least one `approved`, `changes_requested`, and `rejected` edge.
 - Add explicit `terminal` and `terminal_fail` steps before targeting them from
   edges.
 - Add edge purpose metadata for fan-out edges so `route_next_steps` can show
   each downstream route clearly.
-- Add edge handoff instructions so each downstream step receives concrete
-  upstream state, not just generic routing.
+- Add edge handoff instructions and schemas on agent/gate source edges so each
+  downstream step receives concrete upstream state, not just generic routing.
 - Use multiple incoming edges only when the target is an all-success join.
 - For joins, ensure each incoming edge has a distinct handoff contract and the
   target step instructions explain how to synthesize incoming handoffs.
 - Use gate `on_fail` retry loops only when bounded rework is intentional.
-- Add `max_attempts` only on the `on_fail` edge metadata when the default retry
-  budget should change. Do not put retry fields in step config.
+- Add `max_attempts` only on a gate `on_fail` edge when the default retry
+  budget should change. Do not put retry fields in step config or on human
+  outcome edges.
 - Do not use `on_exhausted`.
 - Verify reachable terminals, no terminal outgoing edges, and no cycles except
-  bounded gate `on_fail` loops.
+  bounded gate `on_fail` loops or human `changes_requested` loops.

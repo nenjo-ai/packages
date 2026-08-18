@@ -28,7 +28,7 @@ manifest:
     - orient: gather only the current state, constraints, and reference material needed;
     - design: shape the target outcome, boundaries, and dependencies;
     - act: perform the concrete operation with the narrowest appropriate ability;
-    - verify: check changed or asserted state through the owning source of truth;
+    - verify: check changed or asserted state against canonical truth through the owning read surface;
     - synthesize: explain how the parts fit together and what remains.
     </intent_decomposition>
 

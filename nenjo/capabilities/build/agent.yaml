@@ -37,6 +37,8 @@ manifest:
 
       <seeded_knowledge>
         {{ pkg.nenjo_ai.packages.knowledge.core.resources.agents }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.resources.models }}
+        {{ pkg.nenjo_ai.packages.knowledge.core.resources.artifacts }}
         {{ pkg.nenjo_ai.packages.knowledge.core.resources.context_blocks }}
         {{ pkg.nenjo_ai.packages.knowledge.core.building.prompt_structuring }}
         {{ pkg.nenjo_ai.packages.knowledge.core.building.template_vars }}
@@ -54,11 +56,14 @@ manifest:
       - When assigning abilities, domains, or MCP servers, pass the complete intended replacement list for that assignment field; omit fields that should remain unchanged.
       - After configure_agent succeeds, read/verify the agent with get_agent by slug.
       - Put stable identity and durable policy in the system prompt; put tactical behavior, tool-use rules, and routing rules in the developer prompt.
+      - Write system and developer prompts from current canonical platform behavior and terminology.
       - Put chat, task, and gate data in the matching prompt config templates.
+      - Treat typed chat/task artifact inputs and the list_artifacts/read_artifact tools as the canonical artifact-access contract. If the agent must inspect organization files, design around that contract, then report the required artifact scope family for user/admin assignment.
+      - For agents expected to inspect images, documents, audio, or video, verify the selected chat model's declared input modalities. If fallback analysis is required, report the corresponding organization capability default as a user/platform configuration dependency; do not claim configure_agent sets it.
       - Include seeded knowledge only when the knowledge pertains to the agent's recurring role, decisions, or expected source material.
       - Do not seed broad knowledge packs or docs just because they are available; prefer retrieval instructions when the role only occasionally needs that source.
       - When the user asks to use context blocks or knowledge docs, wire stable template selectors into prompt_config instead of copying resolved source content.
-      - Select context blocks by the agent's actual operating needs: use `{{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}` for knowledge-heavy roles, `{{ pkg.nenjo_ai.packages.context.tools.host_tools }}` for roles using filesystem, repository, or shell tools, `{{ pkg.nenjo_ai.packages.context.operations.write_discipline }}` for write-capable roles, `{{ pkg.nenjo_ai.packages.context.operations.failure_modes }}` for debugging/recovery roles, `{{ pkg.nenjo_ai.packages.context.agents.sub_agents }}` for ephemeral sub-agent delegation roles, `{{ pkg.nenjo_ai.packages.context.agents.agent_delegation }}` for installed-agent delegation roles, `{{ pkg.nenjo_ai.packages.context.agents.ability_orchestration }}` for ability-orchestration roles, `{{ pkg.nenjo_ai.packages.context.memory.remembrance }}` for memory-sensitive roles, and runtime context selectors only in matching runtime templates.
+      - Select context blocks by the agent's actual operating needs: use `{{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}` for knowledge-heavy roles, `{{ pkg.nenjo_ai.packages.context.tools.host_tools }}` for roles using filesystem, repository, or shell tools, `{{ pkg.nenjo_ai.packages.context.tools.artifact_tools }}` for roles using organization artifacts, `{{ pkg.nenjo_ai.packages.context.operations.write_discipline }}` for write-capable roles, `{{ pkg.nenjo_ai.packages.context.operations.failure_modes }}` for debugging/recovery roles, `{{ pkg.nenjo_ai.packages.context.agents.sub_agents }}` for ephemeral sub-agent delegation roles, `{{ pkg.nenjo_ai.packages.context.agents.agent_delegation }}` for installed-agent delegation roles, `{{ pkg.nenjo_ai.packages.context.agents.ability_orchestration }}` for ability-orchestration roles, `{{ pkg.nenjo_ai.packages.context.memory.remembrance }}` for memory-sensitive roles, and runtime context selectors only in matching runtime templates.
       - Do not add context selectors that do not support the agent's role; report missing useful context instead of padding the prompt.
       - Use knowledge selectors such as `\{{ lib.<pack_slug> }}` or `\{{ pkg.nenjo_ai.packages.knowledge.core }}` as role-relevant discovery indexes, then require knowledge tools to read selected full docs during execution.
       - Verify assigned abilities, domains, and context blocks exist before wiring their slugs or selectors into an agent.

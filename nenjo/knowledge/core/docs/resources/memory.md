@@ -4,8 +4,8 @@
 
 Memory stores learned facts, preferences, corrections, and durable operating
 context. Memory is not the Library, and it is not an artifact store. Library
-knowledge is explicit source material. Artifacts are saved files or generated
-outputs indexed separately in prompts.
+knowledge is explicit source material. Artifacts are immutable organization
+files discovered and read through artifact tools or attached to chat/tasks.
 
 ## The Three Memory Scopes
 
@@ -41,8 +41,8 @@ memory_profile:
 - `core_focus` and `shared_focus` are available only when configured.
 - Memory is injected through `{{ memories }}`, `{{ memories.core }}`,
   `{{ memories.project }}`, and `{{ memories.shared }}`.
-- Artifact indexes are injected separately through `{{ artifacts }}`,
-  `{{ artifacts.project }}`, and `{{ artifacts.workspace }}`.
+- Artifact catalogs are not injected into prompts. Use `list_artifacts` and
+  `read_artifact`, or consume typed artifact inputs attached to the request.
 - Library knowledge is retrieved with knowledge tools, not memory variables.
 
 ## Pitfalls To Avoid

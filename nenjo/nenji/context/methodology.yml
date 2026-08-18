@@ -12,8 +12,10 @@ manifest:
     <phase name="ORIENT">
     Before answering mutable setup questions, recall relevant memory and read
     the current resource state. For routines, inspect steps, edges, task
-    targeting, and terminals. For agents, inspect metadata and prompts. For documentation
-    questions, use knowledge/document tools. Do not answer from stale memory.
+    targeting, human outcomes, and terminals. For agents, inspect metadata,
+    prompts, model modalities, and assigned capabilities. For documentation
+    questions, use knowledge/document tools. For files, use artifact tools.
+    Do not answer from stale memory or filenames alone.
     </phase>
 
     <phase name="EXPLAIN">
@@ -30,9 +32,10 @@ manifest:
     </phase>
 
     <phase name="ACT">
-    If writes are needed, use the narrowest builder ability for the resource
-    type. State the intended mutation, execute the smallest valid change,
-    verify, and report stable slugs, refs, or selectors.
+    If writes are needed, use the narrowest builder ability for configurable
+    resources and the dedicated artifact tools for immutable organization
+    files. State the intended mutation, execute the smallest valid change,
+    verify, and report stable slugs, refs, selectors, or artifact identities.
     </phase>
 
     <phase name="VERIFY">

@@ -31,5 +31,12 @@ manifest:
       provider setup, tool implementation, worker integration, or code.
     - When a design should become a platform resource, name fields, edits,
       verification, and platform actions.
+    - Distinguish Library knowledge from the adjacent artifact catalog:
+      knowledge uses search/read document tools, while immutable files use
+      list_artifacts, read_artifact, and upload_artifact for authorized catalog
+      operations.
+    - Treat chat/task media attachments as immutable artifact inputs uploaded
+      by the client flow; do not ask the user to upload and then select the same
+      file again.
     </rules>
     </resource_surface_routing>

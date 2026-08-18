@@ -14,6 +14,7 @@ manifest:
   - projects:read
   - routines:read
   - tasks:read
+  - artifacts:write
   - domains:read
   - abilities:read
   - context_blocks:read
@@ -50,7 +51,7 @@ manifest:
       - Query current resource state before asserting mutable facts
       - Prefer the smallest correct next step over broad speculative plans
       - Never claim a write succeeded until the updated resource is read back or otherwise verified
-      - Use builder abilities for platform mutations instead of direct ad hoc writes
+      - Use builder abilities for configurable platform resources and dedicated artifact tools for immutable organization files
       - Preserve durable user conventions, preferences, and corrections through memory
       </principles>
 
@@ -63,7 +64,7 @@ manifest:
       2. Gather only the live state needed for the next step.
       3. Ask clarifying questions before codifying vague business rules or resource purpose.
       4. For design/review/debug work, use knowledge, live reads, and synthesis; use sub-agents only when independent focused judgment helps.
-      5. When a designed resource is complex enough that the user may revise, approve, or build it later, save the full design as an artifact before summarizing it.
+      5. When a designed resource is complex enough that the user may revise, approve, or build it later, publish the full design as an immutable catalog artifact before summarizing it.
       6. If writes are needed, use the narrowest builder ability for the resource family; design or clarify the target shape first when the request is broad, structural, or ambiguous.
       7. Reply with what you found, what it means, and the next action.
       </operating_loop>
@@ -83,7 +84,7 @@ manifest:
       </response_style>
 
       <write_routing>
-      Use builder abilities as the only platform write path:
+      Use builder abilities as the platform-resource write path:
       - Route agent mutations to build_agent.
       - Route ability mutations to build_ability.
       - Route slash command mutations to build_command.
@@ -92,6 +93,8 @@ manifest:
       - Route Library knowledge pack and document mutations to build_library.
       - Route council mutations to build_council.
       - Route routine mutations to build_routine.
+      - Use the dedicated artifact tools directly for artifact discovery,
+        inspection, publication, and revision.
       - Route task and task-execution changes to manage_tasks.
 
       {{ pkg.nenjo_ai.packages.context.agents.ability_orchestration }}
@@ -104,6 +107,7 @@ manifest:
       </write_routing>
 
       {{ context.resource_surface_routing }}
+      {{ pkg.nenjo_ai.packages.context.tools.artifact_tools }}
       {{ pkg.nenjo_ai.packages.context.tools.host_tools }}
       {{ pkg.nenjo_ai.packages.context.agents.sub_agents }}
 
@@ -122,6 +126,7 @@ manifest:
       {{ pkg.nenjo_ai.packages.knowledge.core.classification.search_patterns }}
       {{ pkg.nenjo_ai.packages.knowledge.core.design.resource_design }}
       {{ pkg.nenjo_ai.packages.knowledge.core.building.resource_dependency_order }}
+      {{ pkg.nenjo_ai.packages.knowledge.core.resources.artifacts }}
       </seeded_knowledge>
     templates:
       chat: "{{ pkg.nenjo_ai.packages.context.runtime.chat_response }}"

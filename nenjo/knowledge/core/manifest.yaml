@@ -27,7 +27,7 @@ manifest:
   - selector: orientation.platform
     source_path: docs/orientation/platform.md
     title: Platform
-    summary: "Orientation to the user-facing platform surface: dashboard, chat, Library, projects, workers, settings, and permission UX."
+    summary: "Orientation to the user-facing platform surface: dashboard, chat, Library knowledge and artifacts, human reviews, projects, workers, settings, and permission UX."
     kind: orientation
     tags: ["intent:overview", "surface:platform", "audience:user"]
     related:
@@ -211,7 +211,7 @@ manifest:
   - selector: design.workflows
     source_path: docs/design/workflow-design.md
     title: Workflow Design
-    summary: "How to design tasks, routines, councils, gates, executions, flow state, handoffs, handoff schemas, dependencies, and review points."
+    summary: "How to design tasks, routines, councils, gates, durable human reviews, executions, flow state, artifact-aware handoffs, dependencies, and outcomes."
     kind: design
     tags: ["intent:design", "domain:workflow", "resource:routines", "resource:tasks", "audience:builder"]
     related:
@@ -233,7 +233,7 @@ manifest:
   - selector: resources.agents
     source_path: docs/resources/agents.md
     title: Agents
-    summary: "Resource-level model for agents: behavior ownership, prompts, runtime modes, memory profile, and assigned capability surface."
+    summary: "Resource-level model for agents: behavior ownership, prompts, runtime modes, memory profile, artifact inputs, models, and assigned capability surface."
     kind: resource
     tags: ["intent:explain", "intent:build", "resource:agents", "topic:behavior"]
     related:
@@ -337,7 +337,7 @@ manifest:
   - selector: resources.tasks
     source_path: docs/resources/tasks.md
     title: Tasks
-    summary: "Resource-level model for organization tasks with optional projects, status rows, labels, execution targets, schedules, and shared execution semantics."
+    summary: "Resource-level model for organization tasks with optional projects, status rows, labels, ordered artifact inputs, execution targets, schedules, and shared execution semantics."
     kind: resource
     tags: ["intent:explain", "intent:build", "resource:tasks", "domain:project_work"]
     related:
@@ -349,11 +349,13 @@ manifest:
       target: resources.agents
     - type: references
       target: classification.task_priority_and_labels
+    - type: related_to
+      target: resources.artifacts
 
   - selector: resources.routines
     source_path: docs/resources/routines.md
     title: Routines
-    summary: "Resource-level model for task-targetable workflow graphs, agents, gates, councils, edge metadata, handoffs, flow state, and terminal outcomes."
+    summary: "Resource-level model for task-targetable workflow graphs, agents, gates, human reviews, councils, artifact-aware handoffs, flow state, retries, and terminal outcomes."
     kind: resource
     tags: ["intent:explain", "intent:build", "resource:routines", "domain:workflow"]
     related:
@@ -403,7 +405,7 @@ manifest:
   - selector: resources.executions
     source_path: docs/resources/executions.md
     title: Executions
-    summary: "Resource-level model for task-scoped manual, retry, and scheduled runs plus routine flow state, lifecycle, and progress tracking."
+    summary: "Resource-level model for task-scoped manual, retry, and scheduled runs plus artifact inputs, routine flow state, durable human-review pauses, lifecycle, and progress tracking."
     kind: resource
     tags: ["intent:explain", "intent:build", "resource:executions", "domain:workflow"]
     related:
@@ -451,7 +453,7 @@ manifest:
   - selector: resources.library
     source_path: docs/resources/library.md
     title: Library
-    summary: "Platform source-material surface exposed through knowledge pack search, graph traversal, and full-document reads."
+    summary: "Dashboard organization-content area with separate Knowledge search/graph semantics and filesystem-like immutable Artifact navigation."
     kind: resource
     tags: ["intent:explain", "intent:build", "resource:library", "domain:knowledge"]
     related:
@@ -461,6 +463,8 @@ manifest:
       target: building.knowledge_manifests
     - type: references
       target: classification.search_patterns
+    - type: related_to
+      target: resources.artifacts
 
   - selector: resources.packages
     source_path: docs/resources/packages.md
@@ -479,7 +483,7 @@ manifest:
   - selector: resources.models
     source_path: docs/resources/models.md
     title: Models
-    summary: "Resource-level model for LLM configuration refs used by agents."
+    summary: "Resource-level model for LLM configuration refs, capabilities, modalities, and artifact-analysis routing."
     kind: resource
     tags: ["intent:explain", "intent:build", "resource:models", "topic:llm"]
     related:
@@ -523,14 +527,22 @@ manifest:
   - selector: resources.artifacts
     source_path: docs/resources/artifacts.md
     title: Artifacts
-    summary: "Resource-level reference for saved generated outputs and workspace files indexed separately from memory and Library knowledge."
+    summary: "Resource-level contract for immutable organization artifacts, catalog paths, revisions, media-aware reads, uploads, attachments, and human-review references."
     kind: resource
     tags: ["intent:explain", "resource:artifacts", "topic:context"]
     related:
     - type: related_to
       target: resources.memory
+    - type: related_to
+      target: resources.library
+    - type: related_to
+      target: resources.tasks
+    - type: related_to
+      target: resources.routines
+    - type: depends_on
+      target: resources.models
     - type: references
-      target: building.template_vars
+      target: reference.platform_scopes
 
   - selector: building.resource_dependency_order
     source_path: docs/building/resource-dependency-order.md
@@ -579,7 +591,7 @@ manifest:
   - selector: building.routine_flow_authoring
     source_path: docs/building/routine-flow-authoring.md
     title: Routine Flow Authoring
-    summary: "Practical routine authoring guide for flow state, edge metadata, handoff instructions, handoff schemas, fan-out, joins, gate retries, and graph verification."
+    summary: "Practical routine authoring guide for flow state, artifact-aware handoffs, fan-out, joins, gate retries, human-review outcomes and forms, and graph verification."
     kind: build
     tags: ["intent:build", "intent:design", "domain:workflow", "resource:routines", "topic:flow_state", "topic:orchestration", "audience:builder"]
     related:

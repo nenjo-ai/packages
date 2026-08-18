@@ -5,8 +5,9 @@ building and managing platform resources. It can be installed independently or
 pulled transitively by the `nenji` package.
 
 It includes abilities for agents, abilities, commands, domains, context blocks,
-Library knowledge, councils, routines, and tasks. The abilities depend on the
-shared `context` and `knowledge` packages for their prompt guidance.
+Library knowledge, councils, routines, and tasks. The
+abilities depend on the shared `context` and `knowledge` packages for their
+prompt guidance.
 
 Package consumers assign abilities with stable, versionless logical refs. For
 example:

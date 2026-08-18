@@ -36,7 +36,7 @@ agents, abilities, or councils when the workflow shape is part of the reasoning.
 | Orchestrator-workers | Decompose work, assign specialists, synthesize | Planner step -> worker branches -> synthesis; council leader and members; single agent delegation | Use a routine when worker lanes are predictable. Use an agent or council when decomposition is dynamic |
 | Evaluator-optimizer | Generate, evaluate, revise within a bounded budget | Gate `on_fail` retry loop with `max_attempts`; reviewer ability; self-reflection agent loop | Use a routine when retry count, evidence, and outcomes must be recorded |
 | Autonomous agent | Let one agent pursue a goal with tools over time | Single agent with abilities/domains/tools; scheduled task targeting the agent | Use an agent by default. Use a routine only for audit checkpoints or deterministic handoffs |
-| Human/tool approval | Pause or gate progress on external approval or evidence | Gate step; explicit terminal_fail/escalation path; agent asks user/tool | Use a routine when approval is a workflow checkpoint |
+| Human/tool approval | Pause or gate progress on external approval or evidence | Human step with outcome edges; gate step for agent-evaluated criteria; explicit terminal_fail/escalation path | Use a human step when a person decides and a gate when an agent can evaluate the criteria |
 | Adversarial review | Challenge an answer before acceptance | Council with critic/reviewer roles; routine generate -> critique -> gate | Use a council for contested judgment. Use a routine when the challenge path must be explicit |
 
 ## Decision Framework
@@ -50,8 +50,9 @@ agents, abilities, or councils when the workflow shape is part of the reasoning.
    add real signal.
 5. Combine routine and council when the macro workflow is deterministic but one
    step needs collaborative judgment.
-6. Keep routine ordinary flow acyclic. The only valid cycle is a bounded gate
-   `on_fail` retry loop. Retry exhaustion fails the routine directly.
+6. Keep routine ordinary flow acyclic. Valid cycles are a bounded gate
+   `on_fail` retry loop or a reviewer-driven human `changes_requested` loop.
+   Retry exhaustion applies only to the gate loop.
 7. Prefer a routine when downstream work must receive explicit handoff state
    from known upstream branches or when joins must be auditable.
 
@@ -60,4 +61,4 @@ agents, abilities, or councils when the workflow shape is part of the reasoning.
 After choosing a pattern, read `design.workflows` for resource boundaries and
 `building.workflow_pattern_cookbook` for concrete Nenjo graph recipes. Read
 `building.routine_flow_authoring` when the pattern uses fan-out, joins, gates,
-or edge handoff metadata.
+human review, or edge handoff metadata.

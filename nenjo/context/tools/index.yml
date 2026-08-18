@@ -1,4 +1,5 @@
 schema: nenjo.module_index.v1
 modules:
+  - artifact_tools.yml
   - notifications.yml
   - host_tools.yml

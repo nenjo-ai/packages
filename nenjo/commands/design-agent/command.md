@@ -37,7 +37,10 @@ These are the relevant seeded knowledge docs that you MUST read first using the 
    - States platform scopes needed for the intended work and flags scopes that should require a domain or user approval.
    - Names any missing dependencies that must be created before the agent can be built.
 
-4. **Save** - If the design is complex enough that the user may revise, approve, or build it later, save the full design as an artifact before summarizing.
+4. **Save** - If the design is complex enough that the user may revise, approve,
+   or build it later, use the dedicated artifact tools to publish the full
+   design as an immutable catalog artifact before summarizing. Report its
+   catalog path and artifact ID.
 
 5. **Report** - Return a concise agent design summary that makes the implementation legible:
    - List the proposed agent identity, responsibility, and boundaries.

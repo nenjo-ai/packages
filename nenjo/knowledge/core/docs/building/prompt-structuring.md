@@ -15,8 +15,8 @@ state and full source reads.
    boundaries.
 2. Developer prompt — routing rules, tool-use expectations, and tactical
    behavior.
-3. Runtime template — chat, task, gate, routine, memory,
-   artifact, project, and Git variables.
+3. Runtime template — chat, task, gate, routine, memory, project, and Git
+   variables.
    Command content uses the same template rules as chat templates for the
    invoked turn.
 4. Evidence gathered during the turn — tool results, selected Library/package
@@ -87,12 +87,14 @@ variables include:
 - `{{ routine.step.instructions }}`
 - `{{ routine.handoffs }}`
 - `{{ memories }}`
-- `{{ artifacts }}`
 - `{{ git }}`
 
 Use only variables documented in `building.template_vars`. Available tools and
 resources should come from the platform tool surface and live reads, not invented
 template variables.
+
+Artifacts arrive as typed chat/task inputs or through `list_artifacts` and
+`read_artifact`; they are not injected through an aggregate prompt variable.
 
 ## Knowledge Retrieval Pattern
 

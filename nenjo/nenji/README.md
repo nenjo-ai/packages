@@ -16,15 +16,17 @@ through focused builder abilities.
   surface routing.
 - `@nenjo-ai/capabilities`: write abilities for agents, abilities, commands,
   domains, context blocks, Library knowledge, councils, routines, and tasks.
+- `@nenjo-ai/context`: canonical operating guidance for direct artifact tools
+  and shared agent behavior.
 
 The package depends on:
 
 ```yaml
 dependencies:
-  capabilities: "^1.0.0"
-  commands: "^1.2.0"
-  context: "^1.1.0"
-  knowledge: "^1.3.0"
+  capabilities: "^1.2.0"
+  commands: "^1.3.0"
+  context: "^1.3.0"
+  knowledge: "^1.5.0"
 ```
 
 Those dependencies provide shared slash commands, operating context, and the
@@ -54,8 +56,8 @@ Nenji assigns these builder abilities from `@nenjo-ai/capabilities`:
 - `manage_tasks`
 
 Nenji's write flow is intentionally conservative: it reads current state before
-mutation, uses the narrowest matching ability, and verifies writes by reading
-back the changed resource.
+mutation, uses the narrowest matching ability or dedicated artifact tool, and
+verifies writes by reading back the changed resource or artifact revision.
 
 ## Prompt And Package References
 
@@ -74,6 +76,7 @@ for example:
 ```jinja
 {{ pkg.nenjo_ai.packages.context.agents.agent_delegation }}
 {{ pkg.nenjo_ai.packages.context.agents.ability_orchestration }}
+{{ pkg.nenjo_ai.packages.context.tools.artifact_tools }}
 {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
 {{ pkg.nenjo_ai.packages.knowledge.core.resources.agents }}
 ```

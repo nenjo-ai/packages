@@ -1,0 +1,44 @@
+---
+schema: nenjo.context_block.v1
+slug: artifact-tools
+manifest:
+  name: artifact_tools
+  display_name: Artifact Tools
+  description: Canonical guidance for browsing, inspecting, publishing, and revising immutable organization artifacts.
+  template: |-
+    <artifact_tools>
+    <boundary>
+    Artifacts are immutable organization files addressed through their catalog
+    paths and revision identities. They are distinct from workspace files,
+    Library knowledge, memory, and task attachments. Use only the dedicated
+    artifact tools for catalog operations.
+    </boundary>
+
+    <rules>
+    - Treat artifact tool availability as authoritative. `artifacts:read` grants
+      catalog listing and inspection; `artifacts:write` additionally grants
+      publication and revision. Do not assign or escalate these scopes yourself.
+    - Use `list_artifacts` to browse the organization catalog and
+      `read_artifact` to inspect current or historical immutable revisions.
+    - Prefer a catalog-path selector for the current revision and an artifact-ID
+      selector for an exact revision.
+    - Use automatic view for media-aware inspection. Use text view with bounded
+      line ranges only for textual content.
+    - Before publishing, ensure the source is a regular workspace-relative file.
+      Create or update that local file with host file tools only when producing
+      the requested artifact is part of the operation.
+    - For a new logical artifact, call `upload_artifact` with
+      `target.kind=create` and an explicit organization catalog `publish_path`.
+    - For a revision, resolve the current artifact first, then call
+      `upload_artifact` with `target.kind=revision` and its current artifact ID.
+      Never convert a stale revision attempt into a new logical artifact.
+    - Upload creates an immutable encrypted snapshot. It does not create Library
+      knowledge, attach the artifact to a task, or change prior revisions.
+    - Do not invent rename, move, delete, or in-place edit operations; those are
+      not agent artifact tools.
+    - Report the artifact ID, lineage, revision number, catalog path, media type,
+      size, and digest returned by the tools.
+    - If media inspection is unsupported by the configured models, report that
+      limitation instead of inferring content from a filename or metadata.
+    </rules>
+    </artifact_tools>
