@@ -59,10 +59,13 @@ Use these platform tools for ability work:
 
 Use `list_abilities` to discover existing names/slugs and `get_ability` to
 inspect the full AbilityDocument, including prompt_config and tool assignments.
-Use `configure_ability` for all ability writes: creation, metadata changes,
-prompt_config changes, and full replacement MCP/script tool assignments. Do not
-use `configure_ability` to assign platform scopes. Scope changes are a
-user/platform operation.
+Use `configure_ability` for authored ability writes. Always provide the stable
+top-level `slug`; if it does not exist, also provide `name` and `prompt_config`.
+Omitted fields remain unchanged and a supplied `mcp_servers` array is a complete
+replacement. Do not use `metadata`, `assignments`, or a separate `ability`
+selector. Script-tool and platform-scope mutation are outside this tool. A
+successful response contains the same canonical AbilityDocument as
+`get_ability`.
 
 ## Pitfalls To Avoid
 

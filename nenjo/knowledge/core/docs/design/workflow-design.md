@@ -40,9 +40,9 @@ Include:
   `step.config.instructions`, that tell the assigned agent exactly what to do
   for that step;
 - dependencies, parallelizable branches, and fan-in joins;
-- edge metadata on agent/gate source edges with `metadata.purpose` and
-  `metadata.handoff_instructions` for the state each route must carry, plus
-  `metadata.handoff_schema` for every agent or gate source edge;
+- explicit edge `purpose` and `handoff_instructions` on agent/gate source edges
+  for the state each route must carry, plus `handoff_schema` for every agent or
+  gate source edge;
 - gate criteria and terminal outcomes;
 - expected artifacts, Library evidence, or execution output at each handoff;
 - retry, escalation, or human approval points;
@@ -80,16 +80,16 @@ For routine-backed workflows, design the flow state before writing the graph.
 Flow state is the runtime record of which entries, steps, edges, handoffs,
 joins, gate decisions, retries, and terminals are active or complete.
 
-Each edge leaving an agent or gate is an authored handoff contract. Use
-`metadata.purpose` to explain why the route exists and
-`metadata.handoff_instructions` to tell the source agent what actual
+Each edge leaving an agent or gate is an authored handoff contract. Use the
+explicit edge field `purpose` to explain why the route exists and
+`handoff_instructions` to tell the source agent what actual
 information to pass through `route_next_steps`. The handoff should contain
 source output, evidence, decisions, artifact refs, constraints, unresolved
 questions, or required fixes. It should not merely restate the target step
 instructions. Human outcome edges instead carry the scheduler's immutable
 decision handoff.
 
-Choose `metadata.handoff_schema` from the downstream step's minimum required
+Choose `handoff_schema` from the downstream step's minimum required
 state, not from the source step's full output. Every edge whose source is an
 `agent` or `gate` must use a JSON object schema. Prefer a small object with
 named, required fields and `additionalProperties: false`. Use:
@@ -110,7 +110,8 @@ Do not choose a schema that is just `{work: string}` unless the downstream step
 genuinely only needs one free-form work item. Do not use the schema to encode
 instructions, optional commentary, or everything the source agent might know.
 The schema is the enforceable payload shape; `handoff_instructions` explains how
-to fill that shape well.
+to fill that shape well. These are top-level edge fields; do not wrap them in
+edge `metadata`.
 
 For fan-out, each downstream edge should request different handoff content. For
 joins, the target step should state how to combine incoming handoff blocks while
@@ -121,9 +122,10 @@ incoming edges.
 For platform routines, keep ordinary flow acyclic. A `gate` step may use an
 `on_fail` edge back to an earlier step for bounded rework. A human step may use
 a reviewer-driven `changes_requested` edge back to an earlier step. Set
-`metadata.max_attempts` only on a gate `on_fail` edge when its retry budget
-should differ from the runner default of 3 attempts. Human review edges never
-use this limit. When a gate retry edge exhausts its budget, the routine fails
+explicit edge `max_retries` only on a gate `on_fail` retry edge when its budget
+should differ from the worker default of 3 rework traversals. The initial gate
+evaluation is not a retry; `0` disables rework. Human review edges never use
+this limit. When a gate retry edge exhausts its budget, the routine fails
 directly with a structured `retry_exhausted` result; do not model exhaustion as
 a separate branch.
 
@@ -145,7 +147,7 @@ optional `metadata`; human steps require `request`; terminal-fail steps may use
 `failure_reason`. Put acceptance criteria and input references in the
 instruction text unless the prompt explicitly consumes
 `{{ routine.step.metadata }}`. Put retry limits only on gate `on_fail` edge
-`metadata.max_attempts`, not on the step config or human outcome edges.
+`max_retries`, not on the step config or human outcome edges.
 To run a routine periodically, schedule a task whose execution target is that
 routine. A gate without an agent cannot execute because no model
 has been assigned to evaluate the gate criteria and call `route_next_steps`.
@@ -186,6 +188,6 @@ Terminal outcomes are also ordinary graph steps: add an explicit `terminal` or
 Use this when designing project work or routine structure. Read
 `classification.workflow_patterns` to choose the implementation approach,
 `building.workflow_pattern_cookbook` for concrete graph recipes,
-`building.routine_flow_authoring` for edge metadata and handoff contracts, and
+`building.routine_flow_authoring` for explicit edge fields and handoff contracts, and
 `resources.tasks`, `resources.routines`, and `resources.executions` for exact
 mechanics.

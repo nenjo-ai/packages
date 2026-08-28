@@ -72,7 +72,7 @@ Before building, identify:
   `building.workflow_pattern_cookbook` when a workflow pattern has several
   valid implementations.
 - Use `building.routine_flow_authoring` before designing concrete routine
-  topology, edge metadata, handoff schemas, fan-out, joins, or gate retries.
+  topology, explicit edge contracts, handoff schemas, fan-out, joins, or gate retries.
 - Use `resources.library` and `resources.knowledge_packs` for source material.
 - Use `resources.packages` and `building.package_manifests` for package
   structure questions.

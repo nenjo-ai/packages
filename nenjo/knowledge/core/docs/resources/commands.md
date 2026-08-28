@@ -85,13 +85,11 @@ package source and reinstall/update the package.
 
 Use `configure_command` for command writes.
 
-On create, omit `command_ref`, include `metadata.command`, optional
-`metadata.path`, optional `metadata.description`, and `content`. Omit
-`metadata.name` unless preserving a specific existing internal slug is required;
-the platform derives the internal name from the slash command.
-
-On update, include `command_ref` with the current internal name or slash command
-and provide only the metadata fields or content that should change.
+Always provide the stable top-level `slug`. If it does not exist, also provide
+top-level `name`, `command`, and `content`; if it exists, omitted fields remain
+unchanged. Use top-level `path` and `description`, and set `description` to null
+to clear it. Do not use `command_ref` or a `metadata` wrapper. A successful
+response contains the canonical CommandManifest for the saved command.
 
 ## Pitfalls To Avoid
 

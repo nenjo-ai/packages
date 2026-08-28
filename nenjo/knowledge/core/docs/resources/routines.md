@@ -15,11 +15,11 @@ A routine is a directed graph consisting of:
 - **Edges** — Connections that define execution flow and dependencies
 - **Flow state** — Runtime state for activated entries, steps, edges,
   handoffs, joins, retries, and terminals
-- **Optional metadata** — Custom configuration per routine
+- **Optional description and project scope** — Routine-level context outside the graph
 
 Platform routine graphs are mostly acyclic. A gate may use a bounded `on_fail`
 rework loop. A human review may use an unbounded, reviewer-driven
-`changes_requested` loop back to an earlier step. `metadata.max_attempts`
+`changes_requested` loop back to an earlier step. Explicit edge `max_retries`
 applies only to gate `on_fail` retry edges; never put it on human outcome edges.
 
 ## Task Dispatch
@@ -28,6 +28,25 @@ A routine starts when a task whose execution target is that routine is
 dispatched. The task supplies runtime context and may be run manually, retried,
 or activated by its own schedule. Routines do not own trigger, timer, or
 schedule metadata.
+
+## Configure Contract
+
+`configure_routine` atomically creates or replaces one complete routine graph
+by stable slug. Its payload is flat:
+
+- required top-level fields: `slug`, `name`, `entry_steps`, `steps`, and
+  `edges`;
+- optional top-level fields: `description` and `project_id`;
+- each step uses `slug`, `name`, `step_type`, `order_index`, the applicable
+  `agent` or `council`, and typed `config`;
+- each edge uses `source_step`, `target_step`, `condition`, and the applicable
+  explicit route-contract fields `purpose`, `handoff_instructions`,
+  `handoff_schema`, and `max_retries`.
+
+Do not send a `routine` identity field, `graph` wrapper, platform IDs,
+top-level `metadata` or `runtime_metadata`, `is_active`, or a routine-wide
+retry limit. When updating, first read the routine and submit the entire
+intended graph. Omitted steps and edges are removed.
 
 ## Step Types
 
@@ -59,8 +78,9 @@ schedule metadata.
   `config.metadata`. Human steps instead require `config.request`; a
   `terminal_fail` step may define `config.failure_reason`. Do not add
   top-level `config.inputs`, `config.evaluation_criteria`, `config.max_attempts`,
-  or similar fields; they do not control execution. Retry budgets belong only
-  on gate `on_fail` edge `metadata.max_attempts`.
+  `config.max_retries`, or similar fields; they do not control execution.
+  Retry budgets belong only on an explicit gate `on_fail` edge `max_retries`
+  field.
 
 **Failure semantics differ by step type:**
 
@@ -73,24 +93,29 @@ schedule metadata.
   every outgoing edge matching `approved`, `changes_requested`, or `rejected`.
   The same outcome may have multiple outgoing edges, producing deterministic
   fan-out with one immutable decision handoff. Human outcome edges do not use
-  `metadata.max_attempts` or target-specific handoff schemas.
+  `max_retries` or target-specific handoff schemas.
 
 This distinction ensures that critical work steps are treated as atomic (failure = routine failure), while gates can implement sophisticated error handling and branching.
 
-## Edge Metadata And Handoffs
+## Edge Route Contracts And Handoffs
 
-Edges leaving agents and gates carry authoring metadata that shapes runtime
+Edges leaving agents and gates carry explicit authoring fields that shape runtime
 handoffs:
 
-- `metadata.purpose` explains why the route exists.
-- `metadata.handoff_instructions` tells the source agent what information to
+- `purpose` explains why the route exists.
+- `handoff_instructions` tells the source agent what information to
   pass to the target through `route_next_steps`.
-- `metadata.max_attempts` is used only on gate `on_fail` retry edges.
+- `handoff_schema` defines the required JSON object payload for every edge
+  leaving an agent or gate.
+- `max_retries` is used only on gate `on_fail` retry edges.
+
+These are top-level edge fields. Do not place them inside an edge `metadata`
+wrapper.
 
 Handoff instructions should request actual state for the downstream step:
 findings, decisions, artifact refs, changed files, failed criteria, unresolved
-questions, constraints, or implementation notes. Do not use handoff metadata to
-repeat the target step instructions.
+questions, constraints, or implementation notes. Do not use edge handoff fields
+to repeat the target step instructions.
 
 When a handoff contains an uploaded artifact ID, declare it as a semantic
 artifact reference rather than a generic string:
@@ -158,12 +183,14 @@ Routines are typically built using well-known patterns:
   instructions. The text should be concrete enough that the assigned agent can
   execute the step without inferring its task from only the routine name, step
   slug, or general agent prompt.
-- Edges should use `metadata.purpose` to explain why the route exists and
-  `metadata.handoff_instructions` to tell the source agent what information to
+- Edges should use explicit `purpose` to explain why the route exists and
+  `handoff_instructions` to tell the source agent what information to
   pass to that target through `route_next_steps`. At runtime, joined target
   steps receive one structured handoff block for each activated incoming edge.
 - If an `on_fail` edge creates a retry cycle, the source step must be a `gate`
-  and the retry remains bounded by `metadata.max_attempts` or the runner default.
+  and the retry remains bounded by `max_retries` or the worker default. The
+  field counts rework traversals after the initial gate evaluation; `0`
+  disables rework.
 - Do not add an `on_exhausted` branch. Retry exhaustion fails the routine
   directly and records the exhausted edge in the result data.
 
@@ -173,7 +200,7 @@ Express retries only as a bounded gate failure loop:
 
 1. `implement -> review_gate`
 2. `review_gate on_pass -> done`
-3. `review_gate on_fail -> implement`, optionally with `metadata.max_attempts`
+3. `review_gate on_fail -> implement`, optionally with `max_retries`
 4. If the retry budget is exhausted, the routine fails directly
 
 The gate owns the retry decision. Agent steps do not use `on_fail` retry edges;

@@ -20,7 +20,7 @@ semantics, parallelism, and cost.
 | Failure semantics | Explicit terminal, terminal_fail, gate retry exhaustion | Prompt and tool dependent |
 | Parallelism | Explicit entry steps, fan-out edges, and joins | Possible through sub-agents or council members, less graph-visible |
 | Flow-state visibility | Explicit activated edges, handoffs, joins, gate decisions, and retry state | Must be narrated or recorded by the agent |
-| Handoff contract | Edge metadata can define per-route handoff instructions | Handoffs depend on prompt discipline |
+| Handoff contract | Explicit edge fields define per-route handoff instructions and schemas | Handoffs depend on prompt discipline |
 | Cost/control | Predictable shape | More variable but often simpler for exploratory work |
 
 Use routines when the workflow shape is part of the product contract. Use
@@ -34,7 +34,7 @@ agents, abilities, or councils when the workflow shape is part of the reasoning.
 | Routing | Choose one path from task intent, context, or evidence | Router agent; council; routine branches; domain switch | Use an agent for fuzzy intent. Use a routine when route choice is an audited business process |
 | Parallelization | Run independent branches and combine results | Multiple `entry_steps`; agent fan-out plus join; council members; sub-agents | Use a routine for auditable branch state and explicit handoffs. Use a council for judgment. Use sub-agents for flexible speed |
 | Orchestrator-workers | Decompose work, assign specialists, synthesize | Planner step -> worker branches -> synthesis; council leader and members; single agent delegation | Use a routine when worker lanes are predictable. Use an agent or council when decomposition is dynamic |
-| Evaluator-optimizer | Generate, evaluate, revise within a bounded budget | Gate `on_fail` retry loop with `max_attempts`; reviewer ability; self-reflection agent loop | Use a routine when retry count, evidence, and outcomes must be recorded |
+| Evaluator-optimizer | Generate, evaluate, revise within a bounded budget | Gate `on_fail` retry loop with `max_retries`; reviewer ability; self-reflection agent loop | Use a routine when retry count, evidence, and outcomes must be recorded |
 | Autonomous agent | Let one agent pursue a goal with tools over time | Single agent with abilities/domains/tools; scheduled task targeting the agent | Use an agent by default. Use a routine only for audit checkpoints or deterministic handoffs |
 | Human/tool approval | Pause or gate progress on external approval or evidence | Human step with outcome edges; gate step for agent-evaluated criteria; explicit terminal_fail/escalation path | Use a human step when a person decides and a gate when an agent can evaluate the criteria |
 | Adversarial review | Challenge an answer before acceptance | Council with critic/reviewer roles; routine generate -> critique -> gate | Use a council for contested judgment. Use a routine when the challenge path must be explicit |
@@ -61,4 +61,4 @@ agents, abilities, or councils when the workflow shape is part of the reasoning.
 After choosing a pattern, read `design.workflows` for resource boundaries and
 `building.workflow_pattern_cookbook` for concrete Nenjo graph recipes. Read
 `building.routine_flow_authoring` when the pattern uses fan-out, joins, gates,
-human review, or edge handoff metadata.
+human review, or explicit edge handoff contracts.

@@ -23,10 +23,10 @@ The package depends on:
 
 ```yaml
 dependencies:
-  capabilities: "^1.2.0"
-  commands: "^1.3.0"
-  context: "^1.3.0"
-  knowledge: "^1.5.0"
+  capabilities: "^1.3.0"
+  commands: "^1.4.0"
+  context: "^1.4.0"
+  knowledge: "^1.6.0"
 ```
 
 Those dependencies provide shared slash commands, operating context, and the

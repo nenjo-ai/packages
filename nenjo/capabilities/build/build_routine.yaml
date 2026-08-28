@@ -41,7 +41,8 @@ manifest:
       - Verify upstream resources before wiring downstream references.
       - For routines, list/read referenced agents and councils before using their slugs.
       - If a referenced council, agent, domain, ability, context block, project, or task is missing, stop and return it as a remaining dependency for the matching builder.
-      - When calling `configure_routine`, set `routine` to the intended stable routine slug for both create and update. Do not provide platform UUIDs; the backend owns them and keeps the operation idempotent.
+      - `configure_routine` is an atomic complete-graph upsert by stable slug. Set top-level `slug`, `name`, `entry_steps`, `steps`, and `edges` for both create and update; optionally set `description` and `project_id`. Do not wrap the payload in `routine` or `graph`, and do not provide platform UUIDs, top-level metadata, runtime metadata, activation state, or a routine-wide retry limit.
+      - When updating, submit the complete intended graph. Omitted steps and edges are removed, so preserve every existing graph element that should remain.
       - In routine graph steps, use the `agent` field with an agent slug for every `agent` step and every `gate` step.
       - Use `council` only for `council` steps.
       - Keep ordinary routine flow acyclic. Valid cycles are bounded gate `on_fail` retry loops and human `changes_requested` revision loops.
@@ -56,19 +57,20 @@ manifest:
       - Author human review with `step_type: human` and `config.request.title`. Human steps cannot be entry steps and must route only `approved`, `changes_requested`, or `rejected` outcomes. One outcome may have multiple outgoing edges; every matching edge activates with the same immutable decision handoff.
       - Provide at least one outgoing edge for each of the three human outcomes. When one outcome fans out, make its branches converge before a single terminal result.
       - Human steps may receive multiple concurrently activated inputs, but each incoming edge must have a unique source step. Optional approval fields may use static choices or project choices from named incoming handoffs.
-      - On edges leaving agents and gates, put branch purpose on metadata.purpose, source-step guidance on metadata.handoff_instructions, and the canonical object contract on metadata.handoff_schema so `route_next_steps` can show and enforce what the source must pass. Human outcome edges receive the scheduler's immutable decision handoff and do not define target-specific handoff schemas.
-      - Every edge whose source step is an agent or gate must define metadata.handoff_schema as a JSON object schema. Use type="object", required fields, properties, and additionalProperties=false for the concrete downstream payload shape.
+      - Define edge route contracts with explicit top-level edge fields: `purpose`, `handoff_instructions`, `handoff_schema`, and, only where allowed, `max_retries`. Never place these fields inside an edge `metadata` wrapper.
+      - On edges leaving agents and gates, set `purpose` to the branch purpose, `handoff_instructions` to source-step guidance, and `handoff_schema` to the canonical object contract so `route_next_steps` can show and enforce what the source must pass. Human outcome edges receive the scheduler's immutable decision handoff and do not define target-specific handoff schemas.
+      - Every edge whose source step is an agent or gate must define `handoff_schema` as a JSON object schema. Use type="object", required fields, properties, and additionalProperties=false for the concrete downstream payload shape.
       - When a handoff field contains an artifact ID returned by `upload_artifact`, declare it as `{type: "string", format: "nenjo-artifact-id"}`. A plain UUID string is not recognized as an artifact reference.
       - Treat the caller's requested topology as intent, not proof that the graph is valid. Normalize it to the platform invariants before the first write, and explain any semantic adjustment in the final result.
       - Before calling `configure_routine`, preflight every declared step for reachability and every agent/gate edge for purpose, handoff instructions, and a concrete handoff schema. This includes `on_pass` edges whose target is a terminal step.
-      - For bounded gate rework, use `gate on_fail -> earlier_step` with metadata.max_attempts. Retry exhaustion fails directly; do not add an otherwise-unreachable `terminal_fail` step solely for exhaustion.
-      - Never put metadata.max_attempts on human outcome edges. Human changes-requested rounds remain reviewer-driven until resolution or execution cancellation.
+      - For bounded gate rework, use `gate on_fail -> earlier_step` with explicit edge `max_retries`. It counts rework traversals after the initial gate evaluation; `0` disables rework, and omission uses the worker default. Retry exhaustion fails directly; do not add an otherwise-unreachable `terminal_fail` step solely for exhaustion.
+      - Never put `max_retries` on human outcome edges. Human changes-requested rounds remain reviewer-driven until resolution or execution cancellation.
       - Treat every agent/gate edge as a flow-state handoff contract. Its handoff instructions must request concrete downstream state such as evidence, decisions, artifact refs, constraints, failed criteria, or open questions, not repeat the target step instructions.
       - For joins, ensure each activated incoming edge can provide a distinct handoff block and the target step instructions explain how to combine upstream handoffs while preserving source identity.
       - Preserve explicit success and failure terminals when changing routine topology.
       - Validate gate pass/fail destinations before writing.
       - If `configure_routine` returns a recoverable validation error, use that error to correct and retry the graph within this same ability operation. Do not require the parent to stop and reinvoke you for fixable graph validation.
-      - Verify reachable terminals, branch destinations, joins, edge handoff metadata, and cross-resource references after mutation.
+      - Verify reachable terminals, branch destinations, joins, explicit edge handoff fields, and cross-resource references after mutation.
       - After a successful write, call `get_routine` and verify the persisted graph before finishing. Use `finish` with status `failed` only for a non-recoverable blocker or missing dependency.
       </rules>
 

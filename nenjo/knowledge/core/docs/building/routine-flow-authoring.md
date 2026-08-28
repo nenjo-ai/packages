@@ -3,7 +3,7 @@
 ## Purpose
 
 Use routine flow authoring when turning a workflow design into a concrete
-routine graph with explicit runtime state, edge metadata, and handoff contracts.
+routine graph with explicit runtime state, edge fields, and handoff contracts.
 
 This doc complements `design.workflows`, which chooses the workflow shape,
 `resources.routines`, which defines routine mechanics, and
@@ -40,8 +40,8 @@ without guessing what happened upstream.
 3. Write `config.instructions` for every `agent` and `gate` step, and
    `config.request` for every `human` step.
 4. Draw edges with source, target, and condition.
-5. For edges leaving agents and gates, add metadata that explains why the edge
-   exists and what the source must hand off to the target.
+5. For edges leaving agents and gates, add explicit fields that explain why
+   the edge exists and what the source must hand off to the target.
 6. Mark one or more `entry_steps`.
 7. Add explicit `terminal` and, when useful, `terminal_fail` steps.
 8. Verify reachability, joins, retry loops, and terminal paths before writing.
@@ -60,25 +60,26 @@ instructions tell the assigned executor:
 Keep agent and gate config narrow. Use only `instructions` and optional
 `metadata` when the prompt explicitly consumes `{{ routine.step.metadata }}`.
 Human steps use `request`; terminal-fail steps may use `failure_reason`. Do not put
-`inputs`, `evaluation_criteria`, `max_attempts`, or routing fields in step
-config. Retry budgets belong on `on_fail` edge `metadata.max_attempts`.
+`inputs`, `evaluation_criteria`, `max_attempts`, `max_retries`, or routing
+fields in step config. Retry budgets belong on explicit `max_retries` fields
+of gate `on_fail` retry edges.
 
-## Edge Metadata
+## Edge Route Contracts
 
-Use edge metadata to define the handoff contract leaving agent and gate steps.
-Human outcome edges carry the scheduler's immutable decision handoff; they do
-not define target-specific handoff schemas.
+Use explicit edge fields to define the handoff contract leaving agent and gate
+steps. Human outcome edges carry the scheduler's immutable decision handoff;
+they do not define target-specific handoff schemas.
 
-`metadata.purpose` should explain why the route exists in business or workflow
+`purpose` should explain why the route exists in business or workflow
 terms. It helps the source agent distinguish downstream paths when
 `route_next_steps` is available.
 
-`metadata.handoff_instructions` should tell the source agent what actual
+`handoff_instructions` should tell the source agent what actual
 information to include in the handoff for that target. It should not repeat the
 target step instructions. It should specify the needed evidence, decisions,
 artifact refs, constraints, unresolved questions, or implementation notes.
 
-`metadata.handoff_schema` is required for every edge whose source step is an
+`handoff_schema` is required for every edge whose source step is an
 agent or gate. It is the enforced JSON object shape for the handoff payload that
 `route_next_steps` must submit for that edge. Choose the schema from the target
 step's required input state:
@@ -105,60 +106,61 @@ report_artifact:
 
 Avoid broad catch-all schemas. A `{work: string}` schema is only appropriate
 when the target truly needs one free-form work item. Do not put instructions in
-the schema; put instructions in `metadata.handoff_instructions` and use the
+the schema; put instructions in `handoff_instructions` and use the
 schema to enforce the payload shape.
 
-Use `metadata.max_attempts` only on a gate `on_fail` edge that loops back for
-bounded rework.
+Do not put these fields inside an edge `metadata` wrapper. Use `max_retries`
+only on a gate `on_fail` edge that loops back for bounded rework. It counts
+rework traversals after the initial gate evaluation. `0` disables rework;
+omitting it uses the worker default.
 
-Example edge metadata:
+Example edge route contract:
 
 ```yaml
-metadata:
-  purpose: Send implementation evidence to review.
-  handoff_instructions: >-
-    Include the changed files, tests run, unresolved risks, and any acceptance
-    criteria that still need reviewer attention.
-  handoff_schema:
-    type: object
-    required: [changed_files, tests_run, unresolved_risks]
-    properties:
-      changed_files:
-        type: array
-        items:
-          type: string
-          minLength: 1
-      tests_run:
-        type: array
-        items:
-          type: string
-          minLength: 1
-      unresolved_risks:
-        type: array
-        items:
-          type: string
-    additionalProperties: false
+purpose: Send implementation evidence to review.
+handoff_instructions: >-
+  Include the changed files, tests run, unresolved risks, and any acceptance
+  criteria that still need reviewer attention.
+handoff_schema:
+  type: object
+  required: [changed_files, tests_run, unresolved_risks]
+  properties:
+    changed_files:
+      type: array
+      items:
+        type: string
+        minLength: 1
+    tests_run:
+      type: array
+      items:
+        type: string
+        minLength: 1
+    unresolved_risks:
+      type: array
+      items:
+        type: string
+  additionalProperties: false
 ```
 
-For fan-out, each outgoing edge should have different handoff instructions:
+For fan-out, each outgoing edge should have different handoff instructions.
+The required `handoff_schema` fields are omitted from this excerpt only to
+highlight the branch-specific content:
 
 ```yaml
 - source_step: plan
   target_step: backend
   condition: always
-  metadata:
-    purpose: Route backend implementation work.
-    handoff_instructions: >-
-      Provide backend requirements, API contracts, data model notes, and
-      dependencies on frontend or worker behavior.
+  purpose: Route backend implementation work.
+  handoff_instructions: >-
+    Provide backend requirements, API contracts, data model notes, and
+    dependencies on frontend or worker behavior.
 - source_step: plan
   target_step: frontend
   condition: always
-  metadata:
-    purpose: Route frontend implementation work.
-    handoff_instructions: >-
-      Provide UI states, user flows, API calls, validation rules, and visual or
-      interaction constraints.
+  purpose: Route frontend implementation work.
+  handoff_instructions: >-
+    Provide UI states, user flows, API calls, validation rules, and visual or
+    interaction constraints.
 ```
 
 ## Handoff Rules
@@ -210,18 +212,26 @@ Use a retry loop only for bounded rework:
 ```text
 implement -> review_gate
 review_gate on_pass -> done
-review_gate on_fail -> implement [metadata.max_attempts = 3]
+review_gate on_fail -> implement [max_retries = 3]
 ```
 
 The retry edge should describe the repair handoff:
 
 ```yaml
-metadata:
-  purpose: Send failed review findings back for bounded rework.
-  handoff_instructions: >-
-    Include the failed criteria, required fixes, evidence gaps, and any reviewer
-    notes the implementation step must address before trying again.
-  max_attempts: 3
+purpose: Send failed review findings back for bounded rework.
+handoff_instructions: >-
+  Include the failed criteria, required fixes, evidence gaps, and any reviewer
+  notes the implementation step must address before trying again.
+handoff_schema:
+  type: object
+  required: [failed_criteria, required_fixes, evidence_gaps, reviewer_notes]
+  properties:
+    failed_criteria: {type: array, items: {type: string}}
+    required_fixes: {type: array, items: {type: string}}
+    evidence_gaps: {type: array, items: {type: string}}
+    reviewer_notes: {type: string}
+  additionalProperties: false
+max_retries: 3
 ```
 
 Do not add an `on_exhausted` edge. When the retry budget is exhausted, the run
@@ -266,7 +276,7 @@ outcome may fan out to multiple targets; resolution activates every matching
 edge with the same immutable decision handoff. Those fan-out branches must
 converge before entering one terminal step. A `changes_requested` edge may loop
 back to an earlier agent step. Human revision rounds are reviewer-driven, so
-never put `max_attempts` on a human edge.
+never put `max_retries` on a human edge.
 
 ## Verification Checklist
 
@@ -280,8 +290,8 @@ Before writing or updating a routine:
   has uniquely named incoming source steps, and has at least one edge for each
   human outcome;
 - every council step has a `council` slug;
-- every edge leaving an agent or gate has `metadata.purpose`,
-  `metadata.handoff_instructions`, and an object `metadata.handoff_schema`;
+- every edge leaving an agent or gate has `purpose`, `handoff_instructions`,
+  and an object `handoff_schema` as explicit top-level edge fields;
 - every fan-out edge has a distinct handoff contract;
 - every join target has instructions for combining upstream handoffs;
 - every cycle is either a bounded gate `on_fail` loop or a human

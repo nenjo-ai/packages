@@ -73,8 +73,11 @@ Use these tools for context block work:
 
 Use `list_context_blocks` to discover existing slugs/selectors and
 `get_context_block` to inspect the full ContextBlockDocument, including
-template. Use `configure_context_block` for all context block writes: creation,
-metadata changes, and template changes.
+template. Always provide the stable top-level `slug`; if it does not exist, also
+provide `name` and `template`. Omitted fields remain unchanged and
+`description: null` clears the description. Do not use `metadata` or a separate
+`context_block` selector. A successful response contains the same canonical
+ContextBlockDocument as `get_context_block`.
 
 ## Best Practices
 
