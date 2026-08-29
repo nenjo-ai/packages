@@ -139,7 +139,7 @@ Example:
 <rules>
 - Read current agent state before mutation.
 - Read referenced context block and knowledge docs before composing prompt_config.
-- Use configure_agent for metadata, prompt_config, and assignment changes.
+- Use flat configure_agent fields for authored data, prompt_config, and assignment changes; always identify the agent by its stable top-level slug.
 - Use selectors for reusable context and knowledge instead of copying source bodies.
 - Do not assign platform scopes.
 - Verify by reading back the agent by slug/ref.

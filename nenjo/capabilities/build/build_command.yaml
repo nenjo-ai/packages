@@ -37,15 +37,14 @@ manifest:
       You MUST follow the following rules.
       <rules>
       - Use configure_command as the only command write tool.
-      - For new commands, call configure_command without command_ref and include metadata.command plus content.
-      - Omit metadata.name for new native commands unless the user explicitly provides an internal slug; the platform derives name from the slash command.
-      - For existing commands, call configure_command with command_ref set to the current slash command or internal name.
-      - Use metadata.path only for UI grouping. Use an empty path for root-level commands.
-      - Keep metadata.command as the slash trigger, such as /design-workflow. Do not encode grouping as colon subcommands.
-      - Treat command content as sensitive prompt content. Keep secrets out of command metadata.
+      - Always pass the stable command `slug` at the top level. If it does not exist, also pass `name`, `command`, and `content`; if it exists, omitted fields remain unchanged.
+      - Never use `command_ref` and never wrap configure fields in `metadata`. The top-level slug is the only configure lookup key.
+      - Use top-level `path` only for UI grouping. Use an empty path for root-level commands.
+      - Keep top-level `command` as the slash trigger, such as /design-workflow. Do not encode grouping as colon subcommands.
+      - Treat command content as sensitive prompt content. Keep secrets out of non-content fields.
       - Use only template variables documented in building.template_vars.
       - Prefer stable context and knowledge selectors over copied source bodies.
-      - Verify from the configure_command result, and when read/list surfaces are available, read back the command before reporting success.
+      - Treat the configure_command result as the canonical CommandManifest returned by the command read surface; verify the intended final values directly from that result.
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}

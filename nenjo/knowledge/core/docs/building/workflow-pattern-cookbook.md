@@ -15,11 +15,14 @@ workflow shape should remain flexible and intent-driven.
 ## Authoring Rule
 
 When a pattern becomes a routine, design both topology and flow state. Every
-edge leaving an agent or gate should explain:
+edge leaving an agent or gate should define these explicit top-level fields:
 
-- why the route exists with `metadata.purpose`;
-- what state the source must pass with `metadata.handoff_instructions`;
-- whether a gate `on_fail` retry edge needs `metadata.max_attempts`.
+- why the route exists with `purpose`;
+- what state the source must pass with `handoff_instructions`;
+- the enforced object payload with `handoff_schema`;
+- whether a gate `on_fail` retry edge needs `max_retries`.
+
+Do not wrap route-contract fields in edge `metadata`.
 
 Use `building.routine_flow_authoring` for the full checklist.
 
@@ -34,17 +37,15 @@ entry_steps: [draft]
 draft -> review -> finalize -> done
 ```
 
-Typical handoff metadata:
+Typical handoff fields, with required schemas abbreviated here for focus:
 
 ```yaml
 draft -> review:
-  metadata:
-    purpose: Send draft output for review.
-    handoff_instructions: Include the draft, source assumptions, open risks, and acceptance criteria to check.
+  purpose: Send draft output for review.
+  handoff_instructions: Include the draft, source assumptions, open risks, and acceptance criteria to check.
 review -> finalize:
-  metadata:
-    purpose: Send review findings for finalization.
-    handoff_instructions: Include approved content, required edits, rejected options, and unresolved issues.
+  purpose: Send review findings for finalization.
+  handoff_instructions: Include approved content, required edits, rejected options, and unresolved issues.
 ```
 
 Use a routine when each phase needs its own owner, model, prompt, audit trail,
@@ -101,13 +102,11 @@ For joins, each incoming edge should request source-specific handoff state:
 
 ```yaml
 research_api -> synthesize:
-  metadata:
-    purpose: Send API research findings to synthesis.
-    handoff_instructions: Include API constraints, endpoint behavior, risks, and evidence links.
+  purpose: Send API research findings to synthesis.
+  handoff_instructions: Include API constraints, endpoint behavior, risks, and evidence links.
 research_ui -> synthesize:
-  metadata:
-    purpose: Send UI research findings to synthesis.
-    handoff_instructions: Include user-flow findings, visual constraints, accessibility risks, and evidence links.
+  purpose: Send UI research findings to synthesis.
+  handoff_instructions: Include user-flow findings, visual constraints, accessibility risks, and evidence links.
 ```
 
 Use a routine when branch state and joins must be visible. Use sub-agents when
@@ -135,13 +134,11 @@ for each worker lane:
 
 ```yaml
 plan -> worker_a:
-  metadata:
-    purpose: Assign lane A from the plan.
-    handoff_instructions: Include lane-specific objective, dependencies, expected output, and constraints.
+  purpose: Assign lane A from the plan.
+  handoff_instructions: Include lane-specific objective, dependencies, expected output, and constraints.
 plan -> worker_b:
-  metadata:
-    purpose: Assign lane B from the plan.
-    handoff_instructions: Include lane-specific objective, dependencies, expected output, and constraints.
+  purpose: Assign lane B from the plan.
+  handoff_instructions: Include lane-specific objective, dependencies, expected output, and constraints.
 ```
 
 Use a routine when worker lanes are predictable enough to model as steps. Use a
@@ -159,14 +156,16 @@ Routine shape:
 entry_steps: [implement]
 implement -> review_gate
 review_gate on_pass -> done
-review_gate on_fail -> implement [metadata.max_attempts = 3]
+review_gate on_fail -> implement [max_retries = 3]
 ```
 
 Use a gate for the evaluator. Gates call `route_next_steps` with a pass/fail
 verdict. A pass activates `on_pass`; a fail activates `on_fail`. The `on_fail`
-edge may loop back to an earlier step and is bounded by `metadata.max_attempts`
-or the runner default. Do not author `on_exhausted`; retry exhaustion fails the
-routine directly with a structured `retry_exhausted` result.
+edge may loop back to an earlier step and is bounded by explicit edge
+`max_retries` or the worker default. The value counts rework traversals after
+the initial gate evaluation; `0` disables rework. Do not author `on_exhausted`;
+retry exhaustion fails the routine directly with a structured
+`retry_exhausted` result.
 
 The retry edge should carry repair state:
 
@@ -174,48 +173,45 @@ The retry edge should carry repair state:
 - source_step: implement
   target_step: review_gate
   condition: always
-  metadata:
-    purpose: Send implementation evidence for review.
-    handoff_instructions: >-
-      Include changed files, tests run, unresolved risks, and acceptance
-      criteria that still need reviewer attention.
-    handoff_schema:
-      type: object
-      required: [changed_files, tests_run, unresolved_risks]
-      properties:
-        changed_files: {type: array, items: {type: string}}
-        tests_run: {type: array, items: {type: string}}
-        unresolved_risks: {type: array, items: {type: string}}
-      additionalProperties: false
+  purpose: Send implementation evidence for review.
+  handoff_instructions: >-
+    Include changed files, tests run, unresolved risks, and acceptance
+    criteria that still need reviewer attention.
+  handoff_schema:
+    type: object
+    required: [changed_files, tests_run, unresolved_risks]
+    properties:
+      changed_files: {type: array, items: {type: string}}
+      tests_run: {type: array, items: {type: string}}
+      unresolved_risks: {type: array, items: {type: string}}
+    additionalProperties: false
 - source_step: review_gate
   target_step: done
   condition: on_pass
-  metadata:
-    purpose: Record the approved implementation result.
-    handoff_instructions: Include the pass verdict and approval summary.
-    handoff_schema:
-      type: object
-      required: [verdict, summary]
-      properties:
-        verdict: {type: string, const: pass}
-        summary: {type: string}
-      additionalProperties: false
+  purpose: Record the approved implementation result.
+  handoff_instructions: Include the pass verdict and approval summary.
+  handoff_schema:
+    type: object
+    required: [verdict, summary]
+    properties:
+      verdict: {type: string, const: pass}
+      summary: {type: string}
+    additionalProperties: false
 - source_step: review_gate
   target_step: implement
   condition: on_fail
-  metadata:
-    purpose: Send failed review findings back for bounded rework.
-    handoff_instructions: Include failed criteria, required fixes, evidence gaps, and reviewer notes.
-    handoff_schema:
-      type: object
-      required: [failed_criteria, required_fixes, evidence_gaps, reviewer_notes]
-      properties:
-        failed_criteria: {type: array, items: {type: string}}
-        required_fixes: {type: array, items: {type: string}}
-        evidence_gaps: {type: array, items: {type: string}}
-        reviewer_notes: {type: string}
-      additionalProperties: false
-    max_attempts: 3
+  purpose: Send failed review findings back for bounded rework.
+  handoff_instructions: Include failed criteria, required fixes, evidence gaps, and reviewer notes.
+  handoff_schema:
+    type: object
+    required: [failed_criteria, required_fixes, evidence_gaps, reviewer_notes]
+    properties:
+      failed_criteria: {type: array, items: {type: string}}
+      required_fixes: {type: array, items: {type: string}}
+      evidence_gaps: {type: array, items: {type: string}}
+      reviewer_notes: {type: string}
+    additionalProperties: false
+  max_retries: 3
 ```
 
 Use an agent self-reflection loop only when audit and deterministic retry
@@ -279,7 +275,7 @@ review rejected -> failed
 
 The human step requires `config.request.title`. The incoming edge must carry a
 concrete handoff schema. Artifact properties must use
-`format: nenjo-artifact-id`. Do not set `max_attempts` on the
+`format: nenjo-artifact-id`. Do not set `max_retries` on the
 `changes_requested` loop; that limit is only for gate `on_fail` retries. Add at
 least one route for every fixed human outcome. If one outcome fans out, converge
 its branches before one terminal result.
@@ -297,7 +293,7 @@ its branches before one terminal result.
   with at least one `approved`, `changes_requested`, and `rejected` edge.
 - Add explicit `terminal` and `terminal_fail` steps before targeting them from
   edges.
-- Add edge purpose metadata for fan-out edges so `route_next_steps` can show
+- Add explicit edge `purpose` for fan-out edges so `route_next_steps` can show
   each downstream route clearly.
 - Add edge handoff instructions and schemas on agent/gate source edges so each
   downstream step receives concrete upstream state, not just generic routing.
@@ -305,7 +301,7 @@ its branches before one terminal result.
 - For joins, ensure each incoming edge has a distinct handoff contract and the
   target step instructions explain how to synthesize incoming handoffs.
 - Use gate `on_fail` retry loops only when bounded rework is intentional.
-- Add `max_attempts` only on a gate `on_fail` edge when the default retry
+- Add `max_retries` only on a gate `on_fail` edge when the default retry
   budget should change. Do not put retry fields in step config or on human
   outcome edges.
 - Do not use `on_exhausted`.

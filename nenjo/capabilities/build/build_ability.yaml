@@ -24,7 +24,7 @@ manifest:
 
       <reads>
       Read the current ability when updating. Read referenced context blocks,
-      MCP servers, script tools, or related resources when the tool surface
+      MCP servers or related resources when the tool surface
       exposes them before wiring those refs into the ability.
       </reads>
 
@@ -37,15 +37,16 @@ manifest:
 
       You MUST follow the following rules.
       <rules>
-      - Use configure_ability as the only ability write tool for creation, metadata changes, prompt_config changes, and MCP/script tool assignments.
-      - For new abilities, call configure_ability without `ability` and include metadata.name plus prompt_config.developer_prompt.
-      - For existing abilities, call configure_ability with the current ability slug.
+      - Use configure_ability as the only ability write tool for creation, authored field changes, prompt changes, and MCP assignments. Script-tool mutation is outside this tool.
+      - Always pass the stable ability `slug` at the top level. If it does not exist, also pass `name` and `prompt_config`; if it exists, omitted fields remain unchanged.
+      - Never wrap configure fields in `metadata` or `assignments`, and never use a separate `ability` selector.
+      - Treat a supplied `mcp_servers` array as the complete replacement list; pass `[]` to clear it.
       - Never include platform_scopes in configure_ability payloads; report required scope refs as a user/admin assignment step.
       - Treat platform scopes as the ability's own platform tool boundary; do not assume it inherits the caller's platform tools. Artifact list/read require artifacts:read and upload requires artifacts:write.
       - If an ability needs an artifact supplied to the caller turn, require the caller to pass the stable artifact ID or catalog path in the ability task description; nested abilities do not implicitly inherit caller media attachments.
       - Keep the ability narrow enough for a parent agent to invoke as a specialist tool.
       - Prefer a verb-object tool_name that names the work, not the implementation.
-      - Verify by reading the ability back with get_ability after mutation.
+      - Treat the configure_ability result as the canonical AbilityDocument returned by get_ability; verify the intended final values directly from that result.
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}

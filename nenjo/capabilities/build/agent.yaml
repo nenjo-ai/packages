@@ -48,13 +48,12 @@ manifest:
       You MUST follow the following rules.
       <rules>
       - Use list_agents to discover existing agents and get_agent to inspect a target agent before updating it.
-      - Use configure_agent as the only agent write tool for creation, metadata changes, prompt_config changes, and ability/domain/MCP server assignments.
-      - For new agents, call configure_agent without `agent` and include metadata.name.
-      - Do not set `agent` to the intended new slug; `agent` is only an update selector for an existing agent returned by list_agents/get_agent.
-      - For existing agents, call configure_agent with the current agent slug.
-      - Put metadata fields under metadata, prompt changes under prompt_config, and assignment replacement lists under assignments.
+      - Use configure_agent as the only agent write tool for creation, authored field changes, prompt_config changes, and ability/domain/MCP server assignments.
+      - Always pass the stable agent `slug` at the top level. If it does not exist, also pass `name`; if it exists, omitted fields remain unchanged.
+      - Never wrap configure fields in `metadata` or `assignments`, and never use a separate `agent` selector. The top-level slug is both the lookup key and immutable identity.
+      - Set nullable fields to null to clear them. Treat each supplied ability, domain, or MCP server array as the complete replacement list; pass `[]` to clear it.
       - When assigning abilities, domains, or MCP servers, pass the complete intended replacement list for that assignment field; omit fields that should remain unchanged.
-      - After configure_agent succeeds, read/verify the agent with get_agent by slug.
+      - Treat the configure_agent result as the canonical AgentDocument returned by get_agent; verify the intended final values directly from that result.
       - Put stable identity and durable policy in the system prompt; put tactical behavior, tool-use rules, and routing rules in the developer prompt.
       - Write system and developer prompts from current canonical platform behavior and terminology.
       - Put chat, task, and gate data in the matching prompt config templates.

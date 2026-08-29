@@ -39,12 +39,12 @@ manifest:
       <rules>
       - Domains are explicit user-activated modes; use hash commands such as #review.
       - Verify every assigned ability exists before writing the domain assignment list.
-      - Use configure_domain as the only domain write tool for creation, metadata changes, prompt_config changes, and ability/MCP/script tool assignments.
-      - For new domains, call configure_domain without `domain` and include metadata.name plus metadata.command.
-      - For existing domains, call configure_domain with the current domain slug.
+      - Use configure_domain as the only domain write tool for creation, authored field changes, prompt changes, and ability/MCP assignments. Script-tool mutation is outside this tool.
+      - Always pass the stable domain `slug` at the top level. If it does not exist, also pass `name` and `command`; if it exists, omitted fields remain unchanged.
+      - Never wrap configure fields in `metadata` or `assignments`, and never use a separate `domain` selector.
       - Never include platform_scopes in configure_domain payloads; report required scope refs as a user/admin assignment step.
-      - Pass the complete intended replacement ability list in assignments.abilities; omit assignment fields that should remain unchanged.
-      - Verify by reading the domain back with get_domain after mutation.
+      - Treat each supplied `abilities` or `mcp_servers` array as the complete replacement list; pass `[]` to clear it and omit it to preserve it.
+      - Treat the configure_domain result as the canonical DomainDocument returned by get_domain; verify the intended final values directly from that result.
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}

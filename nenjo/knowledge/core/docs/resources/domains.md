@@ -53,11 +53,13 @@ surface:
 - `configure_domain`
 
 Use `list_domains` to discover existing slugs and `get_domain` to inspect the
-full DomainDocument, including prompt_config and assignments. Use
-`configure_domain` for all domain writes: creation, metadata/command changes,
-prompt_config changes, and full replacement ability/MCP/script tool assignments.
-Do not use `configure_domain` to assign platform scopes. Platform scopes are
-user-controlled permission refs.
+full DomainDocument, including prompt_config and assignments. Always provide the
+stable top-level `slug`; if it does not exist, also provide `name` and `command`.
+Omitted fields remain unchanged, nullable fields accept null to clear, and
+supplied ability/MCP arrays are complete replacements. Do not use `metadata`,
+`assignments`, or a separate `domain` selector. Script-tool and platform-scope
+mutation are outside this tool. A successful response contains the same
+canonical DomainDocument as `get_domain`.
 
 ## Common Patterns
 

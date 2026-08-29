@@ -88,10 +88,12 @@ Use these platform tools for agent work:
 - `configure_agent`
 
 Use `list_agents` to discover existing slugs and `get_agent` to inspect the full
-AgentDocument. Use `configure_agent` for all agent writes: creation, metadata
-patches, prompt_config patches, and full replacement ability/domain/MCP server
-assignment lists. Omit `agent` to create a new agent; include the existing agent
-slug to update one.
+AgentDocument. Use `configure_agent` for all agent writes. Always provide the
+stable top-level `slug`; if it does not exist, also provide `name`. Omitted
+fields remain unchanged, nullable fields accept `null` to clear, and supplied
+ability/domain/MCP server arrays are complete replacements. Do not use
+`metadata`, `assignments`, or a separate `agent` selector. A successful response
+contains the same canonical AgentDocument as `get_agent`.
 
 ## Pitfalls To Avoid
 

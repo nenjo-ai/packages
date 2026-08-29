@@ -33,12 +33,12 @@ manifest:
 
       You MUST follow the following rules:
       <rules>
-      - Use configure_context_block as the only context block write tool for creation, metadata changes, and template changes.
-      - For new context blocks, call configure_context_block without `context_block` and include metadata.name plus template.
-      - For existing context blocks, call configure_context_block with the current context block slug.
+      - Use configure_context_block as the only context block write tool for creation, authored field changes, and template changes.
+      - Always pass the stable context block `slug` at the top level. If it does not exist, also pass `name` and `template`; if it exists, omitted fields remain unchanged.
+      - Never wrap configure fields in `metadata` and never use a separate `context_block` selector.
       - Keep context blocks reusable and behavioral; do not turn them into one-off task notes.
       - Use stable hierarchical paths and avoid overlapping blocks with the same purpose.
-      - Verify by reading the context block back with get_context_block after mutation.
+      - Treat the configure_context_block result as the canonical ContextBlockDocument returned by get_context_block; verify the intended final values directly from that result.
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}

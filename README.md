@@ -36,11 +36,11 @@ a list of root module entrypoints:
 ```yaml
 schema: nenjo.package.v1
 name: nenji
-version: "1.4.0"
+version: "1.5.0"
 
 dependencies:
-  capabilities: "^1.2.0"
-  knowledge: "^1.5.0"
+  capabilities: "^1.3.0"
+  knowledge: "^1.6.0"
 
 modules:
   - context/

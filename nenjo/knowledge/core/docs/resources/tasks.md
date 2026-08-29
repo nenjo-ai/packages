@@ -111,9 +111,10 @@ Agents with task scopes use task-centered tools:
   when possible;
 - `configure_task` creates a definition when `task_slug` is omitted and updates
   one when `task_slug` is supplied. It accepts project, agent, and routine slugs,
-  label names, and an existing workflow status name. Missing labels are created
-  with a new task, while updates require existing label names. Its input is a
-  partial patch and its output is the full saved task document;
+  label names, an existing workflow status name, and declarative schedule state.
+  Missing labels are created with a new task, while updates require existing
+  label names. Its input is a partial patch and its output is the full saved task
+  document, including the current schedule;
 - `dispatch_task` starts a manual run by `task_slug` and returns
   `execution_run_id`;
 - `list_task_execution_runs` lists history or active runs;
@@ -123,8 +124,14 @@ Agents with task scopes use task-centered tools:
 - `retry_execution_run` creates a new run from a terminal run;
 - `delete_task` permanently removes a task, its runs, and attachments by slug.
 
-Task scheduling is configured through the task schedule surface; it is not an
-alternate routine or agent configuration.
+For `schedule`, omission preserves the current schedule, `null` removes it, and
+an object creates or updates it. A new schedule requires `enabled`, a local
+wall-clock `starts_at`, an IANA `timezone`, and a typed `recurrence`; `end`
+defaults to `never`. An existing schedule accepts only the fields that should
+change. When the user asks for work to run on the schedule, explicitly set
+`enabled: true`; omitting `enabled` preserves an existing paused state. Use
+`enabled: false` only to intentionally pause or disable it. Scheduling is task
+state, not alternate routine or agent configuration.
 
 ## Artifact Inputs
 
@@ -149,6 +156,9 @@ a task.
 - Confusing project patch cases: a project slug assigns, an omitted `project`
   preserves the current association, and `project: null` removes it. Null never
   assigns a project.
+- Inventing schedule operations. The schedule is declarative: omit it to
+  preserve, pass null to remove, or supply the desired fields to create or
+  update it.
 - Retrying an identical successful `configure_task` call when the returned
   document does not match the intent. Compare the actual submitted arguments
   with the returned task first.

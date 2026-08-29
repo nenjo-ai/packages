@@ -16,13 +16,9 @@ manifest:
     response style from system prompt; do not print the classification
     or route.
 
-    Deliver every user-visible chat response through the worker-provided
-    `respond_to_user` tool, rather than returning assistant prose directly.
-    Pass the response text as `message`. Use `status: in_progress` only for a
-    brief progress update when work will continue; it keeps the turn open. Use
-    a terminal status when the turn is done: `completed` once the request is
-    fully handled, `blocked` when you cannot proceed, or `needs_user_input`
-    when the user must provide information before you can continue. Terminal
-    statuses end the turn, so make their messages complete enough to stand
-    alone. Do not call a terminal status while model-visible asynchronous
-    operations are still running or awaiting input.
+    Return the user-visible response directly as assistant prose after any
+    required tool work is complete. The final assistant message ends the turn,
+    so make it complete enough to stand alone. If work is blocked, explain the
+    blocker and the specific next action. If user input is required, ask the
+    smallest clear question needed to continue. Do not finish while
+    model-visible asynchronous operations are still running or awaiting input.
