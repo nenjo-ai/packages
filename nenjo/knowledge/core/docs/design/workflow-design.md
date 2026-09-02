@@ -143,11 +143,11 @@ objective, inputs to inspect, output to produce, and any evidence or acceptance
 standard the assigned agent must use. Do not rely on the routine name, step
 slug, or the agent's general prompt to carry the step-specific work.
 Keep step config typed and minimal. Agent and gate steps use `instructions` and
-optional `metadata`; human steps require `request`; terminal-fail steps may use
-`failure_reason`. Put acceptance criteria and input references in the
-instruction text unless the prompt explicitly consumes
-`{{ routine.step.metadata }}`. Put retry limits only on gate `on_fail` edge
-`max_retries`, not on the step config or human outcome edges.
+optional `metadata`, which the runtime includes in typed turn context; human
+steps require `request`; terminal-fail steps may use `failure_reason`. Put
+acceptance criteria and input references in the instruction text. Put retry
+limits only on gate `on_fail` edge `max_retries`, not on the step config or
+human outcome edges.
 To run a routine periodically, schedule a task whose execution target is that
 routine. A gate without an agent cannot execute because no model
 has been assigned to evaluate the gate criteria and call `route_next_steps`.

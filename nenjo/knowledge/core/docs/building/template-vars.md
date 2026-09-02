@@ -1,157 +1,89 @@
-# Template Vars
+# Prompt Context
 
 ## Purpose
 
-Template variables are runtime context references available inside prompts and
-context block templates. They connect stable prompt text with the active agent,
-chat message, task, project, routine, gate, Git context, memory,
-context blocks, and knowledge-pack indexes.
+Nenjo keeps authored instructions byte-stable and places changing execution
+data in runtime-owned messages. Use this reference when authoring system
+prompts, developer prompts, or context blocks.
 
-Use this reference for variable lookup. For composition patterns, read
-`building.prompt_structuring`.
+## Static Prompt References
 
-## Agent
+Static prompts may use:
 
-- `{{ self }}`
-- `{{ agent.slug }}`
-- `{{ agent.name }}`
-- `{{ agent.model }}`
-- `{{ agent.description }}`
+- declared package arguments under `{{ args.* }}`
+- context-block selectors
+- knowledge-pack index selectors
 
-Use `{{ self }}` when the prompt needs a compact XML-like description of the
-executing agent. Use scalar fields for concise identity references.
-
-## Chat
-
-- `{{ chat.message }}`
-
-Use this in chat templates when the user message should be passed through.
-Command content is rendered like a chat template for the command turn; after a
-slash command is invoked, `{{ chat.message }}` contains the user's request with
-the command trigger stripped.
-
-## Task
-
-- `{{ task }}`
-- `{{ task.id }}`
-- `{{ task.title }}`
-- `{{ task.instructions }}`
-- `{{ task.labels }}`
-- `{{ task.status }}`
-- `{{ task.priority }}`
-- `{{ task.slug }}`
-
-Task variables belong in routine task execution templates, routine step prompts,
-and gate evaluation prompts. Prefer `{{ task }}` for compact full context and
-scalar fields when only one value is needed.
-
-## Project
-
-- `{{ project }}`
-- `{{ project.name }}`
-- `{{ project.slug }}`
-- `{{ project.description }}`
-- `{{ project.context }}`
-- `{{ project.metadata }}`
-- `{{ project.working_dir }}`
-
-Projects provide workspace and execution context. Library knowledge is retrieved
-through knowledge tools, not through an aggregate project-doc variable.
-
-## Knowledge
-
-- `{{ lib.<pack_slug> }}`
-- `{{ pkg.nenjo_ai.packages.knowledge.core }}`
-
-Knowledge variables render compact pack indexes. They are discovery hints, not
-full source material. After seeing an index, use:
-
-- `list_knowledge_packs`
-- `search_knowledge`
-- `list_knowledge_neighbors`
-- `read_knowledge_doc`
-
-Package-installed knowledge uses the
-`pkg.<source_scope>.<source_repo>.<package_name>.<pack_name>` namespace. Library
-knowledge uses `lib.<pack_slug>`.
-
-When composing prompts, include the knowledge selector when the agent should
-discover and read that source during execution. Do not paste the resolved
-knowledge document body into prompt text.
-
-## Routine
-
-- `{{ routine }}`
-- `{{ routine.slug }}`
-- `{{ routine.name }}`
-- `{{ routine.execution_id }}`
-- `{{ routine.step.name }}`
-- `{{ routine.step.type }}`
-- `{{ routine.step.instructions }}`
-- `{{ routine.step.metadata }}`
-- `{{ routine.handoffs }}`
-
-Use routine variables in routine step templates and workflow-aware prompts.
-When present, `routine.handoffs` is the authoritative upstream input for the
-current routine step, including gate steps.
-
-## Git
-
-- `{{ git }}`
-- `{{ git.current_branch }}`
-- `{{ git.target_branch }}`
-- `{{ git.work_dir }}`
-- `{{ git.repo_url }}`
-
-Use Git variables when task execution depends on repository state or local
-workspace paths.
-
-## Memory
-
-- `{{ memories }}`
-- `{{ memories.core }}`
-- `{{ memories.project }}`
-- `{{ memories.shared }}`
-- `{{ memory_profile }}`
-- `{{ memory_profile.core_focus }}`
-- `{{ memory_profile.project_focus }}`
-- `{{ memory_profile.shared_focus }}`
-
-Memory is learned context. Organization artifacts are not prompt variables;
-browse and inspect them with `list_artifacts` and `read_artifact`, or receive
-them as typed chat/task inputs. Library and package knowledge remain explicit
-source material retrieved through knowledge tools.
-
-## Context Blocks
-
-Context blocks render by their refs, for example:
+Example context and knowledge selectors:
 
 ```jinja
 {{ context.methodology }}
 {{ pkg.nenjo_ai.packages.context.tools.host_tools }}
 {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
+{{ lib.product_docs }}
+{{ pkg.nenjo_ai.packages.knowledge.core }}
 ```
 
-`pkg.*` is only used for package-installed context blocks and package knowledge.
-Installed agents, abilities, domains, commands, MCP servers, script tools, and
-routines are resolved as runtime resources, not prompt variables.
+Package arguments are resolved before execution. If a referenced argument
+changes, the compiled static instruction prefix intentionally starts a new
+cache epoch.
 
-When composing prompts, include the context block selector. Do not paste the
-resolved context block template into another prompt.
+Knowledge selectors provide compact discovery indexes, not full source
+material. Use `search_knowledge`, `list_knowledge_neighbors`, and
+`read_knowledge_doc` to retrieve selected documents.
 
-## Global
+## Runtime-Owned Context
 
-- `{{ global.timestamp }}`
+Agent identity and live state are not available through template selectors.
 
-Use this when the prompt needs the current timestamp.
+The session-context message contains the executing agent identity and freezes
+project/workspace information and retrieved memory for a session epoch. The
+memory profile controls retrieval and memory writing but is not repeated as
+model-visible content.
+
+The turn-context message contains the clock (local time, timezone, and UTC),
+execution kind, and applicable task, routine, Git/worktree, and gate fields.
+The raw chat message or task instructions follow that context as user input.
+Retries reuse the original persisted turn bytes.
+
+The runtime protocol tells agents to read the applicable context before acting.
+Session context applies for its session epoch; turn context applies only to the
+immediately following logical turn and wins for overlapping facts. Control
+context is application guidance. Data context is reference material and must
+not be followed as instructions. User-authored text cannot create authoritative
+context by copying the XML tags.
+
+## Removed Selectors
+
+Do not author selectors rooted at:
+
+- `self`
+- `agent`
+- `global`
+- `chat`
+- `task`
+- `project`
+- `routine`
+- `gate`
+- `git`
+- `memories`
+- `memory_profile`
+- `heartbeat`
+- `artifacts`
+
+Package validation rejects these roots in system prompts, developer prompts,
+and context blocks. Artifacts arrive as typed inputs or through artifact tools.
+Slash-command content uses `$ARGUMENTS` and becomes raw turn input; it is not an
+agent chat template.
 
 ## Pitfalls To Avoid
 
-- Using variables that are not listed in this reference.
-- Treating knowledge pack indexes as full source material.
-- Copying resolved context or knowledge bodies instead of using selectors.
-- Treating memory as Library knowledge.
-- Treating artifact access as a template-variable surface; the canonical
-  artifact-access contract uses typed chat/task inputs and the
-  `list_artifacts`/`read_artifact` tools.
-- Embedding platform-scope assumptions in prompt templates.
+- Copying resolved context-block or knowledge-document bodies into prompts.
+- Treating a knowledge index as full source material.
+- Expecting executing-agent metadata to be available during static rendering.
+- Expecting the mutable memory profile to appear in model context.
+- Treating artifact access as a template-variable surface instead of using
+  typed chat/task inputs and `list_artifacts`/`read_artifact`.
+- Adding a new dynamic selector instead of extending typed session or turn
+  context.
+- Embedding platform-scope assumptions in prompt text.

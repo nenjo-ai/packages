@@ -3,16 +3,16 @@
 You have received a design workflow command with the following user request:
 
 <user_request>
-> {{chat.message}}
+> $ARGUMENTS
 </user_request>
 
 These are the relevant seeded knowledge docs that you MUST read first using the knowledge tools.
 <seeded_knowledge>
-{{ pkg.nenjo_ai.packages.knowledge.core.classification.search_patterns }}
-{{ pkg.nenjo_ai.packages.knowledge.core.design.workflows }}
-{{ pkg.nenjo_ai.packages.knowledge.core.classification.workflow_patterns }}
-{{ pkg.nenjo_ai.packages.knowledge.core.building.workflow_pattern_cookbook }}
-{{ pkg.nenjo_ai.packages.knowledge.core.building.routine_flow_authoring }}
+pkg.nenjo_ai.packages.knowledge.core.classification.search_patterns
+pkg.nenjo_ai.packages.knowledge.core.design.workflows
+pkg.nenjo_ai.packages.knowledge.core.classification.workflow_patterns
+pkg.nenjo_ai.packages.knowledge.core.building.workflow_pattern_cookbook
+pkg.nenjo_ai.packages.knowledge.core.building.routine_flow_authoring
 </seeded_knowledge>
 
 ---

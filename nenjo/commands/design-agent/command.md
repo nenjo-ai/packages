@@ -3,16 +3,16 @@
 You have received a design agent command with the following user request:
 
 <user_request>
-> {{chat.message}}
+> $ARGUMENTS
 </user_request>
 
 These are the relevant seeded knowledge docs that you MUST read first using the knowledge tools.
 <seeded_knowledge>
-{{ pkg.nenjo_ai.packages.knowledge.core.classification.search_patterns }}
-{{ pkg.nenjo_ai.packages.knowledge.core.design.agents }}
-{{ pkg.nenjo_ai.packages.knowledge.core.resources.agents }}
-{{ pkg.nenjo_ai.packages.knowledge.core.design.prompts }}
-{{ pkg.nenjo_ai.packages.knowledge.core.building.prompt_structuring }}
+pkg.nenjo_ai.packages.knowledge.core.classification.search_patterns
+pkg.nenjo_ai.packages.knowledge.core.design.agents
+pkg.nenjo_ai.packages.knowledge.core.resources.agents
+pkg.nenjo_ai.packages.knowledge.core.design.prompts
+pkg.nenjo_ai.packages.knowledge.core.building.prompt_structuring
 </seeded_knowledge>
 
 ---

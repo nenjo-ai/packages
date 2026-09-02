@@ -15,10 +15,8 @@ state and full source reads.
    boundaries.
 2. Developer prompt — routing rules, tool-use expectations, and tactical
    behavior.
-3. Runtime template — chat, task, gate, routine, memory, project, and Git
-   variables.
-   Command content uses the same template rules as chat templates for the
-   invoked turn.
+3. Runtime-owned context — a frozen session snapshot and a per-logical-turn
+   snapshot, followed by raw chat or task input.
 4. Evidence gathered during the turn — tool results, selected Library/package
    knowledge, memory recall, and file reads.
 
@@ -57,41 +55,25 @@ routing instructions.
 | Tool-use discipline and routing | developer prompt or context block |
 | External response style and hidden intent classification | developer prompt or context block |
 | Explicit one-turn slash workflow | command content |
-| Task or chat data | runtime template |
+| Task or chat data | runtime-owned turn context and raw input |
 | Reusable prompt behavior | context block |
 | Learned preferences and corrections | memory |
 | Source material and policies | Library or package knowledge |
 | Generated files and outputs | artifacts |
 | Platform permissions | platform scopes assigned by users/platform |
 
-## Runtime Variables
+## Runtime Context
 
-Runtime templates should be thin. Prefer a one-line include of a reusable
-runtime context block, such as
-`{{ pkg.nenjo_ai.packages.context.runtime.task_execution }}`, when the same
-framing should work across agents. That context block should own the current
-mode's input variables and runtime instructions. It may remind the agent to
-classify intent internally for routing, retrieval, or tool selection, but it
-should not require visible headings such as `Intent:`, `Route:`, or
-`Classification:` in normal user-facing output.
+Do not author live execution selectors. The worker owns canonical session and
+turn serialization so tasks, projects, routines, gates, Git state, clocks, and
+memory do not alter the static instruction prefix. Extend the typed runtime
+context when a new live field is truly required.
 
-Use only variables defined in `building.template_vars`. Common high-value
-variables include:
-
-- `{{ chat.message }}`
-- `{{ task }}`
-- `{{ task.instructions }}`
-- `{{ project }}`
-- `{{ project.working_dir }}`
-- `{{ routine }}`
-- `{{ routine.step.instructions }}`
-- `{{ routine.handoffs }}`
-- `{{ memories }}`
-- `{{ git }}`
-
-Use only variables documented in `building.template_vars`. Available tools and
-resources should come from the platform tool surface and live reads, not invented
-template variables.
+The runtime places executing-agent identity in session control context. Static
+prompts may use declared `args.*` package arguments, context-block selectors,
+and knowledge-pack selectors documented in `building.template_vars`. Available
+tools and resources should come from the platform tool surface and live reads,
+not invented template variables.
 
 Artifacts arrive as typed chat/task inputs or through `list_artifacts` and
 `read_artifact`; they are not injected through an aggregate prompt variable.
@@ -123,8 +105,7 @@ Builder prompts should:
 - verify generated prompt_config contains intended selectors rather than copied source bodies;
 - report slugs, refs, and selectors.
 
-Command content should follow the same selector discipline: use stable context
-and knowledge selectors, keep `{{ chat.message }}` as the user request input,
+Command content uses `$ARGUMENTS` and becomes raw user input. Keep it focused
 and avoid copying full source documents into the command body.
 
 Example:
@@ -146,14 +127,11 @@ Example:
 </rules>
 ```
 
-## Gate Prompt Pattern
+## Gate Behavior Pattern
 
-Gate prompts should combine:
-
-- `{{ routine.handoffs }}`;
-- `{{ task.instructions }}`;
-- routine step instructions or explicit gate criteria;
-- downstream route handoff schemas for pass/fail routing.
+The runtime supplies routine handoffs, task acceptance criteria, prior output,
+and gate metadata in typed turn context. Stable gate operating rules belong in
+the developer prompt; one-off evaluation instructions remain raw input.
 
 Put completion guidance in task instructions, routine step instructions, or
 explicit gate prompt text. Gates should call `route_next_steps` as their final action
@@ -167,6 +145,6 @@ downstream routes.
 - Copying context block templates or knowledge doc bodies into stable prompts.
 - Treating memory as Library documentation.
 - Embedding platform-scope changes in prompts.
-- Using variables that are not rendered by the current runtime.
+- Adding dynamic selectors instead of extending typed runtime context.
 - Leaking internal routing, intent classification, or phase labels into normal
   replies.

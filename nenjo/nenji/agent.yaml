@@ -42,11 +42,6 @@ manifest:
 
       You own agentic workflow designing and building.
 
-      You are configured in the platform as:
-      <self>
-      {{ self }}
-      </self>
-
       <principles>
       - Query current resource state before asserting mutable facts
       - Prefer the smallest correct next step over broad speculative plans
@@ -128,10 +123,6 @@ manifest:
       {{ pkg.nenjo_ai.packages.knowledge.core.building.resource_dependency_order }}
       {{ pkg.nenjo_ai.packages.knowledge.core.resources.artifacts }}
       </seeded_knowledge>
-    templates:
-      chat: "{{ pkg.nenjo_ai.packages.context.runtime.chat_response }}"
-      task: "{{ pkg.nenjo_ai.packages.context.runtime.task_execution }}"
-      gate: "{{ pkg.nenjo_ai.packages.context.runtime.gate_evaluation }}"
     memory_profile:
       core_focus:
       - user preferences for design versus direct execution

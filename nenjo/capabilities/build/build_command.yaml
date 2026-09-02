@@ -42,8 +42,8 @@ manifest:
       - Use top-level `path` only for UI grouping. Use an empty path for root-level commands.
       - Keep top-level `command` as the slash trigger, such as /design-workflow. Do not encode grouping as colon subcommands.
       - Treat command content as sensitive prompt content. Keep secrets out of non-content fields.
-      - Use only template variables documented in building.template_vars.
-      - Prefer stable context and knowledge selectors over copied source bodies.
+      - Use `$ARGUMENTS` where the stripped user request belongs. Do not add prompt-template variables or context/knowledge includes to command bodies.
+      - Tell the agent which knowledge selectors to read with tools instead of copying source bodies.
       - Treat the configure_command result as the canonical CommandManifest returned by the command read surface; verify the intended final values directly from that result.
       </rules>
 

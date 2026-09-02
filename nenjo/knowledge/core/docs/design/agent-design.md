@@ -51,7 +51,6 @@ context blocks themselves.
 | Delegates to installed agents | `pkg.nenjo_ai.packages.context.agents.agent_delegation` |
 | Orchestrates abilities | `pkg.nenjo_ai.packages.context.agents.ability_orchestration` |
 | Depends on durable memory behavior | `pkg.nenjo_ai.packages.context.memory.remembrance` |
-| Runs tasks, gates, or chat wrappers | the matching `pkg.nenjo_ai.packages.context.runtime.*` selector |
 
 Do not add context selectors that do not support the role. Read context block
 metadata and content to choose useful selectors, then include the selectors
@@ -80,7 +79,7 @@ Include:
 - required artifact input modalities and any separate organization analysis
   capability defaults;
 - memory profile focus areas;
-- runtime templates only when chat, task, or gate behavior differs;
+- no dynamic chat, task, gate, or heartbeat templates;
 
 ## Boundary Rules
 
@@ -108,9 +107,9 @@ Complete the following checklist to ensure a good agent shape
 - well defined system prompt
 - well defined developer prompt?
 - well defined memory profile
-- well defined chat, task, and gate templates
+- runtime inputs are handled by the typed session/turn context contract
 - seeded knowledge is limited to sources that pertain to the agent's role
-- prompts and task templates reuse selected context blocks by selector
+- prompts reuse selected static context blocks by selector
 
 ## Agent Guidance
 

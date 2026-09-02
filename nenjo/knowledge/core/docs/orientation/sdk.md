@@ -11,8 +11,7 @@ composition, and transport contracts.
   councils, projects, and supporting resources.
 - Provider builder APIs for composing loaders, model factories, tool factories,
   memory, and agent runners.
-- Prompt context and template variables for rendering runtime state into agent
-  prompts.
+- Static prompt compilation and typed session/turn context for runtime state.
 - Package and Library knowledge pack APIs for reading, searching, and
   traversing knowledge graphs through generic knowledge tools.
 - Shared tool API contracts for tool specs, categories, security policy inputs,

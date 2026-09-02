@@ -29,26 +29,18 @@ platform policy.
 
 ## Runtime Modes
 
-| Mode | Description | Primary Template |
-|---|---|---|
-| chat | User conversation | `templates.chat` |
-| task | Direct task or routine agent-step execution | `templates.task` |
-| gate | Evaluation of prior output | `templates.gate` |
-| council | Council member or leader work | `templates.task` adapted by the runtime |
+| Mode | Runtime Input |
+|---|---|
+| chat | Turn context followed by the raw user message |
+| task | Task/routine/Git context followed by task instructions |
+| gate | Task/routine/gate context followed by evaluation instructions |
+| heartbeat | Scheduled context followed by configured instructions |
+| council | Council task context followed by member or leader instructions |
 
 The agent's identity and memory profile remain stable across modes. The runtime
-mode changes the template and injected variables.
-
-Runtime templates should provide mode-specific input, not define a different
-public voice for each mode. Stable response style, hidden intent
-classification, and routing discipline belong in the developer prompt or a
-reusable context block.
-
-For generic behavior, prefer one-line runtime templates that include reusable
-runtime context blocks, for example
-`{{ pkg.nenjo_ai.packages.context.runtime.task_execution }}`. Put task, project,
-metadata, routine, or gate variable framing inside that context block
-instead of duplicating it across agent templates.
+owns mode-specific session and turn context. Stable response style, hidden
+intent classification, and routing discipline belong in the developer prompt
+or a reusable static context block.
 
 ## Prompt Configuration
 
@@ -57,9 +49,10 @@ should be handled separately when the platform exposes separate tools.
 
 - `system_prompt` — stable identity and principles.
 - `developer_prompt` — tactical behavior, routing, and tool-use guidance.
-- `templates.chat` — chat wrapper.
-- `templates.task` — direct task and routine agent-step execution wrapper.
-- `templates.gate` — gate evaluation wrapper.
+- `memory_profile` — retrieval and memory-writing focus; runtime configuration,
+  not model-visible prompt text.
+
+Chat, task, gate, and heartbeat templates are not part of prompt configuration.
 
 ## Assigned Capability Surface
 

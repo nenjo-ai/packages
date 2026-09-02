@@ -19,9 +19,6 @@ composed by selector instead of copied into every agent or ability.
 | Memory | `pkg.nenjo_ai.packages.context.memory.remembrance` | Recall and update durable memory while keeping immutable artifacts on their tool-backed surface. |
 | Operations | `pkg.nenjo_ai.packages.context.operations.failure_modes` | Classify failures and debug from evidence. |
 | Operations | `pkg.nenjo_ai.packages.context.operations.write_discipline` | Sequence, risk-classify, and verify writes. |
-| Runtime | `pkg.nenjo_ai.packages.context.runtime.chat_response` | Generic chat runtime input and response rules. |
-| Runtime | `pkg.nenjo_ai.packages.context.runtime.task_execution` | Generic routine task-step input, `route_next_steps`, project context, metadata, and reporting rules. |
-| Runtime | `pkg.nenjo_ai.packages.context.runtime.gate_evaluation` | Generic gate runtime input, `route_next_steps`, and verdict routing rules. |
 | Tools | `pkg.nenjo_ai.packages.context.tools.artifact_tools` | Browse, inspect, publish, and revise immutable organization artifacts. |
 | Tools | `pkg.nenjo_ai.packages.context.tools.host_tools` | Choose between scoped filesystem, repository, and shell tools. |
 
@@ -35,7 +32,7 @@ Packages that use these blocks should declare the dependency:
 
 ```yaml
 dependencies:
-  context: "^1.4.0"
+  context: "^1.5.0"
 ```
 
 Then reference the blocks in prompts by package selector:
@@ -55,9 +52,12 @@ an orchestration-heavy agent may need `ability_orchestration`, `sub_agents`, or
 
 ## Authoring Notes
 
-Context blocks are prompt variables. Installed agents, abilities, domains,
-routines, MCP servers, and other resource manifests are resolved through
-package modules and runtime imports instead of `pkg.*` prompt references.
+Context blocks compile into the static instruction prefix. They may use agent
+identity or declared package arguments, but not live chat, task, project,
+routine, gate, Git, clock, memory, or artifact state. Installed agents,
+abilities, domains, routines, MCP servers, and other resource manifests are
+resolved through package modules and runtime imports instead of `pkg.*` prompt
+references.
 
 Inside a package, local manifests can import local context files by relative
 module path. Across installed packages, use the package selector form shown

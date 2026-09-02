@@ -16,7 +16,7 @@ These values are pack conventions for Nenjo Core. Other knowledge packs may defi
 | `orientation` | High-level mental model and product boundaries |
 | `design` | Recommendations, tradeoffs, and resource design guidance |
 | `resource` | Concrete resource behavior, fields, and runtime semantics |
-| `build` | Construction rules, manifests, template variables, and ordering |
+| `build` | Construction rules, manifests, prompt context, and ordering |
 | `classification` | Classification guides and decision tables |
 | `reference` | Stable facts, conventions, glossaries, and lookup material |
 | `policy` | Required rules or governance constraints |

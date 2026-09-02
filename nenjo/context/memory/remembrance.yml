@@ -4,17 +4,11 @@ slug: remembrance
 manifest:
   name: remembrance
   display_name: Remembrance
-  description: Generic guidance for durable memory and separation from immutable organization artifacts.
+  description: Stable guidance for durable memory and separation from immutable organization artifacts.
   template: |-
     <memory>
-    Your memory profile defines what durable facts you should preserve. Store
-    information only when it matches that profile and is likely to matter later.
-
-    {{ memory_profile }}
-    {% if memories %}
-    Stored memories:
-    {{ memories }}
-    {% endif %}
+    Use the runtime-provided memory snapshot as learned context. Store new
+    information only when it is durable and likely to matter later.
     <memory_rules>
     - Recall memory before relying on past preferences, decisions, or project facts.
     - Store concise facts, not transcripts, artifact bodies, or temporary state.

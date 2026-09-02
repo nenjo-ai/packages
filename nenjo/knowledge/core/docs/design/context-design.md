@@ -8,8 +8,8 @@ Context blocks are best for reusable, authored context that is stable enough to 
 ## Design Questions
 
 - Is this context reusable across agents, tasks, or modes?
-- Should it be read as authored text or derived from runtime state?
-- Does it depend on template variables?
+- Is it static authored guidance, or does it belong in runtime context?
+- Does it depend only on declared package arguments or other static blocks?
 - Should it be a context block, memory, knowledge doc, or prompt text?
 
 ## Good Context Shape
@@ -29,7 +29,7 @@ Include:
 - selector or import path;
 - intended consumers such as agents, abilities, domains, or packages;
 - stable instructions or source text to inject;
-- required template variables, if any;
+- required static package arguments, if any;
 - where it should render in the prompt;
 - related Library or package knowledge when the context tells agents how to retrieve;
 - verification plan for prompt rendering and token cost.
@@ -39,7 +39,7 @@ Include:
 - Use context blocks for stable authored guidance that should be injected.
 - Use Library or package knowledge for searchable reference or design material.
 - Use memory for learned user/project facts and corrections.
-- Use template variables for live runtime state.
+- Use typed session or turn context for live runtime state.
 - Use prompts for core identity and behavior that should not be optional.
 
 ## Pitfalls

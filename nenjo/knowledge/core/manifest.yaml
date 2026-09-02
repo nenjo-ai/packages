@@ -131,7 +131,7 @@ manifest:
   - selector: design.commands
     source_path: docs/design/command-design.md
     title: Command Design
-    summary: "How to design explicit slash-triggered chat templates and decide when a command should be used instead of a domain, ability, routine, or agent."
+    summary: "How to design explicit slash-triggered turn inputs and decide when a command should be used instead of a domain, ability, routine, or agent."
     kind: design
     tags: ["intent:design", "resource:commands", "topic:prompting", "audience:builder"]
     related:
@@ -161,7 +161,7 @@ manifest:
   - selector: design.prompts
     source_path: docs/design/prompt-design.md
     title: Prompt Design
-    summary: "How to decide what belongs in system prompts, developer prompts, templates, context blocks, memory, or knowledge."
+    summary: "How to decide what belongs in static instructions, context blocks, runtime context, memory, or knowledge."
     kind: design
     tags: ["intent:design", "topic:prompting", "resource:prompts", "audience:builder"]
     related:
@@ -303,7 +303,7 @@ manifest:
   - selector: resources.commands
     source_path: docs/resources/commands.md
     title: Commands
-    summary: "Resource-level model for slash commands as user-invoked chat templates with platform-authored or package file-backed content."
+    summary: "Resource-level model for slash commands as user-invoked turn inputs with platform-authored or package file-backed content."
     kind: resource
     tags: ["intent:explain", "intent:build", "resource:commands", "topic:prompting"]
     related:
@@ -609,7 +609,7 @@ manifest:
   - selector: building.prompt_structuring
     source_path: docs/building/prompt-structuring.md
     title: Prompt Structuring
-    summary: "Construction rules for composing prompts, context blocks, template variables, memory, Library/package knowledge, and retrieval evidence."
+    summary: "Construction rules for composing static prompts, runtime context, memory, Library/package knowledge, and retrieval evidence."
     kind: build
     tags: ["intent:build", "topic:prompting", "resource:prompts", "audience:builder"]
     related:
@@ -626,8 +626,8 @@ manifest:
 
   - selector: building.template_vars
     source_path: docs/building/template-vars.md
-    title: Template Vars
-    summary: "Runtime prompt variables for connecting static prompt design with live execution state, context, memory, and knowledge indexes."
+    title: Prompt Context
+    summary: "The boundary between static prompt references and runtime-owned session and turn context."
     kind: build
     tags: ["intent:build", "topic:prompting", "resource:template_vars", "audience:builder"]
     related:
