@@ -1,15 +1,14 @@
-# Commands — User-Invoked Chat Templates
+# Commands — User-Invoked Turn Inputs
 
 ## Purpose
 
-Commands are user-facing slash commands that replace the normal chat template
-for a single chat turn. They let users invoke a named prompt workflow such as
-`/design-workflow` without switching domains or asking an agent to infer the
-mode.
+Commands are user-facing slash commands that construct the raw input for a
+single chat turn. They let users invoke a named prompt workflow such as
+`/design-workflow` without asking an agent to infer the prompt workflow.
 
-Use commands for explicit, lightweight prompt entrypoints. Use domains for
-user-approved mode changes, abilities for agent-invoked specialist tools, and
-routines for persistent multi-step workflow graphs.
+Use commands for explicit, lightweight prompt entrypoints, abilities for
+agent-invoked specialist tools, and routines for persistent multi-step workflow
+graphs.
 
 ## What A Command Is
 
@@ -17,8 +16,8 @@ A command:
 
 - Has a unique slash trigger such as `/design-workflow`.
 - May have a folder-like `path` used for UI grouping.
-- Has Markdown `content` that acts as the chat template for the turn.
-- Receives runtime template variables such as `{{ chat.message }}`.
+- Has Markdown `content` that becomes the turn's user input.
+- Receives the stripped command arguments through `$ARGUMENTS`.
 - Is either platform-authored native content or package-installed file-backed
   content.
 
@@ -35,7 +34,7 @@ stable.
   selector. Use `""` for root-level commands.
 - `command` — The user-facing slash trigger. It must start with `/`.
 - `description` — Short human-readable summary for selection and review.
-- `content` — Markdown prompt template. Platform-authored commands use this for
+- `content` — Markdown prompt body. Platform-authored commands use this for
   native command bodies. Package manifests may also use inline `content` for
   short source-managed commands.
 - `content_path` — Preferred package manifest field for Nenjo-authored package
@@ -55,14 +54,13 @@ stable.
 When a user sends a chat message that starts with a command trigger:
 
 1. The worker resolves the installed command by exact slash command.
-2. The command trigger is stripped from `{{ chat.message }}` so command content
-   receives the user's actual request or arguments.
-3. The command content replaces `prompt_config.templates.chat` for that turn.
-4. The command template is rendered with the same template system as chat
-   templates before the provider call.
-5. The rendered command prompt is added to the model chat input.
+2. The trigger is stripped so `$ARGUMENTS` receives the user's actual request
+   or arguments.
+3. The worker expands `$ARGUMENTS` before prompt assembly.
+4. The expanded command body is added as the raw model user input after the
+   runtime-owned turn context.
 
-The command does not permanently change the agent, domain, ability set, memory
+The command does not permanently change the agent, ability set, memory
 profile, or platform permissions.
 
 ## Native And Package Commands

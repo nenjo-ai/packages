@@ -4,8 +4,8 @@ The `capabilities` package provides the official reusable Nenjo abilities for
 building and managing platform resources. It can be installed independently or
 pulled transitively by the `nenji` package.
 
-It includes abilities for agents, abilities, commands, domains, context blocks,
-Library knowledge, councils, routines, and tasks. The
+It includes abilities for agents, abilities, commands, context blocks, Library
+knowledge, councils, routines, and tasks. The
 abilities depend on the shared `context` and `knowledge` packages for their
 prompt guidance.
 

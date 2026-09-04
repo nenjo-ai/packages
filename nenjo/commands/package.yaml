@@ -1,11 +1,11 @@
 ---
 schema: nenjo.package.v1
 name: commands
-version: "1.4.0"
+version: "1.5.0"
 description: Official Nenjo slash commands for explicit prompt workflows.
 
 dependencies:
-  knowledge: "^1.6.0"
+  knowledge: "^1.7.0"
 
 modules:
   - design-agent.yaml

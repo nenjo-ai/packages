@@ -14,13 +14,13 @@ Nenjo resources are modeled, designed, built, routed, or retrieved.
   knowledge pack.
 - `core/docs/orientation/`: high-level guides for Nenjo, the platform, and the
   SDK.
-- `core/docs/design/`: design guidance for agents, abilities, domains,
+- `core/docs/design/`: design guidance for agents, abilities,
   councils, prompts, commands, workflows, context, and knowledge.
 - `core/docs/resources/`: resource-level references for agents, abilities,
-  domains, commands, councils, tasks, routines, projects, memory, executions,
+  commands, councils, tasks, routines, projects, memory, executions,
   context blocks, and knowledge packs.
 - `core/docs/building/`: implementation guidance for manifests, prompt
-  structure, template variables, and dependency order.
+  structure, prompt context, and dependency order.
 - `core/docs/classification/` and `core/docs/reference/`: routing
   classifications, selector conventions, user-defined document kinds, and
   glossary material.
@@ -35,7 +35,7 @@ Packages that use the core knowledge pack should declare it as a dependency:
 
 ```yaml
 dependencies:
-  knowledge: "^1.6.0"
+  knowledge: "^1.7.0"
 ```
 
 Then seed the pack or specific documents in prompts with package selectors:

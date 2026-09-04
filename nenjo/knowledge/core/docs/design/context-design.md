@@ -8,8 +8,8 @@ Context blocks are best for reusable, authored context that is stable enough to 
 ## Design Questions
 
 - Is this context reusable across agents, tasks, or modes?
-- Should it be read as authored text or derived from runtime state?
-- Does it depend on template variables?
+- Is it static authored guidance, or does it belong in runtime context?
+- Does it depend only on declared package arguments or other static blocks?
 - Should it be a context block, memory, knowledge doc, or prompt text?
 
 ## Good Context Shape
@@ -27,9 +27,9 @@ A good context block:
 Include:
 
 - selector or import path;
-- intended consumers such as agents, abilities, domains, or packages;
+- intended consumers such as agents, abilities, or packages;
 - stable instructions or source text to inject;
-- required template variables, if any;
+- required static package arguments, if any;
 - where it should render in the prompt;
 - related Library or package knowledge when the context tells agents how to retrieve;
 - verification plan for prompt rendering and token cost.
@@ -39,17 +39,19 @@ Include:
 - Use context blocks for stable authored guidance that should be injected.
 - Use Library or package knowledge for searchable reference or design material.
 - Use memory for learned user/project facts and corrections.
-- Use template variables for live runtime state.
-- Use prompts for core identity and behavior that should not be optional.
+- Use typed session or turn context for live runtime state.
+- Use session control for identity, an optional system prompt for invariants
+  inherited by abilities, and developer prompts for role behavior.
 
 ## Pitfalls
 
 - Putting volatile runtime data in authored context.
 - Using context blocks as unstructured storage.
 - Duplicating Library or package knowledge in context blocks.
-- Importing broad context into every prompt when a narrower ability or domain
-  context would be cheaper.
+- Importing broad context into every prompt when a narrower ability context
+  would be cheaper.
 
 ## Agent Guidance
 
-Use this before creating reusable prompt context. Read `resources.context_blocks` for resource behavior and `building.template_vars` for variable usage.
+Use this before creating reusable prompt context. Read `resources.context_blocks`
+for resource behavior and `building.prompt_context` for static/runtime placement.

@@ -74,7 +74,7 @@ Councils are typically used **inside routines** as a single step, not as standal
 ## Common Patterns
 
 - **Code Review Council** — One agent writes code, another reviews, leader synthesizes
-- **Risk Assessment Council** — Multiple domain experts evaluate different risk dimensions
+- **Risk Assessment Council** — Multiple subject-matter experts evaluate different risk dimensions
 - **Strategic Planning Council** — Leader decomposes problem, specialists contribute, leader synthesizes
 - **Adversarial Review Council** — One member proposes, another critiques, leader decides
 

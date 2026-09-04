@@ -1,12 +1,12 @@
 ---
 schema: nenjo.package.v1
 name: capabilities
-version: "1.4.0"
+version: "1.5.0"
 description: Official Nenjo abilities for building and managing platform resources.
 
 dependencies:
-  context: "^1.4.0"
-  knowledge: "^1.6.0"
+  context: "^1.5.0"
+  knowledge: "^1.7.0"
 
 modules:
   - build/

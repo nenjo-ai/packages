@@ -3,7 +3,10 @@
 ## Purpose
 Use ability design when deciding whether a capability should be exposed to an agent as a callable specialist tool.
 
-Abilities are best for narrow, reusable work with a clear activation condition and result shape. They are essentially sub-agents that inherit the parent agents identity and memory.
+Abilities are best for narrow, reusable work with a clear activation condition
+and result shape. They run as nested executions, inherit the caller's system
+invariants and memory configuration, and replace its developer guidance with
+their own specialist prompt.
 
 ## Design Questions
 
@@ -29,7 +32,7 @@ Include:
 - result shape expected by the parent agent;
 - developer guidance for the specialist behavior;
 - required platform scopes or MCP servers;
-- whether the ability is assigned directly to an agent or exposed only through a domain;
+- which agents should receive the ability;
 - verification plan for output quality.
 
 ## Use An Ability For
@@ -46,14 +49,16 @@ Include:
 - long-running ownership;
 - user-approved mode switches;
 - multi-step workflow graphs;
-- behavior that should define the agent identity.
+- broad recurring behavior that belongs to the parent agent.
 
 ## Boundary Rules
 
 - If the parent agent should decide when to invoke it, use an ability.
-- If the user must explicitly approve the mode before use, use a domain.
+- Keep permission changes on a user-controlled platform surface.
 - If the work has multiple persistent steps or gates, use a routine.
 
 ## Agent Guidance
 
-Use this doc to design capability boundaries. Read `resources.abilities` for the runtime model and `design.domains` when explicit user activation is required.
+Use this doc to design capability boundaries. Read `resources.abilities` for
+the runtime model and `design.commands` when a user-invoked one-turn entrypoint
+is required.

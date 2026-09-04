@@ -31,13 +31,13 @@ author GitHub-style scopes in repo-backed package keys or package `name` fields.
 ```yaml
 schema: nenjo.package.v1
 name: nenji
-version: "1.5.0"
+version: "1.6.0"
 
 dependencies:
-  capabilities: "^1.3.0"
-  commands: "^1.4.0"
-  context: "^1.4.0"
-  knowledge: "^1.6.0"
+  capabilities: "^1.5.0"
+  commands: "^1.5.0"
+  context: "^1.5.0"
+  knowledge: "^1.7.0"
 
 modules:
   - context/
@@ -59,9 +59,8 @@ entrypoints. Module paths are package-relative.
 - Logical refs are stable and versionless; installation records retain the
   exact package version.
 
-Supported package resource kinds include agents, abilities, domains, context
-blocks, knowledge packs, MCP servers, script tools, commands, hooks, skills, and
-plugins.
+Supported package resource kinds include agents, abilities, context blocks,
+knowledge packs, MCP servers, script tools, commands, hooks, skills, and plugins.
 
 ## Relationship To Knowledge
 

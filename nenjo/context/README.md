@@ -2,7 +2,7 @@
 
 The `context` package provides reusable prompt context blocks for common agent
 operating rules. It is intentionally generic: the blocks can be shared by
-agents, domains, and abilities that need consistent guidance for tool use,
+agents and abilities that need consistent guidance for tool use,
 memory, delegation, knowledge retrieval, write safety, and debugging.
 
 Use this package when prompts need durable operating guidance that should be
@@ -19,9 +19,6 @@ composed by selector instead of copied into every agent or ability.
 | Memory | `pkg.nenjo_ai.packages.context.memory.remembrance` | Recall and update durable memory while keeping immutable artifacts on their tool-backed surface. |
 | Operations | `pkg.nenjo_ai.packages.context.operations.failure_modes` | Classify failures and debug from evidence. |
 | Operations | `pkg.nenjo_ai.packages.context.operations.write_discipline` | Sequence, risk-classify, and verify writes. |
-| Runtime | `pkg.nenjo_ai.packages.context.runtime.chat_response` | Generic chat runtime input and response rules. |
-| Runtime | `pkg.nenjo_ai.packages.context.runtime.task_execution` | Generic routine task-step input, `route_next_steps`, project context, metadata, and reporting rules. |
-| Runtime | `pkg.nenjo_ai.packages.context.runtime.gate_evaluation` | Generic gate runtime input, `route_next_steps`, and verdict routing rules. |
 | Tools | `pkg.nenjo_ai.packages.context.tools.artifact_tools` | Browse, inspect, publish, and revise immutable organization artifacts. |
 | Tools | `pkg.nenjo_ai.packages.context.tools.host_tools` | Choose between scoped filesystem, repository, and shell tools. |
 
@@ -35,7 +32,7 @@ Packages that use these blocks should declare the dependency:
 
 ```yaml
 dependencies:
-  context: "^1.4.0"
+  context: "^1.5.0"
 ```
 
 Then reference the blocks in prompts by package selector:
@@ -48,16 +45,20 @@ Then reference the blocks in prompts by package selector:
 ```
 
 Use the smallest context block that matches the behavior you want. For example,
-an ability that performs writes usually needs `write_discipline` and
-`host_tools`; an agent that retrieves docs usually needs `knowledge_routing`;
-an orchestration-heavy agent may need `ability_orchestration`, `sub_agents`, or
-`agent_delegation`.
+an ability that performs writes may need `write_discipline`; add `host_tools`
+only when it operates on workspace files or commands. An agent that retrieves
+docs may need `knowledge_routing`; an orchestration-heavy agent may need one or
+more delegation blocks.
 
 ## Authoring Notes
 
-Context blocks are prompt variables. Installed agents, abilities, domains,
-routines, MCP servers, and other resource manifests are resolved through
-package modules and runtime imports instead of `pkg.*` prompt references.
+Context blocks compile into the static instruction prefix. They may use declared
+package arguments and other static context or knowledge selectors, but not agent
+identity or live chat, task, project, routine, gate, Git, clock, memory, or
+artifact state. Agent identity comes from runtime session control. Installed
+agents, abilities, routines, MCP servers, and other resource manifests
+are resolved through package modules and runtime imports instead of `pkg.*`
+prompt references.
 
 Inside a package, local manifests can import local context files by relative
 module path. Across installed packages, use the package selector form shown

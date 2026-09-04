@@ -4,7 +4,7 @@
 
 Context blocks store durable, reusable prompt guidance. They define principles,
 methodology, tool-use rules, routing patterns, and other operating behavior that
-should be referenced across agents, abilities, domains, routines, and workflows
+should be referenced across agents, abilities, routines, and workflows
 without duplicating text.
 
 ## What A Context Block Is
@@ -30,7 +30,7 @@ or platform environment.
 
 ## Selectors Over Copies
 
-When composing an agent, ability, domain, routine, or another context block,
+When composing an agent, ability, routine, or another context block,
 reference reusable context by selector. Do not copy the resolved context block
 template into another prompt.
 
@@ -51,7 +51,7 @@ resource being composed.
 - Delegation and tool-use patterns.
 - Review standards and quality criteria.
 - Prompt-writing conventions.
-- Domain-specific behavior guidance.
+- Subject-specific behavior guidance.
 
 ## Weak Uses
 

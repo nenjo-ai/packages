@@ -57,12 +57,12 @@ instructions tell the assigned executor:
 - what acceptance standard applies;
 - what downstream consumers will need.
 
-Keep agent and gate config narrow. Use only `instructions` and optional
-`metadata` when the prompt explicitly consumes `{{ routine.step.metadata }}`.
-Human steps use `request`; terminal-fail steps may use `failure_reason`. Do not put
+Keep step config narrow. Use only `instructions` and optional `metadata` when
+the assigned executor needs that metadata in runtime context. Do not put
 `inputs`, `evaluation_criteria`, `max_attempts`, `max_retries`, or routing
-fields in step config. Retry budgets belong on explicit `max_retries` fields
-of gate `on_fail` retry edges.
+fields in step config. Human steps use `request`; terminal-fail steps may use
+`failure_reason`. Retry budgets belong on explicit `max_retries` fields of gate
+`on_fail` retry edges.
 
 ## Edge Route Contracts
 
@@ -249,7 +249,7 @@ name: Review report
 step_type: human
 config:
   request:
-    title: "Review {{ task.title }}"
+    title: "Review report"
     approval:
       fields:
         - id: release_lane

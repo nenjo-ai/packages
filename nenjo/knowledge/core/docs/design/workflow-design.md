@@ -49,7 +49,7 @@ Include:
 - verification plan for graph structure and execution state.
 
 A workflow can be implemented as a routine, council, agent, ability chain,
-domain mode, task set, or combination. Choose by the required guarantees:
+task set, or combination. Choose by the required guarantees:
 
 | Need | Prefer |
 |---|---|
@@ -57,14 +57,13 @@ domain mode, task set, or combination. Choose by the required guarantees:
 | Fuzzy intent routing or adaptive planning | agent |
 | Narrow reusable specialist operation | ability |
 | Multiple perspectives, critique, voting, or synthesis | council |
-| User-approved operating mode or permission boundary | domain |
 | Trackable user/project work item | task |
 
 Routines are started through task dispatch. A task may be manual or scheduled,
 and its execution target may be the routine. Routines provide the
 strongest audit trail for step results, gate decisions, fan-out, fan-in, and
 bounded retry loops. Agents are more flexible and intent-driven, and can run in
-chat, task, domain, ability, or council contexts, but their intermediate control
+chat, task, ability, or council contexts, but their intermediate control
 flow is less graph-auditable unless they explicitly record it.
 
 For platform routines, `entry_steps` may contain multiple step slugs; those
@@ -143,11 +142,11 @@ objective, inputs to inspect, output to produce, and any evidence or acceptance
 standard the assigned agent must use. Do not rely on the routine name, step
 slug, or the agent's general prompt to carry the step-specific work.
 Keep step config typed and minimal. Agent and gate steps use `instructions` and
-optional `metadata`; human steps require `request`; terminal-fail steps may use
-`failure_reason`. Put acceptance criteria and input references in the
-instruction text unless the prompt explicitly consumes
-`{{ routine.step.metadata }}`. Put retry limits only on gate `on_fail` edge
-`max_retries`, not on the step config or human outcome edges.
+optional `metadata`, which the runtime includes in typed turn context; human
+steps require `request`; terminal-fail steps may use `failure_reason`. Put
+acceptance criteria and input references in the instruction text. Put retry
+limits only on gate `on_fail` edge `max_retries`, not on the step config or
+human outcome edges.
 To run a routine periodically, schedule a task whose execution target is that
 routine. A gate without an agent cannot execute because no model
 has been assigned to evaluate the gate criteria and call `route_next_steps`.
@@ -159,7 +158,7 @@ Terminal outcomes are also ordinary graph steps: add an explicit `terminal` or
 ## Common Patterns
 
 - prompt chaining as a linear routine or a single structured agent;
-- routing as a router agent, council, domain switch, or explicit routine branch;
+- routing as a router agent, council, or explicit routine branch;
 - parallelization as multiple entry steps, fan-out/fan-in, council members, or
   sub-agents;
 - orchestrator-workers as planner/worker/synthesis steps, a council, or one
@@ -180,7 +179,7 @@ Terminal outcomes are also ordinary graph steps: add an explicit `terminal` or
 - Use tasks for project-specific work units.
 - Use routines for reusable execution graphs.
 - Use councils for multi-agent judgment and synthesis.
-- Use domains for user-approved modes that change capability access.
+- Keep capability-access changes on user-controlled platform surfaces.
 - Keep agent prompts focused on behavior; put repeatable step order in routines.
 
 ## Agent Guidance

@@ -18,7 +18,6 @@ builder abilities.
 
 - Agents define behavior, prompts, memory, model, and capability assignments.
 - Abilities provide callable specialist behavior.
-- Domains provide user-activated modes for session-specific behavior.
 - Context blocks provide reusable prompt context.
 - Routines model multi-step workflow graphs.
 - Councils model structured multi-agent collaboration.

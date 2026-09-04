@@ -13,11 +13,10 @@ easy for a user to choose and should not require the agent to infer the mode.
 
 - What exact slash trigger should the user type?
 - Should the command appear at the root level or under a UI grouping `path`?
-- What user request or arguments should be passed through via
-  `{{ chat.message }}`?
-- Which reusable context or knowledge selectors should the command seed?
+- What user request or arguments should be passed through via `$ARGUMENTS`?
+- Which retrieval behavior should the command request?
 - Does the command only reshape the current turn, or does it actually require a
-  domain, ability, or routine?
+  ability or routine?
 - Is the command native platform-authored content or package-installed
   source-managed content?
 
@@ -27,8 +26,8 @@ A good command has:
 
 - a short unique slash trigger;
 - a concise description;
-- a clear Markdown content template;
-- minimal seeded knowledge or context;
+- a clear Markdown prompt body;
+- focused retrieval instructions;
 - explicit output expectations;
 - no hidden permission change or persistent mode switch.
 
@@ -39,8 +38,7 @@ Include:
 - slash trigger, for example `/design-workflow`;
 - UI grouping path, or `""` for root-level;
 - description;
-- command content template;
-- expected runtime variables, usually `{{ chat.message }}`;
+- command content using `$ARGUMENTS` where the user input belongs;
 - source owner: native platform command or package command;
 - package content source when source-managed: inline `content` for short
   commands or `content_path` for separate Markdown files;
@@ -51,7 +49,7 @@ Include:
 
 - user-invoked prompt workflows;
 - consistent design, review, audit, or summary formats;
-- thin routing templates that seed knowledge and tell the agent how to answer;
+- thin prompt entrypoints that tell the agent how to answer or retrieve evidence;
 - package-distributed prompt entrypoints.
 
 ## Avoid A Command For
@@ -66,13 +64,13 @@ Include:
 
 - If the user explicitly invokes the behavior with `/...`, use a command.
 - If the agent should decide when to invoke the behavior, use an ability.
-- If the user must approve a long-lived mode or capability change, use a domain.
+- Keep long-lived capability changes on a user-controlled platform surface.
 - If the work has persistent steps, gates, retries, or schedules, use a routine.
 - If the behavior should define who performs work over time, use an agent.
 
 ## Agent Guidance
 
 Read `resources.commands` for runtime semantics and package/native storage.
-Read `building.template_vars` before choosing variables. Read
-`building.prompt_structuring` before writing command content that references
-context blocks or knowledge.
+Read `building.prompt_structuring` before writing command content. Command
+bodies become raw turn input; they do not compile static context or knowledge
+selectors.

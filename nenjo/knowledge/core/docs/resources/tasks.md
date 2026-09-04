@@ -18,8 +18,7 @@ worker inbox, and concurrency limit.
   stored and transported as task-bound encrypted content.
 - A task may have one execution target: an agent or routine. Platform storage
   uses UUID foreign keys; agent-facing tools use resource slugs.
-- Organization-owned statuses and labels replace fixed status strings and tag
-  arrays.
+- Workflow status and labels are organization-owned resources.
 - Recurrence is owned by the task schedule, never by an agent or routine.
 
 ## Key Fields
@@ -42,10 +41,9 @@ worker inbox, and concurrency limit.
 - `completed_at` — Completion timestamp when the task reaches a completed
   status.
 
-The retired task shape must not be used. Do not send `description`,
-`acceptance_criteria`, `tags`, `required_tags`, `type`, `complexity`, or
-`order_index` as task fields. Fold completion guidance and other task-specific
-requirements into `instructions`, and use labels for classification.
+Put objectives, constraints, and completion guidance in `instructions`, use
+organization labels for classification, and send only fields exposed by the
+current API or tool schema.
 
 ## Workflow Statuses
 
@@ -166,7 +164,7 @@ a task.
 - Assuming an agent target implicitly enters a routine where that agent happens
   to be the first step. The routine itself must be the task target.
 - Putting timer state on an agent or routine.
-- Using retired task fields instead of `instructions`, labels, and status rows.
+- Sending fields not exposed by the current task API or tool schema.
 - Dispatching a backlog task before moving it to a runnable workflow status.
 - Treating scheduled occurrences as a separate execution model.
 - Assuming `upload_artifact` automatically attaches the result to a task.

@@ -5,7 +5,7 @@
 Memory stores learned facts, preferences, corrections, and durable operating
 context. Memory is not the Library, and it is not an artifact store. Library
 knowledge is explicit source material. Artifacts are immutable organization
-files discovered and read through artifact tools or attached to chat/tasks.
+files discovered through artifact tools or attached as typed chat/task inputs.
 
 ## The Three Memory Scopes
 
@@ -18,8 +18,8 @@ files discovered and read through artifact tools or attached to chat/tasks.
 ## Memory Profiles
 
 A `memory_profile` is attached to an agent and describes what should be recalled
-or saved in each scope. In manifests and prompt context it is structured data,
-usually authored as YAML arrays.
+or saved in each scope. It is runtime configuration, not model-visible prompt
+content, and is usually authored as YAML arrays.
 
 ```yaml
 memory_profile:
@@ -39,11 +39,11 @@ memory_profile:
 - Memory is scoped according to the active profile and project context.
 - `project_focus` memory stays project-specific.
 - `core_focus` and `shared_focus` are available only when configured.
-- Memory is injected through `{{ memories }}`, `{{ memories.core }}`,
-  `{{ memories.project }}`, and `{{ memories.shared }}`.
-- Artifact catalogs are not injected into prompts. Use `list_artifacts` and
-  `read_artifact`, or consume typed artifact inputs attached to the request.
-- Library knowledge is retrieved with knowledge tools, not memory variables.
+- Retrieved memory is frozen into the session-context snapshot and replayed
+  byte-for-byte for that session epoch.
+- A changed memory profile affects a new session epoch.
+- Artifacts arrive as typed inputs or through artifact tools.
+- Library knowledge is retrieved with knowledge tools, not memory context.
 
 ## Pitfalls To Avoid
 

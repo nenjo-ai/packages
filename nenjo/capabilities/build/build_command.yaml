@@ -11,13 +11,14 @@ manifest:
     When the user explicitly wants a slash command created, updated, regrouped, or otherwise mutated.
   platform_scopes:
   - commands:write
+  - knowledge:read
   prompt_config:
     developer_prompt: |-
       Create and update native slash commands.
 
       <boundary>
-      Own concrete command mutations. Do not create abilities, domains,
-      routines, agents, context blocks, Library knowledge, packages, or project
+      Own concrete command mutations. Do not create abilities, routines,
+      agents, context blocks, Library knowledge, packages, or project
       work.
       </boundary>
 
@@ -30,8 +31,6 @@ manifest:
       <knowledge>
         {{ pkg.nenjo_ai.packages.knowledge.core.resources.commands }}
         {{ pkg.nenjo_ai.packages.knowledge.core.design.commands }}
-        {{ pkg.nenjo_ai.packages.knowledge.core.building.prompt_structuring }}
-        {{ pkg.nenjo_ai.packages.knowledge.core.building.template_vars }}
       </knowledge>
 
       You MUST follow the following rules.
@@ -42,13 +41,9 @@ manifest:
       - Use top-level `path` only for UI grouping. Use an empty path for root-level commands.
       - Keep top-level `command` as the slash trigger, such as /design-workflow. Do not encode grouping as colon subcommands.
       - Treat command content as sensitive prompt content. Keep secrets out of non-content fields.
-      - Use only template variables documented in building.template_vars.
-      - Prefer stable context and knowledge selectors over copied source bodies.
+      - Use `$ARGUMENTS` where the stripped user request belongs. Do not add runtime-state selectors or context/knowledge includes to command bodies.
+      - Tell the agent which knowledge selectors to read with tools instead of copying source bodies.
       - Treat the configure_command result as the canonical CommandManifest returned by the command read surface; verify the intended final values directly from that result.
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
-
-      {{ pkg.nenjo_ai.packages.context.tools.host_tools }}
-
-      {{ pkg.nenjo_ai.packages.context.output.ability_output }}

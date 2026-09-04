@@ -3,15 +3,18 @@
 ## Purpose
 Use agent design when deciding what an agent should own, how broad its role should be, and which resources should be attached to it.
 
-An agent is the right unit when behavior needs a durable identity, stable prompts, memory focus, model assignment, and a managed capability surface.
+An agent is the right unit when behavior needs a durable named owner, stable
+operating guidance, memory focus, model assignment, and a managed capability
+surface. The runtime supplies that resource identity to the model in session
+control.
 
 ## Design Questions
 
 - What job should this agent be trusted to perform repeatedly?
-- What should stay in the agent prompt versus an ability, domain, routine, or knowledge pack?
+- What should stay in the agent prompt versus an ability, routine, or knowledge pack?
 - What memory focus does the agent need to remain useful over time?
-- Which tools should be available by default, and which should require a domain or platform-controlled path?
-- Which abilities, domains, context blocks, MCP servers, and knowledge packs are required at start?
+- Which tools should be available by default, and which should require a platform-controlled path?
+- Which abilities, context blocks, MCP servers, and knowledge packs are required at start?
 - What model should be assigned, and why is that model appropriate for the expected work?
 - Will the agent receive images, documents, audio, or other artifact inputs?
   If so, can its chat model accept those modalities directly, or must a user
@@ -22,10 +25,10 @@ An agent is the right unit when behavior needs a durable identity, stable prompt
 A good agent has:
 
 - one clear responsibility;
-- a stable behavioral identity;
+- a clear manifest identity and description;
 - explicit prompt boundaries;
 - a narrow default capability set;
-- enough knowledge access to answer its domain questions;
+- enough knowledge access to answer its subject questions;
 - memory guidance that matches its expected lifetime;
 - reusable context blocks selected by role need, not by availability.
 
@@ -51,7 +54,6 @@ context blocks themselves.
 | Delegates to installed agents | `pkg.nenjo_ai.packages.context.agents.agent_delegation` |
 | Orchestrates abilities | `pkg.nenjo_ai.packages.context.agents.ability_orchestration` |
 | Depends on durable memory behavior | `pkg.nenjo_ai.packages.context.memory.remembrance` |
-| Runs tasks, gates, or chat wrappers | the matching `pkg.nenjo_ai.packages.context.runtime.*` selector |
 
 Do not add context selectors that do not support the role. Read context block
 metadata and content to choose useful selectors, then include the selectors
@@ -72,23 +74,22 @@ Include:
 
 - display name and user-facing description;
 - durable responsibility and non-goals;
-- system prompt purpose, principles, and behavioral boundaries;
-- developer guidance for tool use, retrieval, verification, and escalation;
+- an optional system prompt only for invariants inherited by nested abilities;
+- developer guidance for role behavior, tool use, retrieval, verification, and escalation;
 - role-relevant seeded knowledge selectors, if any;
 - role-relevant context block selectors, if any;
 - model slug or model requirements;
 - required artifact input modalities and any separate organization analysis
   capability defaults;
 - memory profile focus areas;
-- runtime templates only when chat, task, or gate behavior differs;
+- no runtime-owned identity or execution data copied into authored prompts;
 
 ## Boundary Rules
 
 - Use an agent when the behavior needs identity, memory, model choice, and
   recurring responsibility.
 - Use an ability for a narrow operation the parent agent can call.
-- Use a domain when the user must explicitly activate a different mode or added
-  capabilities.
+- Use a command when the user should explicitly invoke a one-turn prompt workflow.
 - Use a routine when the main complexity is ordered steps, gates, and
   execution state.
 - Use a council when independent perspectives and final synthesis matter.
@@ -100,17 +101,18 @@ Include:
 - Giving the agent too many default tools.
 - Using an agent when an ability or routine would be simpler.
 - Designing assignments vaguely instead of naming the complete intended ability,
-  domain, model, MCP, context, and knowledge surface.
-- Optimization the agent prompts early on. Start simple and add complexity later when the work demands it.
+  model, MCP, context, and knowledge surface.
+- Repeating runtime-provided identity or live context in authored prompts.
+- Adding prompt complexity before repeated work demonstrates a need for it.
 
 ## Checklist
 Complete the following checklist to ensure a good agent shape  
-- well defined system prompt
-- well defined developer prompt?
+- system prompt is empty or contains only universal inherited invariants
+- developer prompt has a clear role and operating boundary
 - well defined memory profile
-- well defined chat, task, and gate templates
+- runtime inputs are handled by the typed session/turn context contract
 - seeded knowledge is limited to sources that pertain to the agent's role
-- prompts and task templates reuse selected context blocks by selector
+- prompts reuse selected static context blocks by selector
 
 ## Agent Guidance
 

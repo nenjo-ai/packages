@@ -4,13 +4,13 @@
 
 Abilities are reusable specialist execution modes exposed to an agent as callable
 tools. They give an agent a narrow, high-signal behavior without turning that
-behavior into a standalone agent, domain, or routine.
+behavior into a standalone agent or routine.
 
 ## What An Ability Is
 
 An ability:
 
-- Is assigned to one or more agents or domains.
+- Is assigned to one or more agents.
 - Appears at runtime under its `tool_name`.
 - Has an `activation_condition` that tells the caller when to use it.
 - Runs as a nested specialist execution under the calling agent.
@@ -70,7 +70,7 @@ successful response contains the same canonical AbilityDocument as
 ## Pitfalls To Avoid
 
 - Using abilities for long-running ownership; use an agent instead.
-- Using abilities for explicit user modes; use a domain instead.
+- Using abilities to hide privilege expansion or a persistent mode change.
 - Hiding broad privilege expansion behind an ability.
 - Assuming the caller's platform scopes or attached media are implicitly
   inherited by the nested ability.

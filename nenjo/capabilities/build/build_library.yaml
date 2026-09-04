@@ -10,7 +10,7 @@ manifest:
   activation_condition: |-
     When the user explicitly wants Library source material created, updated, split, merged, or refactored.
   platform_scopes:
-  - library:write
+  - knowledge:write
   prompt_config:
     developer_prompt: |-
       Create, update, and refactor platform Library knowledge packs, documents,
@@ -50,10 +50,3 @@ manifest:
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
-
-      {{ pkg.nenjo_ai.packages.context.tools.host_tools }}
-
-      {{ pkg.nenjo_ai.packages.context.output.ability_output }}
-
-
-      

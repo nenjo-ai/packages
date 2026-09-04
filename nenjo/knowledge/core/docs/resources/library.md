@@ -15,7 +15,7 @@ packages even though knowledge and artifacts share Library navigation.
 
 - Product and architecture references.
 - Policy, procedure, and compliance material.
-- Domain glossaries and classification references.
+- Subject glossaries and classification references.
 - Research notes and source-backed guidance.
 - Project-relevant references that should remain explicit source material.
 

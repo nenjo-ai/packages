@@ -22,6 +22,14 @@ artifacts remain distinct from indexed Library knowledge and from agent memory.
 - Publishing a revision requires the current artifact ID. Stale revision IDs
   are rejected instead of silently overwriting concurrent work.
 
+## Runtime Access
+
+- typed immutable artifact inputs on chat or task requests;
+- `list_artifacts` and `read_artifact` when platform scope permits;
+- workspace tools for files in the current execution scope.
+
+Artifacts are not prompt template variables.
+
 Artifact catalog paths are organization-relative. They are not worker
 workspace paths, object-store keys, or authorization tokens.
 
