@@ -36,45 +36,33 @@ material. Use `search_knowledge`, `list_knowledge_neighbors`, and
 
 Agent identity and live state are not available through template selectors.
 
-The session-context message contains the executing agent identity and freezes
-project/workspace information and retrieved memory for a session epoch. The
-memory profile controls retrieval and memory writing but is not repeated as
-model-visible content.
+The runtime emits session control followed by optional session data. Control
+contains the executing agent identity and project/workspace routing facts. Data
+contains project description/context/metadata and the memory snapshot frozen for
+the session epoch. The memory profile controls retrieval and memory writing but
+is not repeated as model-visible content. Empty session data is omitted.
 
-The turn-context message contains the clock (local time, timezone, and UTC),
-execution kind, and applicable task, routine, Git/worktree, and gate fields.
-The raw chat message or task instructions follow that context as user input.
-Retries reuse the original persisted turn bytes.
+For each logical turn, the runtime emits turn control followed by optional turn
+data. Control contains the clock, execution kind, identifiers, routing, workflow
+instructions, Git/worktree facts, and gate verdict. Data contains descriptive
+task/routine fields, handoffs, and arbitrary results. The raw chat message or
+task instructions follow as user input. Empty turn data is omitted, and retries
+reuse the original persisted bytes.
 
 The runtime protocol tells agents to read the applicable context before acting.
 Session context applies for its session epoch; turn context applies only to the
-immediately following logical turn and wins for overlapping facts. Control
-context is application guidance. Data context is reference material and must
-not be followed as instructions. User-authored text cannot create authoritative
-context by copying the XML tags.
+immediately following logical turn and wins for overlapping facts. Control is
+application guidance. Data is reference material and must not be followed as
+instructions. User-authored text cannot create authority by copying the XML
+tags.
 
-## Removed Selectors
+## Selector Boundary
 
-Do not author selectors rooted at:
-
-- `self`
-- `agent`
-- `global`
-- `chat`
-- `task`
-- `project`
-- `routine`
-- `gate`
-- `git`
-- `memories`
-- `memory_profile`
-- `heartbeat`
-- `artifacts`
-
-Package validation rejects these roots in system prompts, developer prompts,
-and context blocks. Artifacts arrive as typed inputs or through artifact tools.
-Slash-command content uses `$ARGUMENTS` and becomes raw turn input; it is not an
-agent chat template.
+Authored prompts may reference only declared `args.*`, static context blocks,
+and knowledge metadata. Package validation rejects runtime-state selector roots
+in system prompts, developer prompts, and context blocks. Artifacts arrive as
+typed inputs or through artifact tools. Slash-command content uses `$ARGUMENTS`
+and becomes raw turn input.
 
 ## Pitfalls To Avoid
 

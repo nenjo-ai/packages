@@ -27,7 +27,7 @@ A good context block:
 Include:
 
 - selector or import path;
-- intended consumers such as agents, abilities, domains, or packages;
+- intended consumers such as agents, abilities, or packages;
 - stable instructions or source text to inject;
 - required static package arguments, if any;
 - where it should render in the prompt;
@@ -40,16 +40,18 @@ Include:
 - Use Library or package knowledge for searchable reference or design material.
 - Use memory for learned user/project facts and corrections.
 - Use typed session or turn context for live runtime state.
-- Use prompts for core identity and behavior that should not be optional.
+- Use session control for identity, an optional system prompt for invariants
+  inherited by abilities, and developer prompts for role behavior.
 
 ## Pitfalls
 
 - Putting volatile runtime data in authored context.
 - Using context blocks as unstructured storage.
 - Duplicating Library or package knowledge in context blocks.
-- Importing broad context into every prompt when a narrower ability or domain
-  context would be cheaper.
+- Importing broad context into every prompt when a narrower ability context
+  would be cheaper.
 
 ## Agent Guidance
 
-Use this before creating reusable prompt context. Read `resources.context_blocks` for resource behavior and `building.template_vars` for variable usage.
+Use this before creating reusable prompt context. Read `resources.context_blocks`
+for resource behavior and `building.prompt_context` for static/runtime placement.

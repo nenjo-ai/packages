@@ -14,6 +14,7 @@ manifest:
   - projects:read
   - routines:read
   - agents:read
+  - knowledge:read
   tool_name: manage_tasks
   prompt_config:
     developer_prompt: |-
@@ -37,7 +38,6 @@ manifest:
       <seeded_knowledge>
         {{ pkg.nenjo_ai.packages.knowledge.core.resources.tasks }}
         {{ pkg.nenjo_ai.packages.knowledge.core.resources.executions }}
-        {{ pkg.nenjo_ai.packages.knowledge.core.classification.task_priority_and_labels }}
       </seeded_knowledge>
 
       You MUST follow the following rules:
@@ -47,13 +47,13 @@ manifest:
       - `configure_task` is a partial patch: omitted fields preserve their values; `project: null`, `target: null`, and `schedule: null` clear those fields; omitting `labels` preserves labels and `labels: []` clears them.
       - The current configure_task tool does not accept artifact_ids. Do not invent that field or imply upload_artifact attaches a file to a task; task artifact association remains a dashboard/API operation.
       - Inspect `list_task_labels` before drafting so existing organization terminology is reused. On create, missing label names are created automatically. On update, every supplied label must already exist. Label matching is trimmed and case-insensitive, so do not introduce spelling or casing variants.
-      - Every task requires non-empty `instructions`. Put the objective, constraints, and completion guidance there; do not use retired description, acceptance_criteria, tags, type, complexity, or order_index fields.
+      - Every task requires non-empty `instructions`. Put the objective, constraints, and completion guidance there, and use only fields exposed by the current tool schema.
       - A task may be planned without a target but needs exactly one agent or routine before dispatch. An agent target runs only that agent; use the routine slug when the full graph is intended.
       - Configure recurrence declaratively in `schedule`. Omit `schedule` to preserve it, pass null to remove it, or pass an object with only the desired changes. Creating a schedule requires `enabled`, local wall-clock `starts_at`, an IANA `timezone`, and a typed `recurrence`; `end` defaults to `{"type":"never"}`. Do not invent an operation field.
       - When the user asks for the task to run on a schedule, explicitly send `schedule.enabled: true`. Send false only when the user asks to pause or disable it. Omit `enabled` on update only when preserving the schedule's current active or paused state is intentional; omission preserves an existing disabled state.
       - Scheduled tasks require exactly one agent or routine target. Use interval recurrence for elapsed frequencies such as every hour; use daily, weekly, monthly, or yearly recurrence for calendar rules, and cron only when the structured forms cannot express the request.
       - When assigning a project, target, status, or existing label, use the exact slug or name returned by its read tool. Treat UUIDs as internal persistence details.
-      - `dispatch_task` and `retry_execution_run` return an `execution_run_id`. For a routine-targeted task, call `watch_execution_run` once with that ID. It starts an async operation: step progress does not wake the agent, while completion or failure does. It has no cursor. Use `wait_operations` to inspect progress and `list_task_execution_runs` for durable lifecycle state and history. Do not use the watcher for direct-agent runs.
+      - `dispatch_task` and `retry_execution_run` return an `execution_run_id`. For a routine-targeted task, call `watch_execution_run` once with that ID. It starts an async operation: step progress does not wake the agent, while completion or failure does. It has no cursor. Use `wait` to inspect progress and `list_task_execution_runs` for durable lifecycle state and history. Do not use the watcher for direct-agent runs.
       - Use `list_task_execution_runs` with `activity: active` for in-flight work and `task_slug` for one task's history. Cancel only queued or running runs. Retry only terminal runs; retry creates a new linked run.
       - Keep recurrence in the task's `schedule`; never encode cron or recurrence in task instructions, agent configuration, or routine metadata. Read the returned full task and schedule to verify the saved state. If an active scheduling request returns `enabled: false`, the request is not fulfilled; correct it with `schedule: {"enabled":true}`.
       - Delete is permanent and removes the task's runs and attachments. Confirm the intended `task_slug` before calling `delete_task`.
@@ -61,7 +61,3 @@ manifest:
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
-
-      {{ pkg.nenjo_ai.packages.context.tools.host_tools }}
-    
-      {{ pkg.nenjo_ai.packages.context.output.ability_output }}

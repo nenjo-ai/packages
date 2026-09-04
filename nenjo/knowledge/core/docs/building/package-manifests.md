@@ -59,9 +59,8 @@ entrypoints. Module paths are package-relative.
 - Logical refs are stable and versionless; installation records retain the
   exact package version.
 
-Supported package resource kinds include agents, abilities, domains, context
-blocks, knowledge packs, MCP servers, script tools, commands, hooks, skills, and
-plugins.
+Supported package resource kinds include agents, abilities, context blocks,
+knowledge packs, MCP servers, script tools, commands, hooks, skills, and plugins.
 
 ## Relationship To Knowledge
 

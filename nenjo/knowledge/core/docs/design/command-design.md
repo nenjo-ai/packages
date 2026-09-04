@@ -16,7 +16,7 @@ easy for a user to choose and should not require the agent to infer the mode.
 - What user request or arguments should be passed through via `$ARGUMENTS`?
 - Which retrieval behavior should the command request?
 - Does the command only reshape the current turn, or does it actually require a
-  domain, ability, or routine?
+  ability or routine?
 - Is the command native platform-authored content or package-installed
   source-managed content?
 
@@ -64,7 +64,7 @@ Include:
 
 - If the user explicitly invokes the behavior with `/...`, use a command.
 - If the agent should decide when to invoke the behavior, use an ability.
-- If the user must approve a long-lived mode or capability change, use a domain.
+- Keep long-lived capability changes on a user-controlled platform surface.
 - If the work has persistent steps, gates, retries, or schedules, use a routine.
 - If the behavior should define who performs work over time, use an agent.
 

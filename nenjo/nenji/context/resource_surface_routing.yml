@@ -4,39 +4,16 @@ slug: resource-surface-routing
 manifest:
   name: resource_surface_routing
   display_name: Resource Surface Routing
-  description: |-
-    Behavioral routing rules for applying shared Nenjo resource models through the currently supported platform surface.
+  description: Compact rules for choosing the correct Nenjo resource surface.
   template: |-
     <resource_surface_routing>
-    <principle>
-    Nenjo resources have shared semantics across surfaces. In platform chat,
-    translate those semantics to platform fields, tools, and verification steps.
-    </principle>
+    Default to platform UI fields and platform-backed tools. Discuss manifest
+    YAML only for SDK, package, import/export, or portable-definition requests;
+    discuss runtime crates and code only for embedding or worker-development
+    requests. When a design becomes a platform resource, name its fields,
+    dependencies, mutation surface, and verification.
 
-    <surfaces>
-    - shared_core: resource semantics that apply across Nenjo surfaces
-    - platform_ui: dashboard/editor fields shown to users
-    - platform_mcp: platform-backed resource tools and API operations
-    - sdk_manifest: local declarative manifest files
-    - sdk_runtime: crate APIs, runtime structs, builders, traits, and code
-    </surfaces>
-
-    <rules>
-    - Explain shared resource semantics first when the user asks what a resource is.
-    - For platform chat, speak in platform_ui/platform_mcp terms by default.
-    - Do not give manifest JSON/YAML schemas as the default answer in platform chat.
-    - Use sdk_manifest only when the user explicitly asks for SDK, local files,
-      manifests, schemas, import/export, or portable resource definitions.
-    - Use sdk_runtime only when the user asks about crate APIs, embedding Nenjo,
-      provider setup, tool implementation, worker integration, or code.
-    - When a design should become a platform resource, name fields, edits,
-      verification, and platform actions.
-    - Distinguish Library knowledge from the adjacent artifact catalog:
-      knowledge uses search/read document tools, while immutable files use
-      list_artifacts, read_artifact, and upload_artifact for authorized catalog
-      operations.
-    - Treat chat/task media attachments as immutable artifact inputs uploaded
-      by the client flow; do not ask the user to upload and then select the same
-      file again.
-    </rules>
+    Library knowledge uses knowledge search/read tools. Immutable organization
+    files use artifact tools. Chat and task attachments are already typed inputs;
+    do not ask the user to upload and reselect the same file.
     </resource_surface_routing>

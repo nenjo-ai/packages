@@ -12,17 +12,17 @@ downstream resources are wired.
 3. Create or select models, MCP servers, script tools, and context blocks.
 4. Create or update agents without broad assignments first.
 5. Apply prompt updates after the agent exists and has been read back by slug/ref.
-6. Create abilities and domains that reference existing tools and context.
-7. Create native commands after their prompt template, context, and knowledge
-   refs are known.
-8. Assign abilities/domains/tool refs to agents only after those refs exist.
+6. Create abilities that reference existing tools and context.
+7. Create native commands after their content and retrieval requirements are
+   known.
+8. Assign ability and tool refs to agents only after those refs exist.
 9. Create councils before routines that reference those councils.
 10. Create routines with valid agent, gate, council, and terminal refs.
 11. Create projects before tasks and executions.
 12. Create tasks with exactly one executor surface: assigned agent ref or routine
     ref.
-13. Start, pause, resume, or inspect executions only after project and task refs
-    are valid.
+13. Dispatch, watch, cancel, retry, or inspect executions only after project and
+    task refs are valid.
 
 Packages are not in the platform write order for agents. Package manifests are
 source-controlled install bundles and should be treated as reference material
@@ -32,13 +32,15 @@ unless the user is explicitly authoring package files in an SDK/local context.
 
 - Agent work: `list_agents`, `get_agent`, `configure_agent`.
 - Ability work: `list_abilities`, `get_ability`, `configure_ability`.
-- Command work: `configure_command`.
-- Domain work: `list_domains`, `get_domain`, `configure_domain`.
+- Command work: `list_commands`, `get_command`, `configure_command`.
 - Context work: `list_context_blocks`, `get_context_block`,
   `configure_context_block`.
-- Routine work: `create_routine`, `update_routine`.
-- Council work: `create_council`, `update_council`, `update_council_member`.
-- Project work: `create_project`, `update_project`.
+- Routine work: `list_routines`, `get_routine`, `configure_routine`.
+- Council work: `list_councils`, `get_council`, `create_council`,
+  `update_council`, `add_council_member`, `update_council_member`,
+  `remove_council_member`, `delete_council`.
+- Project work: `list_projects`, `get_project`, `create_project`,
+  `update_project`, `delete_project`.
 - Task work: `configure_task`, `delete_task`, `dispatch_task`.
 - Execution work: `list_task_execution_runs`, `watch_execution_run`,
   `cancel_execution_run`, `retry_execution_run`.

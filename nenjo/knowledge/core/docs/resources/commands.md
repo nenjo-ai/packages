@@ -4,12 +4,11 @@
 
 Commands are user-facing slash commands that construct the raw input for a
 single chat turn. They let users invoke a named prompt workflow such as
-`/design-workflow` without switching domains or asking an agent to infer the
-mode.
+`/design-workflow` without asking an agent to infer the prompt workflow.
 
-Use commands for explicit, lightweight prompt entrypoints. Use domains for
-user-approved mode changes, abilities for agent-invoked specialist tools, and
-routines for persistent multi-step workflow graphs.
+Use commands for explicit, lightweight prompt entrypoints, abilities for
+agent-invoked specialist tools, and routines for persistent multi-step workflow
+graphs.
 
 ## What A Command Is
 
@@ -61,9 +60,7 @@ When a user sends a chat message that starts with a command trigger:
 4. The expanded command body is added as the raw model user input after the
    runtime-owned turn context.
 
-Command bodies do not restore the removed dynamic prompt-template surface.
-
-The command does not permanently change the agent, domain, ability set, memory
+The command does not permanently change the agent, ability set, memory
 profile, or platform permissions.
 
 ## Native And Package Commands

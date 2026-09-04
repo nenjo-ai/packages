@@ -3,7 +3,7 @@
 ## Purpose
 
 Packages are versioned bundles of Nenjo resources. They can provide agents,
-abilities, domains, context blocks, knowledge packs, MCP servers, script tools,
+abilities, context blocks, knowledge packs, MCP servers, script tools,
 commands, hooks, skills, and other installable resources.
 
 In Nenjo Core knowledge, packages are a reference point and package-system
@@ -37,7 +37,7 @@ Examples:
 {{ pkg.nenjo_ai.packages.knowledge.core.resources.agents }}
 ```
 
-Agents, abilities, domains, routines, MCP servers, and script tools are installed
+Agents, abilities, routines, MCP servers, and script tools are installed
 as runtime resources. They are not referenced as `{{ pkg.* }}` prompt variables.
 
 ## Agent Guidance

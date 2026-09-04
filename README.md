@@ -113,7 +113,7 @@ Examples:
 {{ pkg.nenjo_ai.packages.knowledge.core.resources.agents }}
 ```
 
-Agents, abilities, domains, routines, MCP servers, and other installed resource
+Agents, abilities, routines, MCP servers, and other installed resource
 manifests are resolved through package modules/imports and the worker/dashboard
 runtime. They are not referenced as `{{ pkg.* }}` prompt variables.
 
@@ -141,8 +141,8 @@ name, such as `{{ pkg.nenjo_ai.packages.knowledge.core }}`. Rendered knowledge
 metadata and `list_knowledge_packs` expose the canonical tool selector, such as
 `pkg:nenjo-ai.packages.knowledge.core`.
 
-Package manifests do not author dashboard organization paths. For abilities,
-domains, and context blocks, `manifest.path` is derived from the module's
+Package manifests do not author dashboard organization paths. For abilities and
+context blocks, `manifest.path` is derived from the module's
 package-relative directory during package resolution/import.
 
 ## Current Package Set

@@ -3,12 +3,12 @@
 ## Purpose
 
 Script tools are native or package-provided tools backed by executable scripts.
-They can be assigned to agents, abilities, or domains by slug/ref.
+They can be assigned to agents or abilities by slug/ref.
 
 ## Authoring And Assignment
 
 Script tool manifests are usually provided by packages or controlled runtime
-setup. Agents, abilities, and domains reference script tools through
+setup. Agents and abilities reference script tools through
 `script_tools` assignment lists.
 
 Do not imply a generic agent-write script-tool mutation tool unless the active

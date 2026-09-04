@@ -62,7 +62,7 @@ immediately. For a routine-targeted task, call `watch_execution_run` once with
 that ID. It starts a model-visible async operation and returns its operation ID
 plus initial routine progress. Step updates record completed, active, and
 remaining work without waking the agent; completion or failure wakes the agent.
-Use `wait_operations` when you need to inspect progress. The watcher has no
+Use `wait` when you need to inspect progress. The watcher has no
 cursor and is not used for direct-agent runs.
 
 Use `list_task_execution_runs` with `activity: active` to find all pending,

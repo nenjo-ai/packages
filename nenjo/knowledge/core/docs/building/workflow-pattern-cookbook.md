@@ -63,7 +63,6 @@ Implementation options:
 | Router agent | Inputs are fuzzy or conversational | Flexible, but less deterministic and less auditable |
 | Council | Route choice benefits from multiple perspectives | Better judgment, but heavier |
 | Routine branch | Paths are known and route choice must be audited | Strong graph trail, but topology must be authored up front |
-| Domain switch | User chooses an operating mode or permission boundary | Clear mode boundary, not a general router |
 
 Routine branches should be explicit business-process branches, not hidden
 model-driven intent routing. For agent-driven branch choice, prefer a router
@@ -241,7 +240,7 @@ single routine step unless its internal branches need graph-level audit.
 Intent: give one agent a goal and let it decide tool use and intermediate
 steps.
 
-Prefer a single agent with focused abilities, domains, tools, and knowledge.
+Prefer a single agent with focused abilities, tools, and knowledge.
 Use a routine when the work needs explicit handoffs, gate checkpoints, or
 durable audit around a larger process. Schedule a task targeting either the
 agent or that routine when the work must recur.

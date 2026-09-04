@@ -3,7 +3,7 @@
 ## Purpose
 
 Platform scopes are permission refs that determine which platform tools an
-agent, ability, or domain can access at runtime.
+agent or ability can access at runtime.
 
 Scopes are a platform/user control surface. Agents may read and explain scopes,
 but they must not assign, escalate, or mutate platform scopes for themselves or
@@ -13,7 +13,6 @@ for other resources.
 
 - `agents:read` / `agents:write`
 - `abilities:read` / `abilities:write`
-- `domains:read` / `domains:write`
 - `commands:read` / `commands:write`
 - `routines:read` / `routines:write`
 - `tasks:read` / `tasks:write`
@@ -22,8 +21,8 @@ for other resources.
 - `councils:read` / `councils:write`
 - `context_blocks:read` / `context_blocks:write`
 - `models:read` / `models:write`
-- `mcp_servers:read` / `mcp_servers:write`
-- `library:write`
+- `knowledge:read` / `knowledge:write`
+- `notify:read` / `notify:write`
 
 Available scopes can evolve with the platform. Read current platform state or
 tool policy before asserting exact availability.
@@ -36,6 +35,17 @@ Artifact agent tools use the dedicated artifact scope family:
 
 Task scopes do not grant artifact access, and artifact scopes do not grant task
 access. Scope assignment remains a user/platform action.
+
+`knowledge:read` exposes knowledge discovery, graph traversal, and document
+reads. `knowledge:write` adds Library pack/document mutation and implies read
+access.
+
+The broader organization/API scope catalog also includes `mcp_servers:read`,
+`mcp_servers:write`, `media:read`, and `media:write`. The current model-facing
+platform tool factory does not expose an MCP server catalog or mutation tool,
+and assigned external MCP tools are controlled by resource assignment rather
+than those scope strings. Do not add MCP server scopes to an agent merely to
+let it use an already assigned server.
 
 Organization-member API authorization separately uses `reviews:read` and
 `reviews:write` for the dashboard review inbox and decisions. Those are not

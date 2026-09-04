@@ -4,15 +4,9 @@ slug: ability-output
 manifest:
   name: ability_output
   display_name: Ability Output
-  description: Generic output sytle rules for abilities
+  description: Compact completion guidance for abilities.
   template: |-
-      You MUST respond in the following output when you are done.
-      <output>
-        Return:
-        - Goal
-        - Reads performed
-        - Actions
-        - Verification
-        - Slugs
-        - Remaining dependency
-      </output>
+    <ability_output>
+    Complete through `finish`. Summarize the outcome, verification, stable
+    identifiers, and any blocker; do not narrate routine reads.
+    </ability_output>

@@ -15,7 +15,7 @@ through focused builder abilities.
 - `context/`: Nenji-specific context blocks for methodology and resource
   surface routing.
 - `@nenjo-ai/capabilities`: write abilities for agents, abilities, commands,
-  domains, context blocks, Library knowledge, councils, routines, and tasks.
+  context blocks, Library knowledge, councils, routines, and tasks.
 - `@nenjo-ai/context`: canonical operating guidance for direct artifact tools
   and shared agent behavior.
 
@@ -48,7 +48,6 @@ Nenji assigns these builder abilities from `@nenjo-ai/capabilities`:
 - `build_agent`
 - `build_ability`
 - `build_command`
-- `build_domain`
 - `build_context`
 - `build_library`
 - `build_council`
@@ -61,7 +60,7 @@ verifies writes by reading back the changed resource or artifact revision.
 
 ## Prompt And Package References
 
-Installed agents, domains, and abilities are resolved through package modules
+Installed agents and abilities are resolved through package modules
 and logical refs. They are not referenced with `pkg.*` prompt variables.
 
 For example, Nenji's stable assignment for task management is:
@@ -80,5 +79,9 @@ for example:
 {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
 {{ pkg.nenjo_ai.packages.knowledge.core.resources.agents }}
 ```
+
+Nenji keeps the shared remembrance policy in its system prompt so the policy is
+inherited by nested abilities. Its identity remains runtime-owned session
+control data and is not duplicated in the authored system prompt.
 
 Use those selectors when composing prompts that need the same shared guidance.

@@ -11,7 +11,7 @@ manifest:
     title: Nenjo
     summary: "High-level orientation to Nenjo, Nenji, core resources, Library knowledge, packages, and platform/SDK surfaces."
     kind: orientation
-    tags: ["intent:overview", "domain:nenjo", "audience:agent"]
+    tags: ["intent:overview", "area:nenjo", "audience:agent"]
     related:
     - type: references
       target: orientation.platform
@@ -77,14 +77,12 @@ manifest:
     title: Resource Design
     summary: "Central design guide for choosing Nenjo resource boundaries, producing minimum viable specs, and handing off accepted designs to build abilities."
     kind: design
-    tags: ["intent:design", "intent:classify", "domain:nenjo", "topic:resource_boundaries", "audience:builder"]
+    tags: ["intent:design", "intent:classify", "area:nenjo", "topic:resource_boundaries", "audience:builder"]
     related:
     - type: references
       target: design.agents
     - type: references
       target: design.abilities
-    - type: references
-      target: design.domains
     - type: references
       target: design.commands
     - type: references
@@ -111,27 +109,11 @@ manifest:
       target: design.resource_design
     - type: depends_on
       target: resources.abilities
-    - type: references
-      target: design.domains
-
-  - selector: design.domains
-    source_path: docs/design/domain-design.md
-    title: Domain Design
-    summary: "How to design explicit user-activated modes that change behavior and available capability surfaces."
-    kind: design
-    tags: ["intent:design", "resource:domains", "topic:modes", "audience:builder"]
-    related:
-    - type: part_of
-      target: design.resource_design
-    - type: depends_on
-      target: resources.domains
-    - type: references
-      target: design.abilities
 
   - selector: design.commands
     source_path: docs/design/command-design.md
     title: Command Design
-    summary: "How to design explicit slash-triggered turn inputs and decide when a command should be used instead of a domain, ability, routine, or agent."
+    summary: "How to design explicit slash-triggered turn inputs and decide when a command should be used instead of an ability, routine, or agent."
     kind: design
     tags: ["intent:design", "resource:commands", "topic:prompting", "audience:builder"]
     related:
@@ -142,7 +124,7 @@ manifest:
     - type: references
       target: design.prompts
     - type: references
-      target: building.template_vars
+      target: building.prompt_context
 
   - selector: design.councils
     source_path: docs/design/council-design.md
@@ -170,7 +152,7 @@ manifest:
     - type: references
       target: building.prompt_structuring
     - type: depends_on
-      target: building.template_vars
+      target: building.prompt_context
     - type: depends_on
       target: resources.knowledge_packs
     - type: depends_on
@@ -181,7 +163,7 @@ manifest:
     title: Knowledge Design
     summary: "How to organize knowledge docs, selectors, tags, summaries, and graph relationships for efficient agent retrieval."
     kind: design
-    tags: ["intent:design", "domain:knowledge", "topic:retrieval", "audience:builder"]
+    tags: ["intent:design", "area:knowledge", "topic:retrieval", "audience:builder"]
     related:
     - type: part_of
       target: design.resource_design
@@ -204,7 +186,7 @@ manifest:
     - type: depends_on
       target: resources.context_blocks
     - type: references
-      target: building.template_vars
+      target: building.prompt_context
     - type: references
       target: design.prompts
 
@@ -213,7 +195,7 @@ manifest:
     title: Workflow Design
     summary: "How to design tasks, routines, councils, gates, durable human reviews, executions, flow state, artifact-aware handoffs, dependencies, and outcomes."
     kind: design
-    tags: ["intent:design", "domain:workflow", "resource:routines", "resource:tasks", "audience:builder"]
+    tags: ["intent:design", "area:workflow", "resource:routines", "resource:tasks", "audience:builder"]
     related:
     - type: part_of
       target: design.resource_design
@@ -241,8 +223,6 @@ manifest:
       target: design.agents
     - type: references
       target: resources.abilities
-    - type: references
-      target: resources.domains
     - type: depends_on
       target: resources.memory
     - type: depends_on
@@ -268,31 +248,7 @@ manifest:
     - type: related_to
       target: resources.agents
     - type: related_to
-      target: resources.domains
-    - type: related_to
       target: resources.commands
-    - type: related_to
-      target: resources.mcp_servers
-    - type: related_to
-      target: resources.script_tools
-    - type: references
-      target: reference.platform_scopes
-
-  - selector: resources.domains
-    source_path: docs/resources/domains.md
-    title: Domains
-    summary: "Resource-level model for user-activated execution modes with prompt addons, abilities, tools, and audit semantics."
-    kind: resource
-    tags: ["intent:explain", "intent:build", "resource:domains", "topic:modes"]
-    related:
-    - type: references
-      target: design.domains
-    - type: related_to
-      target: resources.abilities
-    - type: related_to
-      target: resources.commands
-    - type: related_to
-      target: resources.agents
     - type: related_to
       target: resources.mcp_servers
     - type: related_to
@@ -312,7 +268,7 @@ manifest:
     - type: references
       target: design.prompts
     - type: depends_on
-      target: building.template_vars
+      target: building.prompt_context
     - type: related_to
       target: resources.agents
     - type: related_to
@@ -339,7 +295,7 @@ manifest:
     title: Tasks
     summary: "Resource-level model for organization tasks with optional projects, status rows, labels, ordered artifact inputs, execution targets, schedules, and shared execution semantics."
     kind: resource
-    tags: ["intent:explain", "intent:build", "resource:tasks", "domain:project_work"]
+    tags: ["intent:explain", "intent:build", "resource:tasks", "area:project_work"]
     related:
     - type: references
       target: design.workflows
@@ -357,7 +313,7 @@ manifest:
     title: Routines
     summary: "Resource-level model for task-targetable workflow graphs, agents, gates, human reviews, councils, artifact-aware handoffs, flow state, retries, and terminal outcomes."
     kind: resource
-    tags: ["intent:explain", "intent:build", "resource:routines", "domain:workflow"]
+    tags: ["intent:explain", "intent:build", "resource:routines", "area:workflow"]
     related:
     - type: references
       target: design.workflows
@@ -375,7 +331,7 @@ manifest:
     title: Projects
     summary: "Resource-level model for work containers, settings, repository context, tasks, memory, and executions; Library owns source material."
     kind: resource
-    tags: ["intent:explain", "intent:build", "resource:projects", "domain:project_work"]
+    tags: ["intent:explain", "intent:build", "resource:projects", "area:project_work"]
     related:
     - type: governs
       target: resources.tasks
@@ -398,7 +354,7 @@ manifest:
     - type: references
       target: design.context
     - type: references
-      target: building.template_vars
+      target: building.prompt_context
     - type: references
       target: resources.artifacts
 
@@ -407,7 +363,7 @@ manifest:
     title: Executions
     summary: "Resource-level model for task-scoped manual, retry, and scheduled runs plus artifact inputs, routine flow state, durable human-review pauses, lifecycle, and progress tracking."
     kind: resource
-    tags: ["intent:explain", "intent:build", "resource:executions", "domain:workflow"]
+    tags: ["intent:explain", "intent:build", "resource:executions", "area:workflow"]
     related:
     - type: related_to
       target: resources.projects
@@ -428,7 +384,7 @@ manifest:
     - type: references
       target: design.context
     - type: depends_on
-      target: building.template_vars
+      target: building.prompt_context
     - type: references
       target: design.prompts
 
@@ -437,7 +393,7 @@ manifest:
     title: Knowledge Packs
     summary: "Resource-level model for metadata-first knowledge tools, Library knowledge, package knowledge, graph retrieval, and SDK registration."
     kind: resource
-    tags: ["intent:explain", "intent:build", "domain:knowledge", "topic:retrieval"]
+    tags: ["intent:explain", "intent:build", "area:knowledge", "topic:retrieval"]
     related:
     - type: references
       target: design.knowledge
@@ -455,7 +411,7 @@ manifest:
     title: Library
     summary: "Dashboard organization-content area with separate Knowledge search/graph semantics and filesystem-like immutable Artifact navigation."
     kind: resource
-    tags: ["intent:explain", "intent:build", "resource:library", "domain:knowledge"]
+    tags: ["intent:explain", "intent:build", "resource:library", "area:knowledge"]
     related:
     - type: depends_on
       target: resources.knowledge_packs
@@ -471,7 +427,7 @@ manifest:
     title: Packages
     summary: "Resource-level reference for installable packages, package-installed selectors, and package boundaries that agents should not mutate."
     kind: resource
-    tags: ["intent:explain", "domain:packages", "topic:manifests", "audience:developer"]
+    tags: ["intent:explain", "area:packages", "topic:manifests", "audience:developer"]
     related:
     - type: depends_on
       target: building.package_manifests
@@ -503,8 +459,6 @@ manifest:
       target: resources.agents
     - type: related_to
       target: resources.abilities
-    - type: related_to
-      target: resources.domains
     - type: references
       target: resources.packages
 
@@ -519,8 +473,6 @@ manifest:
       target: resources.agents
     - type: related_to
       target: resources.abilities
-    - type: related_to
-      target: resources.domains
     - type: references
       target: resources.packages
 
@@ -549,7 +501,7 @@ manifest:
     title: Resource Dependency Order
     summary: "Recommended creation order for Nenjo resources to avoid circular dependencies and invalid states."
     kind: build
-    tags: ["intent:build", "domain:workflow", "topic:ordering", "risk:routing"]
+    tags: ["intent:build", "area:workflow", "topic:ordering", "risk:routing"]
     related:
     - type: depends_on
       target: resources.context_blocks
@@ -571,9 +523,9 @@ manifest:
   - selector: building.workflow_pattern_cookbook
     source_path: docs/building/workflow-pattern-cookbook.md
     title: Workflow Pattern Cookbook
-    summary: "Concrete Nenjo recipes for implementing workflow patterns as routines, agents, councils, abilities, domains, task sets, or combinations, including edge handoff examples."
+    summary: "Concrete Nenjo recipes for implementing workflow patterns as routines, agents, councils, abilities, task sets, or combinations, including edge handoff examples."
     kind: build
-    tags: ["intent:build", "intent:design", "domain:workflow", "resource:routines", "topic:orchestration", "audience:builder"]
+    tags: ["intent:build", "intent:design", "area:workflow", "resource:routines", "topic:orchestration", "audience:builder"]
     related:
     - type: depends_on
       target: classification.workflow_patterns
@@ -593,7 +545,7 @@ manifest:
     title: Routine Flow Authoring
     summary: "Practical routine authoring guide for flow state, artifact-aware handoffs, fan-out, joins, gate retries, human-review outcomes and forms, and graph verification."
     kind: build
-    tags: ["intent:build", "intent:design", "domain:workflow", "resource:routines", "topic:flow_state", "topic:orchestration", "audience:builder"]
+    tags: ["intent:build", "intent:design", "area:workflow", "resource:routines", "topic:flow_state", "topic:orchestration", "audience:builder"]
     related:
     - type: depends_on
       target: design.workflows
@@ -614,7 +566,7 @@ manifest:
     tags: ["intent:build", "topic:prompting", "resource:prompts", "audience:builder"]
     related:
     - type: depends_on
-      target: building.template_vars
+      target: building.prompt_context
     - type: depends_on
       target: resources.context_blocks
     - type: references
@@ -624,12 +576,12 @@ manifest:
     - type: references
       target: reference.platform_scopes
 
-  - selector: building.template_vars
-    source_path: docs/building/template-vars.md
+  - selector: building.prompt_context
+    source_path: docs/building/prompt-inputs.md
     title: Prompt Context
     summary: "The boundary between static prompt references and runtime-owned session and turn context."
     kind: build
-    tags: ["intent:build", "topic:prompting", "resource:template_vars", "audience:builder"]
+    tags: ["intent:build", "topic:prompting", "resource:prompt_context", "audience:builder"]
     related:
     - type: references
       target: resources.context_blocks
@@ -641,7 +593,7 @@ manifest:
     title: Package Manifests
     summary: "How top-level package manifests define identity, version, modules, dependencies, and derived module metadata."
     kind: build
-    tags: ["intent:build", "domain:packages", "topic:manifests", "audience:developer"]
+    tags: ["intent:build", "area:packages", "topic:manifests", "audience:developer"]
     related:
     - type: references
       target: building.knowledge_manifests
@@ -655,7 +607,7 @@ manifest:
     title: Knowledge Manifests
     summary: "Canonical authored knowledge manifest shape, document metadata fields, selectors, tags, kinds, and graph relationships."
     kind: build
-    tags: ["intent:build", "domain:knowledge", "topic:manifests", "audience:builder"]
+    tags: ["intent:build", "area:knowledge", "topic:manifests", "audience:builder"]
     related:
     - type: depends_on
       target: building.package_manifests
@@ -671,7 +623,7 @@ manifest:
     title: Task Priority And Labels
     summary: "Classification guide for task priority and organization-owned labels."
     kind: classification
-    tags: ["intent:classify", "resource:tasks", "domain:project_work", "topic:priority"]
+    tags: ["intent:classify", "resource:tasks", "area:project_work", "topic:priority"]
     related:
     - type: classifies
       target: resources.tasks
@@ -683,7 +635,7 @@ manifest:
     title: Resource Surface Classification
     summary: "Classification for platform UI/tools, SDK manifest/runtime, Library knowledge, package resources, permissions, and shared fields."
     kind: classification
-    tags: ["intent:classify", "domain:nenjo", "topic:routing", "risk:routing"]
+    tags: ["intent:classify", "area:nenjo", "topic:routing", "risk:routing"]
     related:
     - type: classifies
       target: orientation.platform
@@ -701,7 +653,7 @@ manifest:
     title: Workflow Pattern Classification
     summary: "Classification guide for workflow structures, including linear pipelines, gates, fan-out, joins, handoff contracts, reviews, councils, and escalation paths."
     kind: classification
-    tags: ["intent:classify", "domain:workflow", "topic:orchestration"]
+    tags: ["intent:classify", "area:workflow", "topic:orchestration"]
     related:
     - type: classifies
       target: resources.routines
@@ -719,7 +671,7 @@ manifest:
     title: Search Patterns
     summary: "Retrieval patterns that tell Nenji which docs to search, read, and traverse for general, design, build, and reference questions."
     kind: classification
-    tags: ["intent:classify", "domain:knowledge", "topic:retrieval", "audience:agent"]
+    tags: ["intent:classify", "area:knowledge", "topic:retrieval", "audience:agent"]
     related:
     - type: references
       target: design.resource_design
@@ -749,7 +701,7 @@ manifest:
     title: Knowledge Doc Kinds
     summary: "Reference for using the user-defined doc kind field to categorize knowledge documents such as orientation, design, resource, build, classification, reference, policy, and entity."
     kind: reference
-    tags: ["intent:lookup", "domain:knowledge", "topic:kinds", "audience:builder"]
+    tags: ["intent:lookup", "area:knowledge", "topic:kinds", "audience:builder"]
     related:
     - type: defines
       target: building.knowledge_manifests
@@ -761,7 +713,7 @@ manifest:
     title: Selector Conventions
     summary: "Reference for stable dotted Jinja-compatible selectors, naming rules, and the distinction between selectors and source paths."
     kind: reference
-    tags: ["intent:lookup", "domain:knowledge", "topic:selectors", "audience:builder"]
+    tags: ["intent:lookup", "area:knowledge", "topic:selectors", "audience:builder"]
     related:
     - type: defines
       target: building.knowledge_manifests
@@ -785,7 +737,7 @@ manifest:
     title: Glossary
     summary: "Compact definitions of core Nenjo terms for quick answers and disambiguation."
     kind: reference
-    tags: ["intent:lookup", "domain:nenjo", "topic:vocabulary", "audience:agent"]
+    tags: ["intent:lookup", "area:nenjo", "topic:vocabulary", "audience:agent"]
     related:
     - type: references
       target: orientation.nenjo

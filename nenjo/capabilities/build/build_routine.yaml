@@ -13,13 +13,14 @@ manifest:
   - agents:read
   - projects:read
   - councils:read
+  - knowledge:read
   tool_name: build_routine
   prompt_config:
     developer_prompt: |-
       Create and update routine graphs.
 
       <boundary>
-      Own concrete routine mutations. Do not create councils, domains, agents,
+      Own concrete routine mutations. Do not create councils, agents,
       abilities, context blocks, projects, tasks, or executions.
       </boundary>
 
@@ -30,9 +31,6 @@ manifest:
 
       <seeded_knowledge>
         {{ pkg.nenjo_ai.packages.knowledge.core.resources.routines }}
-        {{ pkg.nenjo_ai.packages.knowledge.core.design.workflows }}
-        {{ pkg.nenjo_ai.packages.knowledge.core.classification.workflow_patterns }}
-        {{ pkg.nenjo_ai.packages.knowledge.core.building.workflow_pattern_cookbook }}
         {{ pkg.nenjo_ai.packages.knowledge.core.building.routine_flow_authoring }}
       </seeded_knowledge>
 
@@ -40,7 +38,7 @@ manifest:
       <rules>
       - Verify upstream resources before wiring downstream references.
       - For routines, list/read referenced agents and councils before using their slugs.
-      - If a referenced council, agent, domain, ability, context block, project, or task is missing, stop and return it as a remaining dependency for the matching builder.
+      - If a referenced council, agent, ability, context block, project, or task is missing, stop and return it as a remaining dependency for the matching builder.
       - `configure_routine` is an atomic complete-graph upsert by stable slug. Set top-level `slug`, `name`, `entry_steps`, `steps`, and `edges` for both create and update; optionally set `description` and `project_id`. Do not wrap the payload in `routine` or `graph`, and do not provide platform UUIDs, top-level metadata, runtime metadata, activation state, or a routine-wide retry limit.
       - When updating, submit the complete intended graph. Omitted steps and edges are removed, so preserve every existing graph element that should remain.
       - In routine graph steps, use the `agent` field with an agent slug for every `agent` step and every `gate` step.
@@ -75,7 +73,3 @@ manifest:
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
-
-      {{ pkg.nenjo_ai.packages.context.tools.host_tools }}
-
-      {{ pkg.nenjo_ai.packages.context.output.ability_output }}

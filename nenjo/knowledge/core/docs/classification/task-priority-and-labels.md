@@ -2,8 +2,8 @@
 
 ## Purpose
 
-Use priority and organization-owned labels to classify tasks. The task model
-does not have fixed type, urgency, or complexity fields.
+Use the supported priority field and organization-owned labels to classify
+tasks.
 
 ## Priority
 

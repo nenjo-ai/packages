@@ -2,7 +2,7 @@
 
 The `context` package provides reusable prompt context blocks for common agent
 operating rules. It is intentionally generic: the blocks can be shared by
-agents, domains, and abilities that need consistent guidance for tool use,
+agents and abilities that need consistent guidance for tool use,
 memory, delegation, knowledge retrieval, write safety, and debugging.
 
 Use this package when prompts need durable operating guidance that should be
@@ -45,19 +45,20 @@ Then reference the blocks in prompts by package selector:
 ```
 
 Use the smallest context block that matches the behavior you want. For example,
-an ability that performs writes usually needs `write_discipline` and
-`host_tools`; an agent that retrieves docs usually needs `knowledge_routing`;
-an orchestration-heavy agent may need `ability_orchestration`, `sub_agents`, or
-`agent_delegation`.
+an ability that performs writes may need `write_discipline`; add `host_tools`
+only when it operates on workspace files or commands. An agent that retrieves
+docs may need `knowledge_routing`; an orchestration-heavy agent may need one or
+more delegation blocks.
 
 ## Authoring Notes
 
-Context blocks compile into the static instruction prefix. They may use agent
-identity or declared package arguments, but not live chat, task, project,
-routine, gate, Git, clock, memory, or artifact state. Installed agents,
-abilities, domains, routines, MCP servers, and other resource manifests are
-resolved through package modules and runtime imports instead of `pkg.*` prompt
-references.
+Context blocks compile into the static instruction prefix. They may use declared
+package arguments and other static context or knowledge selectors, but not agent
+identity or live chat, task, project, routine, gate, Git, clock, memory, or
+artifact state. Agent identity comes from runtime session control. Installed
+agents, abilities, routines, MCP servers, and other resource manifests
+are resolved through package modules and runtime imports instead of `pkg.*`
+prompt references.
 
 Inside a package, local manifests can import local context files by relative
 module path. Across installed packages, use the package selector form shown

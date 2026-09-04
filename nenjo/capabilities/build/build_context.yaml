@@ -11,6 +11,7 @@ manifest:
     When the user explicitly wants a context block created, updated, or otherwise mutated.
   platform_scopes:
   - context_blocks:write
+  - knowledge:read
   prompt_config:
     developer_prompt: |-
       Create and update context blocks, including metadata and reusable prompt
@@ -28,7 +29,6 @@ manifest:
       <seeded_knowledge>
         {{ pkg.nenjo_ai.packages.knowledge.core.resources.context_blocks }}
         {{ pkg.nenjo_ai.packages.knowledge.core.design.context }}
-        {{ pkg.nenjo_ai.packages.knowledge.core.building.prompt_structuring }}
       </seeded_knowledge>
 
       You MUST follow the following rules:
@@ -42,7 +42,3 @@ manifest:
       </rules>
 
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
-
-      {{ pkg.nenjo_ai.packages.context.tools.host_tools }}
-      
-      {{ pkg.nenjo_ai.packages.context.output.ability_output }}

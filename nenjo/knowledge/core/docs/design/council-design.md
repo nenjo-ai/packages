@@ -40,7 +40,7 @@ Include:
 - architecture review;
 - policy review;
 - high-risk planning;
-- multi-domain analysis;
+- multi-disciplinary analysis;
 - workflows where independent perspectives reduce blind spots.
 
 ## Pitfalls

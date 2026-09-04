@@ -15,7 +15,6 @@ An agent owns its behavior and runtime surface:
 - memory profile;
 - model assignment;
 - assigned abilities;
-- assigned domains;
 - assigned MCP servers;
 - assigned script tools.
 
@@ -29,37 +28,43 @@ platform policy.
 
 ## Runtime Modes
 
-| Mode | Runtime Input |
-|---|---|
-| chat | Turn context followed by the raw user message |
-| task | Task/routine/Git context followed by task instructions |
-| gate | Task/routine/gate context followed by evaluation instructions |
-| heartbeat | Scheduled context followed by configured instructions |
-| council | Council task context followed by member or leader instructions |
+Every execution begins with session control and optional session data. Each
+logical turn then receives turn control, optional turn data, and raw input. Empty
+data messages are omitted.
 
-The agent's identity and memory profile remain stable across modes. The runtime
-owns mode-specific session and turn context. Stable response style, hidden
-intent classification, and routing discipline belong in the developer prompt
-or a reusable static context block.
+| Mode | Raw input after typed context |
+|---|---|
+| chat | User message |
+| task | Task instructions |
+| gate | Prior result/evaluation input |
+| council | Member or leader instructions through the underlying chat/task run |
+
+The runtime supplies agent identity in session control and owns mode-specific
+session and turn context. Stable response style, hidden intent classification,
+and routing discipline belong in the developer prompt or a reusable static
+context block. The memory profile configures retrieval; the resulting frozen
+snapshot is session data.
 
 ## Prompt Configuration
 
 Prompt content is treated as a subresource. Metadata updates and prompt updates
 should be handled separately when the platform exposes separate tools.
 
-- `system_prompt` — stable identity and principles.
-- `developer_prompt` — tactical behavior, routing, and tool-use guidance.
+- `system_prompt` — optional invariants inherited by every nested ability; omit
+  it when no such invariant is needed.
+- `developer_prompt` — role behavior, routing, and tool-use guidance.
 - `memory_profile` — retrieval and memory-writing focus; runtime configuration,
   not model-visible prompt text.
 
-Chat, task, gate, and heartbeat templates are not part of prompt configuration.
+Runtime input serialization is not part of prompt configuration. Agent identity
+is also not authored there because session control supplies the manifest
+identity and description.
 
 ## Assigned Capability Surface
 
 Agents gain capabilities through explicit assignments:
 
 - Abilities — callable specialist behaviors.
-- Domains — user-activated execution modes.
 - MCP servers — external tool integrations.
 - Script tools — package or native script-backed tools.
 
@@ -84,7 +89,7 @@ Use `list_agents` to discover existing slugs and `get_agent` to inspect the full
 AgentDocument. Use `configure_agent` for all agent writes. Always provide the
 stable top-level `slug`; if it does not exist, also provide `name`. Omitted
 fields remain unchanged, nullable fields accept `null` to clear, and supplied
-ability/domain/MCP server arrays are complete replacements. Do not use
+ability/MCP server arrays are complete replacements. Do not use
 `metadata`, `assignments`, or a separate `agent` selector. A successful response
 contains the same canonical AgentDocument as `get_agent`.
 

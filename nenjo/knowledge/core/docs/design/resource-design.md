@@ -15,7 +15,6 @@ without inventing unrelated topology or permissions.
 | Ongoing behavioral owner | agent |
 | Narrow callable specialist behavior | ability |
 | User-invoked one-turn prompt workflow | command |
-| Explicit user-activated mode | domain |
 | Reusable prompt guidance | context block |
 | Multi-step workflow, gates, retries, or schedules | routine |
 | Structured multi-agent collaboration | council |
@@ -42,7 +41,6 @@ needed scopes but must not assign them.
 | Multi-perspective judgment | council | Distinct members provide critique, votes, or synthesis |
 | Narrow reusable operation called by a parent | ability | Smaller than a new agent or routine |
 | Explicit user slash entrypoint for one chat turn | command | The user chooses the prompt workflow without changing modes |
-| User-approved mode switch | domain | Mode and capability changes are explicit to the user |
 
 Do not force every workflow into a routine. Use routines when the topology is a
 contract. Use agents or councils when the topology should emerge from reasoning.
@@ -62,8 +60,8 @@ Before building, identify:
 
 ## Routing Guidance
 
-- Use `resources.agents`, `resources.abilities`, and `resources.domains` for
-  behavior and mode design.
+- Use `resources.agents` and `resources.abilities` for behavior and capability
+  design.
 - Use `resources.commands` when the user wants an explicit slash command that
   reshapes a chat turn.
 - Use `resources.routines`, `resources.councils`, and `resources.tasks` for
@@ -82,7 +80,7 @@ Before building, identify:
 
 - Modeling Library source material as project metadata.
 - Modeling user-activated privilege changes as abilities.
-- Modeling a one-turn slash prompt as a domain or routine.
+- Modeling a one-turn slash prompt as a routine.
 - Asking agents to assign platform scopes.
 - Treating packages as agent-writable resources.
 - Adding workflow topology when a task or ability is enough.

@@ -7,7 +7,7 @@ runtime APIs, model providers, tools, prompt context, memory, worker
 composition, and transport contracts.
 
 ## Primary Surfaces
-- Declarative resource manifests for agents, abilities, domains, routines,
+- Declarative resource manifests for agents, abilities, routines,
   councils, projects, and supporting resources.
 - Provider builder APIs for composing loaders, model factories, tool factories,
   memory, and agent runners.
@@ -27,10 +27,10 @@ schemas, explain the manifest shape and code-level APIs.
 
 Do not assume SDK manifest authoring when the user is asking from platform chat
 for help designing or configuring a resource. In that case, route through the
-platform domain and resource field guidance first.
+platform resource guidance first.
 
 ## Agent Guidance
-Use this domain when the user mentions the Rust SDK, provider builder, local
+Use this guide when the user mentions the Rust SDK, provider builder, local
 manifests, manifest files, runtime APIs, code embedding, crates, model provider
 implementations, tool traits, knowledge packs, worker harness integration,
 session runtime behavior, or project-local resource files.
@@ -41,7 +41,7 @@ After the harness refactor, avoid treating the worker as a single crate that
 owns all platform execution logic.
 
 - `nenjo` is the core SDK. It owns manifests, provider construction, agent
-  runners, prompt rendering, memory, abilities, domains, councils, and
+  runners, prompt rendering, memory, abilities, councils, and
   routines.
 - `nenjo-tool-api` is the shared tool contract crate. It defines tool specs,
   categories, calls, results, autonomy, security inputs, and tool-name
