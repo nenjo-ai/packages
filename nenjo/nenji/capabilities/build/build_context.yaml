@@ -1,5 +1,6 @@
 ---
 schema: nenjo.ability.v1
+slug: build_context
 manifest:
   name: build_context
   display_name: Build Context

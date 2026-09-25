@@ -1,18 +1,13 @@
 ---
 schema: nenjo.context_block.v1
+slug: gate_evaluation
 manifest:
   name: gate_evaluation
   display_name: Gate Evaluation Runtime
   description: Generic gate runtime input and route_next_steps verdict rules.
   template: |-
-    {% if task %}
-    # Active Task
-    {{ task }}
-    {% endif %}
-    {% if routine %}
-    # Current active routine context. If the routine step instructions are present, you MUST follow them.
-    {{ routine }}
-    {% endif %}
+    Follow the runtime-provided active task, routine step instructions, and
+    authoritative upstream routine.handoffs when present.
 
     Evaluate the authoritative upstream routine.handoffs against the active task
     acceptance criteria, routine step instructions, gate criteria, and project

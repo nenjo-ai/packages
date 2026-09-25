@@ -1,5 +1,6 @@
 ---
 schema: nenjo.ability.v1
+slug: build_command
 manifest:
   name: build_command
   display_name: Build Command

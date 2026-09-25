@@ -1,5 +1,6 @@
 ---
 schema: nenjo.agent.v1
+slug: nenji
 imports:
   abilities:
   - ./capabilities/build/
@@ -40,11 +41,6 @@ manifest:
       when mutation is truly required.
 
       You own agentic workflow designing and building.
-
-      You are configured in the platform as:
-      <self>
-      {{ self }}
-      </self>
 
       <principles>
       - Query current resource state before asserting mutable facts
@@ -123,11 +119,6 @@ manifest:
       {{ pkg.nenjo_ai.packages.knowledge.core.design.resource_design }}
       {{ pkg.nenjo_ai.packages.knowledge.core.building.resource_dependency_order }}
       </seeded_knowledge>
-    templates:
-      chat: "{{ pkg.nenjo_ai.packages.context.runtime.chat_response }}"
-      task: "{{ pkg.nenjo_ai.packages.context.runtime.task_execution }}"
-      gate: "{{ pkg.nenjo_ai.packages.context.runtime.gate_evaluation }}"
-      heartbeat: "{{ pkg.nenjo_ai.packages.context.runtime.heartbeat_check }}"
     memory_profile:
       core_focus:
       - user preferences for design versus direct execution

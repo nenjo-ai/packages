@@ -1,5 +1,6 @@
 ---
 schema: nenjo.context_block.v1
+slug: tool_usage
 manifest:
   name: tool_usage
   display_name: Tool Usage

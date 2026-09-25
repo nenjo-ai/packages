@@ -1,5 +1,6 @@
 ---
 schema: nenjo.ability.v1
+slug: build_council
 manifest:
   name: build_council
   display_name: Build Council

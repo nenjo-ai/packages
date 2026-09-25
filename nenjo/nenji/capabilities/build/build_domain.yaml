@@ -1,5 +1,6 @@
 ---
 schema: nenjo.ability.v1
+slug: build_domain
 manifest:
   name: build_domain
   display_name: Build Domain

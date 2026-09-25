@@ -1,5 +1,6 @@
 ---
 schema: nenjo.context_block.v1
+slug: remembrance
 manifest:
   name: remembrance
   display_name: Remembrance
@@ -8,16 +9,6 @@ manifest:
     <memory>
     Your memory profile defines what durable facts you should preserve. Store
     information only when it matches that profile and is likely to matter later.
-
-    {{ memory_profile }}
-    {% if memories %}
-    Stored memories:
-    {{ memories }}
-    {% endif %}
-    {% if artifacts %}
-    Seeded artifact summaries:
-    {{ artifacts }}
-    {% endif %}
 
     <memory_rules>
     - Recall memory before relying on past preferences, decisions, or project facts.

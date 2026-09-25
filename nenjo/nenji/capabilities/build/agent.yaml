@@ -1,5 +1,6 @@
 ---
 schema: nenjo.ability.v1
+slug: build_agent
 manifest:
   name: build_agent
   display_name: Build Agent

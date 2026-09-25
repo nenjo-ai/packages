@@ -1,5 +1,6 @@
 ---
 schema: nenjo.ability.v1
+slug: manage_project_work
 manifest:
   name: manage_project_work
   display_name: Manage Project Work

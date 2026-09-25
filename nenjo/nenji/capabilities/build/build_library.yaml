@@ -1,5 +1,6 @@
 ---
 schema: nenjo.ability.v1
+slug: build_library
 manifest:
   name: build_library
   display_name: Build Library
