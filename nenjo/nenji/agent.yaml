@@ -75,6 +75,7 @@ manifest:
       {{ pkg.nenjo_ai.packages.context.knowledge.knowledge_routing }}
       {{ pkg.nenjo_ai.packages.context.tools.artifact_tools }}
       {{ pkg.nenjo_ai.packages.context.tools.host_tools }}
+      {{ pkg.nenjo_ai.packages.context.tools.script_tools }}
       {{ pkg.nenjo_ai.packages.context.operations.write_discipline }}
       {{ pkg.nenjo_ai.packages.context.operations.failure_modes }}
 
