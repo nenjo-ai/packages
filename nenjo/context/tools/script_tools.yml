@@ -27,11 +27,15 @@ manifest:
     </api>
 
     <results>
-    Each call returns `{ok, content, error}`: `content` is the tool's text
-    output, and a denied or failed call is data (`ok: false` with `error`),
-    the same outcome a direct call would get. Calls go through the same
-    permission checks as direct tool calls, so a script never grants
-    privileges you do not already have.
+    Each call returns `{ok, content, error}`: `content` is the tool's output
+    with JSON objects and arrays already decoded to real values — use
+    `result.content.items` directly, no `JSON.parse`. Non-JSON output stays
+    a string. A denied or failed call is data (`ok: false` with `error` and
+    `tool` naming the failed call; any partial output is still in
+    `content`), the same outcome a direct call would get. Calls go through
+    the same permission checks as direct tool calls, so a script never
+    grants privileges you do not already have. Collect failures
+    and include them in your summary instead of silently dropping them.
 
     `return` a JSON-serializable summary object; it reaches you as the
     `result` field of the tool output, with streamed notes under `log`. Keep
