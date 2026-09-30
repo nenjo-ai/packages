@@ -3,3 +3,4 @@ modules:
   - artifact_tools.yml
   - notifications.yml
   - host_tools.yml
+  - script_tools.yml

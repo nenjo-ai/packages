@@ -1,0 +1,55 @@
+---
+schema: nenjo.context_block.v1
+slug: script_tools
+manifest:
+  name: script_tools
+  display_name: Script Tools
+  description: Guidance for using the script tool to fan out, join, and aggregate tool calls from JavaScript.
+  template: |-
+    <script_tools>
+    <when>
+    Use the `script` tool when one result depends on many tool calls: fan out
+    independent calls with `Promise.all`, branch on outcomes, filter or join
+    results, and return one compact summary instead of one tool call per item.
+    Do not script a single tool call, or steps that need your judgment between
+    them — issue those directly.
+    </when>
+
+    <api>
+    Every tool you could call directly is an async method on a `ctx`
+    namespace:
+    - `await ctx.mcp.<toolName>({...args})` for MCP tools
+    - `await ctx.runtime.<toolName>({...args})` for host and platform tools
+    - `await ctx.mcp.list()` / `await ctx.runtime.list()` returns the callable
+      tools with name, description, and input schema
+    - `ctx.log(...)` streams progress notes while the script runs
+    - `ctx.harness` exposes `sessionId` and `project`
+    </api>
+
+    <results>
+    Each call returns `{ok, content, error}`: `content` is the tool's output
+    with JSON objects and arrays already decoded to real values — use
+    `result.content.items` directly, no `JSON.parse`. Non-JSON output stays
+    a string. A denied or failed call is data (`ok: false` with `error` and
+    `tool` naming the failed call; any partial output is still in
+    `content`), the same outcome a direct call would get. Calls go through
+    the same permission checks as direct tool calls, so a script never
+    grants privileges you do not already have. Collect failures
+    and include them in your summary instead of silently dropping them.
+
+    `return` a JSON-serializable summary object; it reaches you as the
+    `result` field of the tool output, with streamed notes under `log`. Keep
+    the summary small — aggregate, pick fields, and drop raw payloads.
+    </results>
+
+    <limits>
+    Scripts run in a sandboxed interpreter with no filesystem, network, or
+    environment access; all I/O goes through `ctx` calls. Agent-invoking
+    tools such as `use_ability` and `spawn_sub_agents` are not available
+    inside scripts — delegate and spawn directly instead. A script runs up
+    to 30 seconds by default (120 seconds via `timeout_ms`) and is killed at
+    the deadline, so bound loops and avoid waiting on slow calls inside
+    them. Scripts that keep running return an operation id usable with the
+    inspect, stop, and wait tools.
+    </limits>
+    </script_tools>
